@@ -1,6 +1,7 @@
 import { Ellipsis, MessagesSquare, Paperclip, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import OrgProjectDetails from '../Projects/OrgProjectDetails';
+import MainTasks from '../Projects/Task/MainTasks';
 
 const SingleProjectPage = () => {
 
@@ -8,7 +9,7 @@ const SingleProjectPage = () => {
 
     return (
         <div className='max-w-[1330px] mx-auto pt-10' >
-            <OrgProjectDetails showDetails={showDetails} setShowDetails={setShowDetails} />
+            <MainTasks showDetails={showDetails} setShowDetails={setShowDetails} />
 
 
 
@@ -29,10 +30,6 @@ const SingleProjectPage = () => {
                             <Ellipsis size={18} className='cursor-pointer' />
                         </div>
                     </div>
-
-
-
-
 
 
                     {/* ALL TO DO TASK */}

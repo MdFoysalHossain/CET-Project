@@ -1,0 +1,307 @@
+import React from 'react';
+import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File } from "lucide-react";
+
+const MainTasks = ({ showDetails, setShowDetails }) => {
+    return (
+
+        <div className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-rubik absolute top-0 right-0 ${showDetails || "hidden"}`}
+        >
+
+            {/* CARD */}
+            <div className="w-[600px] bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto">
+
+                {/* HEADER */}
+                <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
+                    <button className="text-gray-500 hover:text-black" onClick={() => setShowDetails(!showDetails)}>
+                        <X size={18} />
+                    </button>
+
+                    <div className="flex gap-3 text-gray-500">
+                        <SquarePen size={18} />
+                    </div>
+                </div>
+
+                {/* BODY */}
+                <div className="p-6 space-y-5">
+
+                    {/* TITLE */}
+                    <h2 className="text-lg font-semibold text-left">
+                        Design Homepage Wireframe
+                    </h2>
+
+                    {/* META INFO */}
+                    <div className="space-y-3 text-sm text-gray-600">
+
+                        {/* Created */}
+                        <div className="flex justify-between">
+                            <span className="flex items-center gap-2">
+                                <Clock size={14} /> Created time
+                            </span>
+                            <span>September 20, 2024 &nbsp; 10:35 AM</span>
+                        </div>
+
+                        {/* Status */}
+                        <div className="flex justify-between">
+                            <span>Status</span>
+                            <span className="px-2 py-1 text-xs rounded bg-orange-100 text-orange-600">
+                                ● In Research
+                            </span>
+                        </div>
+
+                        {/* Priority */}
+                        <div className="flex justify-between">
+                            <span>Priority</span>
+                            <span className="px-2 py-1 text-xs rounded bg-indigo-100 text-indigo-600">
+                                Low
+                            </span>
+                        </div>
+
+                        {/* Due date */}
+                        <div className="flex justify-between">
+                            <span className="flex items-center gap-2">
+                                <Calendar size={14} /> Due Date
+                            </span>
+                            <span>Oct 12, 2026</span>
+                        </div>
+
+                        {/* Assignees */}
+                        <div className="flex justify-between items-center">
+                            <span className="flex items-center gap-2">
+                                <Users size={14} /> Assigned To
+                            </span>
+
+                            <div className="flex -space-x-2">
+                                <img className="w-7 h-7 rounded-full border" src="https://i.pravatar.cc/30?img=1" />
+                                <img className="w-7 h-7 rounded-full border" src="https://i.pravatar.cc/30?img=2" />
+                                <img className="w-7 h-7 rounded-full border" src="https://i.pravatar.cc/30?img=3" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* DESCRIPTION */}
+
+
+
+                    <div className="bg-gray-100 p-4 rounded-lg text-sm text-left text-gray-600">
+                        <p className="mb-2 text-gray-700 font-semibold">
+                            Project Description
+                        </p>
+
+                {/* <pre className="whitespace-pre-wrap break-words leading-relaxed font-sans">
+                            {`- Create a modern, clean, and responsive homepage layout
+- Design a strong hero section with headline, subtext, and call-to-action
+- Include sections for features, services, and key highlights
+- Add a testimonials or social proof section
+- Ensure clear and intuitive navigation
+- Maintain consistent spacing, colors, and typography
+- Optimize for mobile, tablet, and desktop screens
+- Focus on user experience and fast loading performance
+- Include a well-structured footer with essential links and info`}
+                        </pre> */}
+
+                        <pre className="whitespace-pre-wrap break-words leading-relaxed font-rubik">
+                            Design a modern, responsive homepage that clearly communicates the brand’s identity and value. The layout should include a clean hero section with a strong headline and call-to-action, followed by sections for features, services, testimonials, and a footer. Focus on intuitive navigation, visually appealing UI, and consistent spacing, colors, and typography. Ensure the design is mobile-friendly and optimized for performance and user experience.
+                        </pre>
+                    </div>
+
+                </div>
+
+
+
+
+                {/* ATTACHMENTS */}
+                <div className="">
+                    <div className="border-t border-[#e5e7eb] px-6 pt-3 flex justify-between items-center">
+                        <div className="flex gap-6 text-sm text-gray-500">
+                            <button className="border-b-2 border-indigo-500 pb-1 text-indigo-600 text-sm">
+                                Attachments
+                            </button>
+                        </div>
+                        <button className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer">
+                            <CirclePlus size={16} />
+                            <p className="text-sm">Add Attachment</p>
+                        </button>
+                    </div>
+
+
+
+                    <div className="px-6 py-4 space-y-5 text-sm">
+
+                        <div className="grid grid-cols-4 gap-2 justify-items-center">
+                            <div className="flex items-center bg-indigo-300/50 px-2 py-1 rounded text-indigo-800 text-sm w-max gap-2 cursor-pointer">
+                                <p><Image size={16} /></p>
+                                <p>Image Name</p>
+                            </div>
+
+                            <div className="flex items-center bg-indigo-300/50 px-2 py-1 rounded text-indigo-800 text-sm w-max gap-2 cursor-pointer">
+                                <p><File size={16} /></p>
+                                <p>File Name</p>
+                            </div>
+
+                            <div className="flex items-center bg-indigo-300/50 px-2 py-1 rounded text-indigo-800 text-sm w-max gap-2 cursor-pointer">
+                                <p><Image size={16} /></p>
+                                <p>Image Name</p>
+                            </div>
+
+                            <div className="flex items-center bg-indigo-300/50 px-2 py-1 rounded text-indigo-800 text-sm w-max gap-2 cursor-pointer">
+                                <p><File size={16} /></p>
+                                <p>File Name</p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+
+                {/* SUB TASK */}
+                <div className="">
+                    <div className="border-t border-[#e5e7eb] px-6 pt-3 flex justify-between items-center">
+                        <div className="flex gap-6 text-sm text-gray-500">
+                            <button className="border-b-2 border-indigo-500 pb-1 text-indigo-600 text-sm">
+                                Sub Tasks
+                            </button>
+                        </div>
+                        <button className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer">
+                            <CirclePlus size={16} />
+                            <p className="text-sm">Create a Sub Task</p>
+                        </button>
+                    </div>
+
+
+
+                    <div className="px-6 py-4 space-y-5 text-sm">
+
+                        <div className="">
+
+                            <ul class="list rounded-box text-left flex flex-col gap-2 *:cursor-pointer">
+
+                                <li class="w-full bg-gray-100 rounded-lg">
+                                    <div className="collapse-title font-semibold">#1 Account Page</div>
+                                </li>
+                                <li class="w-full bg-gray-100 rounded-lg">
+                                    <div className="collapse-title font-semibold">#2 Login Page</div>
+                                </li>
+                                <li class="w-full bg-gray-100 rounded-lg">
+                                    <div className="collapse-title font-semibold">#3 Registration Page</div>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                {/* COMMENT */}
+                <div className="">
+                    <div className="border-t border-[#e5e7eb] px-6 pt-3">
+                        <div className="flex gap-6 text-sm text-gray-500">
+                            <button className="border-b-2 border-indigo-500 pb-1 text-sm text-indigo-600">
+                                Comments
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div className="px-6 pt-3 font-rubik">
+                        <div className=" px-2  py-1.5 mb-2 rounded-lg">
+                            <form action="" onSubmit={console.log("Submited")}>
+                                <fieldset className="fieldset  text-left relative" >
+                                    <legend className="fieldset-legend text-black gap-1 justify-center items-center flex">
+                                        <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
+                                        <p className='text-[14px]'>Foysa Hossain</p>
+                                    </legend>
+                                    <textarea className="textarea h-30 w-full bg-white border border-gray-500/20" placeholder="Write your thought.."></textarea>
+                                    <button class="absolute bottom-2.5 right-2 w-15 bg-indigo-200 text-indigo-800 font-semibold text-[14px] p-1.5 rounded-sm cursor-pointer z-10" type='submit'>Post</button>
+                                </fieldset>
+                            </form>
+                        </div>
+
+
+                        <div className="flex flex-col gap-4 mb-5">
+                            <div className="text-left">
+
+                                {/* MAIN COMMENT */}
+                                <div className=" p-2 rounded-lg">
+
+                                    <div className="">
+                                        <div className="flex gap-1 justify-between items-center ">
+                                            <div className="flex items-center gap-1">
+                                                <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
+                                                <p className='text-[14px]'>Foysa Hossain</p>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <p className='text-[14px]'>Oct 16, 2026</p>
+                                                <p className='text-[14px]'>10:41 AM</p>
+                                            </div>
+                                        </div>
+
+                                        <p className='text-sm text-left mt-1 ml-7'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
+
+                                    </div>
+
+
+                                    {/* SUB COMMENTS */}
+
+                                    <div className="pl-5 mt-2">
+                                        <div className="border-l border-gray-300 pl-4">
+                                            <div className="flex gap-1 justify-between items-center ">
+                                                <div className="flex items-center gap-1">
+                                                    <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
+                                                    <p className='text-[14px]'>Foysa Hossain</p>
+                                                </div>
+                                                <div className="flex items-center gap-1">
+                                                    <p className='text-[14px]'>Oct 16, 2026</p>
+                                                    <p className='text-[14px]'>10:41 AM</p>
+                                                </div>
+                                            </div>
+
+                                            <p className='text-sm text-left mt-1 ml-7 pb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
+
+                                        </div>
+
+
+                                        <div className="border-l border-gray-300 pl-4">
+                                            <div className="flex gap-1 justify-between items-center ">
+                                                <div className="flex items-center gap-1">
+                                                    <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
+                                                    <p className='text-[14px]'>Foysa Hossain</p>
+                                                </div>
+                                                <div className="flex items-center gap-1">
+                                                    <p className='text-[14px]'>Oct 16, 2026</p>
+                                                    <p className='text-[14px]'>10:41 AM</p>
+                                                </div>
+                                            </div>
+
+                                            <p className='text-sm text-left mt-1 ml-7 pb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default MainTasks;
