@@ -1,0 +1,45 @@
+import { Funnel, Plus } from 'lucide-react';
+import React from 'react';
+
+const ProjectsFilter = () => {
+    return (
+        <div>
+            <div className="font-rubik  w-full flex justify-between items-center bg-[rgba(229,231,235,0.25)] p-4 border border-[#e5e7eb]">
+                <div className="text-2xl font-semibold">
+                    All Projects
+                </div>
+
+                <div className="flex gap-5 items-center">
+                    <div className="w-[300px]">
+                        <label className="input bg-white border-[#e5e7eb]">
+                            <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <g
+                                    strokeLinejoin="round"
+                                    strokeLinecap="round"
+                                    strokeWidth="2.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                >
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.3-4.3"></path>
+                                </g>
+                            </svg>
+                            <input type="search" required placeholder="Search" />
+                        </label>
+                    </div>
+
+                    <div className="flex gap-2 cursor-pointer rounded-lg bg-white border border-[#e5e7eb] justify-center items-center p-2  px-4">
+                        <Funnel size={18} /> <p className='text-[15px]'>Filter</p>
+                    </div>
+
+                    <div className="flex gap-2 cursor-pointer rounded-lg bg-white border border-[#e5e7eb] justify-center items-center p-2 px-4">
+                        <Plus size={18} /> <p className='text-[15px]'>Create Task</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default ProjectsFilter;

@@ -1,0 +1,3 @@
+a.active > svg, a.active > span {
+    color: rgb(250, 59, 59) !important;
+}
