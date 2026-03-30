@@ -30,7 +30,7 @@ const SidebarUI = () => {
     // { icon: Home, label: "Home" },
     { icon: LayoutDashboard, label: "Dashboard", to: "/Dashboard" },
     { icon: Folder, label: "Projects", to: "/Dashboard/Projects"},
-    { icon: CheckSquare, label: "Tasks" },
+    { icon: CheckSquare, label: "Tasks", to: "/Dashboard/Projects/Create"},
     { icon: BarChart3, label: "Reporting" },
     { icon: Users, label: "Users" },
     { icon: Bell, label: "Notification" }

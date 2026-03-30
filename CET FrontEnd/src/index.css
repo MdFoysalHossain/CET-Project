@@ -60,3 +60,9 @@ h1 {
 .second-color {
   color: #374151;
 }
+
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* makes icon black if it's white */
+}

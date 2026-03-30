@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File } from "lucide-react";
 
-const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSubTaskOpen}) => {
-
-    console.log("Main Task Rendered", showDetails);
-
+const SubTask = ({ showSubDetails, setShowSubDetails }) => {
     return (
-
-        <div className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-rubik absolute top-0 right-0 ${showDetails || "hidden"}`}
+        <div className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-rubik absolute top-0 right-0 ${showSubDetails || "hidden"}`}
         >
+
 
             {/* CARD */}
             <div className="w-[600px] bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto font-rubik">
 
                 {/* HEADER */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
-                    <button className="text-gray-500 hover:text-black" onClick={() => setShowDetails(!showDetails)}>
+                    <button className="text-gray-500 hover:text-black" onClick={() => setShowSubDetails(false)}>
                         <X size={18} />
                     </button>
 
@@ -28,63 +26,17 @@ const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSub
                 <div className="p-6 space-y-5">
 
                     {/* TITLE */}
-                    <h2 className="text-lg font-semibold text-left">
-                        Design Homepage Wireframe
-                    </h2>
-
-                    {/* META INFO */}
-                    <div className="space-y-3 text-sm text-gray-600">
-
-                        {/* Created */}
-                        <div className="flex justify-between">
-                            <span className="flex items-center gap-2">
-                                <Clock size={14} /> Created time
-                            </span>
-                            <span>September 20, 2024 &nbsp; 10:35 AM</span>
-                        </div>
-
-                        {/* Status */}
-                        <div className="flex justify-between">
-                            <span>Status</span>
-                            <span className="px-2 py-1 text-xs rounded bg-orange-100 text-orange-600">
-                                ● In Research
-                            </span>
-                        </div>
-
-                        {/* Priority */}
-                        <div className="flex justify-between">
-                            <span>Priority</span>
-                            <span className="px-2 py-1 text-xs rounded bg-indigo-100 text-indigo-600">
-                                Low
-                            </span>
-                        </div>
-
-                        {/* Due date */}
-                        <div className="flex justify-between">
-                            <span className="flex items-center gap-2">
-                                <Calendar size={14} /> Due Date
-                            </span>
-                            <span>Oct 12, 2026</span>
-                        </div>
-
-                        {/* Assignees */}
-                        <div className="flex justify-between items-center">
-                            <span className="flex items-center gap-2">
-                                <Users size={14} /> Assigned To
-                            </span>
-
-                            <div className="flex -space-x-2">
-                                <img className="w-7 h-7 rounded-full border" src="https://i.pravatar.cc/30?img=1" />
-                                <img className="w-7 h-7 rounded-full border" src="https://i.pravatar.cc/30?img=2" />
-                                <img className="w-7 h-7 rounded-full border" src="https://i.pravatar.cc/30?img=3" />
-                            </div>
-                        </div>
+                    <div className="">
+                        <h2 className="text-sm text-left text-gray-500">
+                            Main: Design Homepage Wireframe
+                        </h2>
+                        <h2 className="text-lg font-semibold text-left">
+                            Sub Task: Design Homepage Wireframe
+                        </h2>
                     </div>
 
+
                     {/* DESCRIPTION */}
-
-
-
                     <div className="bg-gray-100 p-4 rounded-lg text-sm text-left text-gray-600">
                         <p className="mb-2 text-gray-700 font-semibold">
                             Project Description
@@ -150,57 +102,6 @@ const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSub
                                 <p><File size={16} /></p>
                                 <p>File Name</p>
                             </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-
-
-                {/* SUB TASK */}
-                <div className="">
-                    <div className="border-t border-[#e5e7eb] px-6 pt-3 flex justify-between items-center">
-                        <div className="flex gap-6 text-sm text-gray-500">
-                            <button className="border-b-2 border-indigo-500 pb-1 text-indigo-600 text-sm">
-                                Sub Tasks
-                            </button>
-                        </div>
-                        <button className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer" onClick={() => {
-                            // console.log("Create Sub Task Clicked");
-                            setCreateSubTaskOpen(true);
-                        }}>
-                            <CirclePlus size={16} />
-                            <p className="text-sm">Create a Sub Task</p>
-                        </button>
-                    </div>
-
-
-
-                    <div className="px-6 py-4 space-y-5 text-sm">
-
-                        <div className="">
-
-                            <ul class="list rounded-box text-left flex flex-col gap-2 *:cursor-pointer">
-
-                                <li class="w-full bg-gray-100 rounded-lg">
-                                    <div className="collapse-title font-semibold" onClick={() => {
-                                        setShowDetails(false)
-                                        setShowSubDetails(true)
-                                    }}>
-                                        #1 Account Page
-                                    </div>
-                                </li>
-                                <li class="w-full bg-gray-100 rounded-lg">
-                                    <div className="collapse-title font-semibold">#2 Login Page</div>
-                                </li>
-                                <li class="w-full bg-gray-100 rounded-lg">
-                                    <div className="collapse-title font-semibold">#3 Registration Page</div>
-                                </li>
-                            </ul>
 
                         </div>
 
@@ -315,4 +216,4 @@ const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSub
     );
 };
 
-export default MainTasks;
+export default SubTask;

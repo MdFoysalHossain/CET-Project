@@ -1,17 +1,34 @@
 import { Ellipsis, MessagesSquare, Paperclip, Plus } from 'lucide-react';
 import React, { useState } from 'react';
-import OrgProjectDetails from '../Projects/OrgProjectDetails';
 import MainTasks from '../Projects/Task/MainTasks';
+import CreateTask from '../Projects/Task/Component/CreateTask';
+import SubTask from '../Projects/Task/SubTask';
+import CreateSubTask from '../Projects/Task/Component/CreateSubTask';
 
 const SingleProjectPage = () => {
 
     const [showDetails, setShowDetails] = useState(false);
+    const [showSubDetails, setShowSubDetails] = useState(false);
+
+    const [createTaskOpen, setCreateTaskOpen] = useState(false);
+    const [createSubTaskOpen, setCreateSubTaskOpen] = useState(false);
 
     return (
         <div className='max-w-[1330px] mx-auto pt-10' >
-            <MainTasks showDetails={showDetails} setShowDetails={setShowDetails} />
+            <MainTasks showDetails={showDetails}
+                setShowDetails={setShowDetails}
+
+                setShowSubDetails={setShowSubDetails}
+
+                createSubTaskOpen={createSubTaskOpen}
+                setCreateSubTaskOpen={setCreateSubTaskOpen}
+            />
 
 
+            <SubTask showSubDetails={showSubDetails} setShowSubDetails={setShowSubDetails} setShowDetails={setShowDetails} />
+
+            <CreateTask isOpen={createTaskOpen} onClose={() => setCreateTaskOpen(false)} />
+            <CreateSubTask createSubTaskOpen={createSubTaskOpen} setCreateSubTaskOpen={setCreateSubTaskOpen} />
 
             <div className="text-left max-w-100">
                 <h2 className='text-3xl font-semibold font-rubik'>Task</h2>
@@ -26,7 +43,7 @@ const SingleProjectPage = () => {
                             <p className='text-lg'>To Do</p>
                         </div>
                         <div className="flex items-center justify-end gap-2">
-                            <Plus size={18} className='cursor-pointer' />
+                            <Plus size={18} className='cursor-pointer' onClick={() => setCreateTaskOpen(true)} />
                             <Ellipsis size={18} className='cursor-pointer' />
                         </div>
                     </div>

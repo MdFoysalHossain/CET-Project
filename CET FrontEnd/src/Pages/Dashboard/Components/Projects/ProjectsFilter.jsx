@@ -1,7 +1,9 @@
 import { Funnel, Plus } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
+import ProjectDashboardPage from './ProjectInputForm';
 
 const ProjectsFilter = () => {
+    const [open, setOpen] = useState(false);
     return (
         <div>
             <div className="font-rubik  w-full flex justify-between items-center bg-[rgba(229,231,235,0.25)] p-4 border border-[#e5e7eb]">
@@ -32,12 +34,15 @@ const ProjectsFilter = () => {
                         <Funnel size={18} /> <p className='text-[15px]'>Filter</p>
                     </div>
 
-                    <div className="flex gap-2 cursor-pointer rounded-lg bg-white border border-[#e5e7eb] justify-center items-center p-2 px-4">
-                        <Plus size={18} /> <p className='text-[15px]'>Create Task</p>
+                    <div className="flex gap-2 cursor-pointer rounded-lg bg-white border border-[#e5e7eb] justify-center items-center p-2 px-4" onClick={() => setOpen(true)}>
+                        <Plus size={18} /> <p className='text-[15px]' >Create Task</p>
                     </div>
 
                 </div>
             </div>
+            
+
+            <ProjectDashboardPage isOpen={open} onClose={() => setOpen(false)} />
         </div>
     );
 };
