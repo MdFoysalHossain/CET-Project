@@ -2,7 +2,7 @@ import React from 'react';
 
 const DashboardActivityLogs = () => {
     return (
-        <div className="flex flex-col font-rubik bg-[rgba(229,231,235,0.25)] p-4 py-8">
+        <div className="flex flex-col font-jukarta bg-[rgba(229,231,235,0.25)] p-4 py-8">
             <div className="flex ">
                 <div className="border-r pr-10 text-lg font-semibold w-[150px] relative">
                     12/12/2025

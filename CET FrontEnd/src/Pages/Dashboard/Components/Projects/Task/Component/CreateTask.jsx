@@ -28,7 +28,7 @@ const CreateTask = ({ isOpen, onClose }) => {
         <div className="fixed absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
 
             {/* Modal Container */}
-            <div className="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-8 relative animate-fadeIn max-h-[700px] overflow-y-auto font-rubik text-left">
+            <div className="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-8 relative animate-fadeIn max-h-[700px] overflow-y-auto font-jukarta text-left">
 
                 {/* Close Button */}
                 <button

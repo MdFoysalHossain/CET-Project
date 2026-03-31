@@ -7,15 +7,22 @@ import ProjectInputForm from './Components/Projects/ProjectInputForm';
 const DashbordProjects = () => {
 
     const [showDetails, setShowDetails] = useState(false);
-    
+
 
     return (
-        <div className='max-w-[1330px] mx-auto flex flex-col'>
+        <div className='flex flex-col'>
 
-            
-            <ProjectsFilter />
 
-            <AllProjects showDetails={showDetails} setShowDetails={setShowDetails} />
+
+            <div className="w-full  mx-auto flex-1 border-b border-[#e5e7eb]">
+                <div className="max-w-[1330px] mx-auto">
+                    <ProjectsFilter />
+                </div>
+            </div>
+
+            <div className="max-w-[1330px] mx-auto">
+                <AllProjects showDetails={showDetails} setShowDetails={setShowDetails} />
+            </div>
 
             {/* <OrgProjectDetails showDetails={showDetails} setShowDetails={setShowDetails} /> */}
 

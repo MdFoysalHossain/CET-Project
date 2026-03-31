@@ -7,11 +7,11 @@ const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSub
 
     return (
 
-        <div className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-rubik absolute top-0 right-0 ${showDetails || "hidden"}`}
+        <div className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-jukarta absolute top-0 right-0 ${showDetails || "hidden"}`}
         >
 
             {/* CARD */}
-            <div className="w-[600px] bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto font-rubik">
+            <div className="w-[600px] bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto font-jukarta">
 
                 {/* HEADER */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
@@ -102,7 +102,7 @@ const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSub
 - Include a well-structured footer with essential links and info`}
                         </pre> */}
 
-                        <pre className="whitespace-pre-wrap break-words leading-relaxed font-rubik">
+                        <pre className="whitespace-pre-wrap break-words leading-relaxed font-jukarta">
                             Design a modern, responsive homepage that clearly communicates the brand’s identity and value. The layout should include a clean hero section with a strong headline and call-to-action, followed by sections for features, services, testimonials, and a footer. Focus on intuitive navigation, visually appealing UI, and consistent spacing, colors, and typography. Ensure the design is mobile-friendly and optimized for performance and user experience.
                         </pre>
                     </div>
@@ -221,7 +221,7 @@ const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSub
                     </div>
 
 
-                    <div className="px-6 pt-3 font-rubik">
+                    <div className="px-6 pt-3 font-jukarta">
                         <div className=" px-2  py-1.5 mb-2 rounded-lg">
                             <form action="" onSubmit={console.log("Submited")}>
                                 <fieldset className="fieldset  text-left relative" >

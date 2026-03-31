@@ -9,7 +9,7 @@ const DashboardHome = () => {
 
             <div className="flex mt-10 gap-5 overflow-hidden">
                 <div className="flex-2">
-                    <div className="text-left font-rubik font-semibold text-xl mb-5">
+                    <div className="text-left font-jukarta font-semibold text-xl mb-5">
                         <h2>Activity Logs</h2>
                     </div>
 

@@ -10,7 +10,11 @@ import {
   Bell,
   BellDot,
   MessageSquare,
-  MessageSquareDot 
+  MessageSquareDot,
+  Blocks,
+  Settings,
+  Info,
+  CalendarRange
 } from "lucide-react";
 import { Link } from "react-router";
 
@@ -28,38 +32,85 @@ const SidebarUI = () => {
 
   const menu = [
     // { icon: Home, label: "Home" },
-    { icon: LayoutDashboard, label: "Dashboard", to: "/Dashboard" },
-    { icon: Folder, label: "Projects", to: "/Dashboard/Projects"},
-    { icon: CheckSquare, label: "Tasks", to: "/Dashboard/Projects/Create"},
-    { icon: BarChart3, label: "Reporting" },
+    { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
+    { icon: Folder, label: "Projects", to: "/Dashboard/Projects" },
+    { icon: CheckSquare, label: "Tasks", to: "/Dashboard/Projects/MyTasks" },
+    { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Projects/MyTasks" },
     { icon: Users, label: "Users" },
     { icon: Bell, label: "Notification" }
   ];
+  const systemMenu = [
+    // { icon: Home, label: "Home" },
+    { icon: Settings, label: "Settings", to: "/Dashboard" },
+    { icon: Info, label: "Help", to: "/Dashboard/Projects" },
+  ];
 
   return (
-    <div className="w-64 h-screen bg-white p-4 flex flex-col font-rubik border-r border-[#e5e7eb] fixed left-0 top-0">
+    <div className="w-64 h-screen bg-white flex flex-col font-jukarta border-r border-[#e5e7eb] fixed left-0 top-0">
 
-      <h2 className="mb-6 flex items-center gap-2 font-bold">
-        CET PROJECT
-      </h2>
+      <div className="border-b border-[#e5e7eb] p-4 flex items-center justify-center">
+        <h2 className="flex items-center gap-2 font-bold text-2xl text-blue-500">
+          PROXT
+        </h2>
+      </div>
 
       {/* MENU */}
-      <div className="space-y-2 font-semibold text-black">
-        {menu.map((item, i) => (
-          <Link
-            key={i}
-            to={item.to}
-            className="flex text-black items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer transition"
-          >
-            <item.icon strokeWidth={2.5} size={18} />
-            {item.label}
-          </Link>
-        ))}
+      <div className=" font-semibold text-black p-4 ">
+
+        <div className="">
+          <div className="text-left text-xs second-color font-semibold  uppercase mb-2">
+            <span className="text-gray-500">General</span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            {menu.map((item, i) => (
+              <Link
+                key={i}
+                to={item.to}
+                className="flex justify-between text-[15px] text-black items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer transition font-semibold"
+              >
+                <div className="flex items-center gap-2">
+                  <item.icon strokeWidth={2.25} size={16} />
+                  {item.label}
+                </div>
+
+                <div className={`bg-gray-200 rounded-md h-6 w-6 flex justify-around items-center text-xs text-gray-700 ${item.label === "Notification" ? "block" : "hidden"}`}>
+                  2
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div className=" font-semibold text-black p-4 border-t border-[#e5e7eb]">
+
+        <div className="">
+          <div className="text-left text-xs second-color font-semibold  uppercase mb-2">
+            <span className="text-gray-500">System</span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            {systemMenu.map((item, i) => (
+              <Link
+                key={i}
+                to={item.to}
+                className="flex text-[15px] text-black items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer transition font-semibold"
+              >
+                <item.icon strokeWidth={2.25} size={16} />
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* PROJECTS */}
-      <div className="mt-8">
-        
+      <div className="mt-2 p-4 border-t border-[#e5e7eb]">
+
         <div className="flex justify-between items-center mb-3">
           <p className="text-xs second-color font-semibold">Clients</p>
           <div className="">

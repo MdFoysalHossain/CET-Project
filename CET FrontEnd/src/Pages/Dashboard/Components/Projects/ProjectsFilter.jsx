@@ -6,7 +6,7 @@ const ProjectsFilter = () => {
     const [open, setOpen] = useState(false);
     return (
         <div>
-            <div className="font-rubik  w-full flex justify-between items-center bg-[rgba(229,231,235,0.25)] p-4 border border-[#e5e7eb]">
+            <div className="font-jukarta  w-full flex justify-between items-center bg-[rgba(229,231,235,0.25)]/0 p-4 py-[10.5px] border border-[#e5e7eb]/0">
                 <div className="text-2xl font-semibold">
                     All Projects
                 </div>
@@ -30,12 +30,12 @@ const ProjectsFilter = () => {
                         </label>
                     </div>
 
-                    <div className="flex gap-2 cursor-pointer rounded-lg bg-white border border-[#e5e7eb] justify-center items-center p-2  px-4">
-                        <Funnel size={18} /> <p className='text-[15px]'>Filter</p>
+                    <div className="flex gap-2 cursor-pointer rounded-sm bg-white border border-[#e5e7eb] justify-center items-center p-2  px-4">
+                        <Funnel size={15} /> <p className='text-[15px]'>Filter</p>
                     </div>
 
-                    <div className="flex gap-2 cursor-pointer rounded-lg bg-white border border-[#e5e7eb] justify-center items-center p-2 px-4" onClick={() => setOpen(true)}>
-                        <Plus size={18} /> <p className='text-[15px]' >Create Task</p>
+                    <div className="flex gap-2 cursor-pointer rounded-sm bg-white border border-[#e5e7eb] justify-center items-center p-2 px-4" onClick={() => setOpen(true)}>
+                        <Plus size={18} /> <p className='text-[15px] font-jukarta' >Create Task</p>
                     </div>
 
                 </div>

@@ -9,6 +9,7 @@ import DashboardHome from "./Pages/Dashboard/DashboardHome.jsx";
 import DashbordProjects from "./Pages/Dashboard/DashbordProjects.jsx";
 import ProjectInputForm from "./Pages/Dashboard/Components/Projects/ProjectInputForm.jsx";
 import SingleProjectPage from "./Pages/Dashboard/Components/SingleProject/SingleProjectPage.jsx";
+import TaskPage from "./Pages/TaskPage/TaskPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/Dashboard/Projects/create",
         element: <ProjectInputForm/>
+      },
+      {
+        path: "/Dashboard/Projects/MyTasks",
+        element: <TaskPage/>
       }
     ]
   },
