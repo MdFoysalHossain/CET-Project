@@ -10,6 +10,8 @@ import DashbordProjects from "./Pages/Dashboard/DashbordProjects.jsx";
 import ProjectInputForm from "./Pages/Dashboard/Components/Projects/ProjectInputForm.jsx";
 import SingleProjectPage from "./Pages/Dashboard/Components/SingleProject/SingleProjectPage.jsx";
 import TaskPage from "./Pages/TaskPage/TaskPage.jsx";
+import CalendarPage from "./Pages/Calander/CalendarPage.jsx";
+import Allusers from "./Pages/Users/Allusers.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
       {
         path: "/Dashboard/Projects/MyTasks",
         element: <TaskPage/>
+      },
+      {
+        path: "/Dashboard/Calendar",
+        element: <CalendarPage/>
+      },
+      {
+        path: "/Dashboard/Users",
+        element: <Allusers/>
       }
     ]
   },

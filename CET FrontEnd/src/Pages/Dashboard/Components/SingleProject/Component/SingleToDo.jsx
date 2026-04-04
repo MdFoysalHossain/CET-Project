@@ -7,7 +7,7 @@ const SingleToDo = ({ setShowDetails }) => {
 
     return (
         <div className="cursor-pointer" onClick={() => setShowDetails(true)}>
-            <div className="bg-white rounded-lg p-4 mb-4 flex flex-col gap-1.5 font-jukarta">
+            <div className="bg-white rounded-lg p-4 mb-4 flex flex-col gap-1.5 font-jukarta relative">
                 {/* <div className="flex items-center justify-end gap-2">
                     <div className="bg-indigo-200 flex items-center gap-1 px-2 rounded-sm py-0.5 text-indigo-600">
                         <p className='h-2 w-2 rounded-3xl bg-indigo-600'></p>
@@ -28,7 +28,13 @@ const SingleToDo = ({ setShowDetails }) => {
                     </div>
                 </div> */}
 
-                <div className="text-left mt-0">
+                <div className="absolute right-2 top-2 ">
+                    <div className="bg-indigo-200 flex items-center  p-1.5 rounded-sm text-indigo-600">
+                        <p className='h-2 w-2 rounded-3xl bg-indigo-600'></p>
+                    </div>
+                </div>
+
+                <div className="text-left mt-2">
                     <h2 className='text-lg font-semibold'>Design Homepage Wireframe</h2>
 
                     <p className='text-sm line-clamp-2 text-gray-500'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit hic fugit quo est, nam beatae perferendis? Dolorem odio totam nemo.</p>

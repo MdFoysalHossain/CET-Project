@@ -74,3 +74,8 @@ h1 {
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1); /* makes icon black if it's white */
 }
+
+/* 
+* {
+  outline: 1px solid red;
+} */

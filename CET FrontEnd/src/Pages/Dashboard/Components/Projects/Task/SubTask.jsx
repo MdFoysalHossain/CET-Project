@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File } from "lucide-react";
+import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File, Trash2 } from "lucide-react";
 
 const SubTask = ({ showSubDetails, setShowSubDetails }) => {
     return (
@@ -13,12 +13,17 @@ const SubTask = ({ showSubDetails, setShowSubDetails }) => {
 
                 {/* HEADER */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
-                    <button className="text-gray-500 hover:text-black" onClick={() => setShowSubDetails(false)}>
-                        <X size={18} />
+                    <button className="text-gray-500 hover:text-black hover:scale-110 cursor-pointer transition duration-200" onClick={() => setShowSubDetails(false)}>
+                        <X size={18} className='hover:scale-110 transition duration-200'/>
                     </button>
 
-                    <div className="flex gap-3 text-gray-500">
-                        <SquarePen size={18} />
+                    <div className="flex gap-5">
+                        <div className="flex gap-3 text-gray-500 cursor-pointer">
+                            <SquarePen size={18} className='hover:scale-110 hover:text-indigo-500 transition duration-200'/>
+                        </div>
+                        <div className="flex gap-3 text-gray-500 cursor-pointer">
+                            <Trash2 size={18} className='hover:scale-110 hover:text-red-500 transition duration-200' />
+                        </div>
                     </div>
                 </div>
 

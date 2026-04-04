@@ -4,15 +4,15 @@ import SidebarUI from '../Components/SidebarUi';
 
 const HomeRoot = () => {
   return (
-    <div className="flex items-start gap-[1px] h-screen w-screen">
-
+    <div className="flex h-screen w-screen gap-0 overflow-hidden ">
+      
       {/* Sidebar */}
-      <div className="w-72 bg-white">
+      <div className=" h-screen bg-gray-50 shrink-0">
         <SidebarUI />
       </div>
 
       {/* Main Content */}
-      <div className="w-full bg-white h-full">
+      <div className="flex-1 h-screen overflow-y-auto bg-gray-50">
         <Outlet />
       </div>
 

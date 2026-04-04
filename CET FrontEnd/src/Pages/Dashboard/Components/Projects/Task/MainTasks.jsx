@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File } from "lucide-react";
+import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File, Trash2 } from "lucide-react";
 
-const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSubTaskOpen}) => {
+const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSubTaskOpen }) => {
 
     console.log("Main Task Rendered", showDetails);
 
@@ -15,12 +15,17 @@ const MainTasks = ({ showDetails, setShowDetails,setShowSubDetails, setCreateSub
 
                 {/* HEADER */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
-                    <button className="text-gray-500 hover:text-black" onClick={() => setShowDetails(!showDetails)}>
-                        <X size={18} />
+                    <button className="text-gray-500 hover:text-black cursor-pointer" onClick={() => setShowDetails(!showDetails)}>
+                        <X size={18} className='hover:scale-110 transition duration-200'/>
                     </button>
 
-                    <div className="flex gap-3 text-gray-500">
-                        <SquarePen size={18} />
+                    <div className="flex gap-5">
+                        <div className="flex gap-3 text-gray-500 cursor-pointer">
+                            <SquarePen size={18} className='hover:scale-110 hover:text-indigo-500 transition duration-200'/>
+                        </div>
+                        <div className="flex gap-3 text-gray-500 cursor-pointer">
+                            <Trash2 size={18} className='hover:scale-110 hover:text-red-500 transition duration-200' />
+                        </div>
                     </div>
                 </div>
 

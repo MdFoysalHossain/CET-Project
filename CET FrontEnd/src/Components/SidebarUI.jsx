@@ -35,8 +35,8 @@ const SidebarUI = () => {
     { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
     { icon: Folder, label: "Projects", to: "/Dashboard/Projects" },
     { icon: CheckSquare, label: "Tasks", to: "/Dashboard/Projects/MyTasks" },
-    { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Projects/MyTasks" },
-    { icon: Users, label: "Users" },
+    { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
+    { icon: Users, label: "Users", to: "/Dashboard/Users" },
     { icon: Bell, label: "Notification" }
   ];
   const systemMenu = [
