@@ -19,7 +19,6 @@ const AllProjects = ({ showDetails, setShowDetails }) => {
                 <div className="grid grid-cols-3 gap-5">
 
 
-                    
                     <Link to="/Dashboard/Projects/ProjectName"
                         // onClick={() => setShowDetails(true)}
                         className="w-full text-left relative bg-white border border-[#e5e7eb] rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"

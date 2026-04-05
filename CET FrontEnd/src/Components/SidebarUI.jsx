@@ -14,7 +14,8 @@ import {
   Blocks,
   Settings,
   Info,
-  CalendarRange
+  CalendarRange,
+  Frame
 } from "lucide-react";
 import { Link } from "react-router";
 
@@ -41,6 +42,7 @@ const SidebarUI = () => {
   ];
   const systemMenu = [
     // { icon: Home, label: "Home" },
+    { icon: Frame, label: "Backlog", to: "/Dashboard/Projects" },
     { icon: Settings, label: "Settings", to: "/Dashboard" },
     { icon: Info, label: "Help", to: "/Dashboard/Projects" },
   ];

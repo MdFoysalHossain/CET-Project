@@ -5,13 +5,14 @@ import { RouterProvider } from "react-router/dom";
 import './index.css'
 import App from './App.jsx'
 import HomeRoot from "./Root/HomeRoot.jsx";
-import DashboardHome from "./Pages/Dashboard/DashboardHome.jsx";
-import DashbordProjects from "./Pages/Dashboard/DashbordProjects.jsx";
-import ProjectInputForm from "./Pages/Dashboard/Components/Projects/ProjectInputForm.jsx";
-import SingleProjectPage from "./Pages/Dashboard/Components/SingleProject/SingleProjectPage.jsx";
+import DashboardHome from "./Pages/Projects/DashboardHome.jsx";
+import DashbordProjects from "./Pages/Projects/DashbordProjects.jsx";
+import ProjectInputForm from "./Pages/Projects/Components/Projects/ProjectInputForm.jsx";
+import SingleProjectPage from "./Pages/Projects/Components/SingleProject/SingleProjectPage.jsx";
 import TaskPage from "./Pages/TaskPage/TaskPage.jsx";
 import CalendarPage from "./Pages/Calander/CalendarPage.jsx";
 import Allusers from "./Pages/Users/Allusers.jsx";
+import DashboardPage from "./Pages/Dashboard/DashboardPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <DashboardHome/>
+        element: <DashboardPage/>
       },
       {
         path: "/Dashboard/Projects",

@@ -1,6 +1,6 @@
 import React from 'react';
-import ProjectsCounting from './Components/ProjectsCounting';
-import DashboardActivityLogs from './Components/DashboardActivityLogs';
+import ProjectsCounting from '../Dashboard/Component/ProjectsCounting';
+// import DashboardActivityLogs from '../Dashboard/Component/DashboardActivityLogs';
 
 const DashboardHome = () => {
     return (
@@ -13,7 +13,7 @@ const DashboardHome = () => {
                         <h2>Activity Logs</h2>
                     </div>
 
-                    <DashboardActivityLogs/>
+                    {/* <DashboardActivityLogs/> */}
 
                 </div>
                 <div className="flex-1">
