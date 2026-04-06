@@ -13,39 +13,41 @@ import TaskPage from "./Pages/TaskPage/TaskPage.jsx";
 import CalendarPage from "./Pages/Calander/CalendarPage.jsx";
 import Allusers from "./Pages/Users/Allusers.jsx";
 import DashboardPage from "./Pages/Dashboard/DashboardPage.jsx";
+import AccountProvidor from "./Context/AccountProvidor.jsx";
+import SettingsProvider from "./Context/SettingsProvidor.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/Dashboard",
-    element: <HomeRoot/>,
+    element: <HomeRoot />,
     children: [
       {
         index: true,
-        element: <DashboardPage/>
+        element: <DashboardPage />
       },
       {
         path: "/Dashboard/Projects",
-        element: <DashbordProjects/>
+        element: <DashbordProjects />
       },
       {
         path: "/Dashboard/Projects/:id",
-        element: <SingleProjectPage/>
+        element: <SingleProjectPage />
       },
       {
         path: "/Dashboard/Projects/create",
-        element: <ProjectInputForm/>
+        element: <ProjectInputForm />
       },
       {
         path: "/Dashboard/Projects/MyTasks",
-        element: <TaskPage/>
+        element: <TaskPage />
       },
       {
         path: "/Dashboard/Calendar",
-        element: <CalendarPage/>
+        element: <CalendarPage />
       },
       {
         path: "/Dashboard/Users",
-        element: <Allusers/>
+        element: <Allusers />
       }
     ]
   },
@@ -54,5 +56,10 @@ const router = createBrowserRouter([
 const root = document.getElementById("root");
 
 ReactDOM.createRoot(root).render(
-  <RouterProvider router={router} />,
+  <SettingsProvider>
+    <AccountProvidor>
+      <RouterProvider router={router} />
+    </AccountProvidor>
+  </SettingsProvider>
+  // <RouterProvider router={router} />,
 );

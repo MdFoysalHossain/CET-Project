@@ -1,27 +1,36 @@
 import React, { useState } from 'react';
 import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File, Trash2 } from "lucide-react";
 
-const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSubTaskOpen }) => {
+const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSubTaskOpen, selectedTask, setSelectedSubTask }) => {
 
-    console.log("Main Task Rendered", showDetails);
+    // console.log("Main Task Details", selectedTask);
 
     return (
 
-        <div className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-jukarta absolute top-0 right-0 ${showDetails || "hidden"}`}
+        <div
+            className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-jukarta absolute top-0 right-0 z-100
+                transition-all duration-300 overflow-hidden
+                ${showDetails ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+            `}
         >
 
             {/* CARD */}
-            <div className="w-[600px] bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto font-jukarta">
+            <div
+                className={`w-[600px] bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto font-jukarta
+                    transform transition-all duration-300 ease-in-out
+                    ${showDetails ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
+                `}
+            >
 
                 {/* HEADER */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
                     <button className="text-gray-500 hover:text-black cursor-pointer" onClick={() => setShowDetails(!showDetails)}>
-                        <X size={18} className='hover:scale-110 transition duration-200'/>
+                        <X size={18} className='hover:scale-110 transition duration-200' />
                     </button>
 
                     <div className="flex gap-5">
                         <div className="flex gap-3 text-gray-500 cursor-pointer">
-                            <SquarePen size={18} className='hover:scale-110 hover:text-indigo-500 transition duration-200'/>
+                            <SquarePen size={18} className='hover:scale-110 hover:text-indigo-500 transition duration-200' />
                         </div>
                         <div className="flex gap-3 text-gray-500 cursor-pointer">
                             <Trash2 size={18} className='hover:scale-110 hover:text-red-500 transition duration-200' />
@@ -34,7 +43,7 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
 
                     {/* TITLE */}
                     <h2 className="text-lg font-semibold text-left">
-                        Design Homepage Wireframe
+                        {selectedTask ? selectedTask.title : "Task Title"}
                     </h2>
 
                     {/* META INFO */}
@@ -45,22 +54,33 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                             <span className="flex items-center gap-2">
                                 <Clock size={14} /> Created time
                             </span>
-                            <span>September 20, 2024 &nbsp; 10:35 AM</span>
+                            <span className='capitalize'>
+                                {selectedTask
+                                    ? new Date(selectedTask.createdAt).toLocaleString('en-GB', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        year: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: true
+                                    }).replace(',', ' -')
+                                    : "Created Date"}
+                            </span>
                         </div>
 
                         {/* Status */}
                         <div className="flex justify-between">
                             <span>Status</span>
                             <span className="px-2 py-1 text-xs rounded bg-orange-100 text-orange-600">
-                                ● In Research
+                                {selectedTask ? selectedTask.status : "Statsus"}
                             </span>
                         </div>
 
                         {/* Priority */}
                         <div className="flex justify-between">
                             <span>Priority</span>
-                            <span className="px-2 py-1 text-xs rounded bg-indigo-100 text-indigo-600">
-                                Low
+                            <span className={`px-2 py-1 text-xs rounded  ${selectedTask?.priority === "High" ? "bg-red-200  text-red-600" : selectedTask?.priority === "Medium" ? "bg-yellow-200  text-yellow-600" : "bg-indigo-100 text-indigo-600 "}`}>
+                                {selectedTask ? selectedTask.priority : "Priority"}
                             </span>
                         </div>
 
@@ -69,7 +89,17 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                             <span className="flex items-center gap-2">
                                 <Calendar size={14} /> Due Date
                             </span>
-                            <span>Oct 12, 2026</span>
+                            {/* <span>{selectedTask ? selectedTask.dueDate : "Due Date"}</span> */}
+                            <span className='capitalize'>
+                                {selectedTask
+                                    ? new Date(selectedTask.dueDate).toLocaleString('en-GB', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        year: 'numeric',
+                                        hour12: true
+                                    }).replace(',', ' -')
+                                    : "Due Date"}
+                            </span>
                         </div>
 
                         {/* Assignees */}
@@ -87,35 +117,16 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                     </div>
 
                     {/* DESCRIPTION */}
-
-
-
                     <div className="bg-gray-100 p-4 rounded-lg text-sm text-left text-gray-600">
                         <p className="mb-2 text-gray-700 font-semibold">
                             Project Description
                         </p>
 
-                        {/* <pre className="whitespace-pre-wrap break-words leading-relaxed font-sans">
-                            {`- Create a modern, clean, and responsive homepage layout
-- Design a strong hero section with headline, subtext, and call-to-action
-- Include sections for features, services, and key highlights
-- Add a testimonials or social proof section
-- Ensure clear and intuitive navigation
-- Maintain consistent spacing, colors, and typography
-- Optimize for mobile, tablet, and desktop screens
-- Focus on user experience and fast loading performance
-- Include a well-structured footer with essential links and info`}
-                        </pre> */}
-
                         <pre className="whitespace-pre-wrap break-words leading-relaxed font-jukarta">
-                            Design a modern, responsive homepage that clearly communicates the brand’s identity and value. The layout should include a clean hero section with a strong headline and call-to-action, followed by sections for features, services, testimonials, and a footer. Focus on intuitive navigation, visually appealing UI, and consistent spacing, colors, and typography. Ensure the design is mobile-friendly and optimized for performance and user experience.
+                            {selectedTask ? selectedTask.description : "Description"}
                         </pre>
                     </div>
-
                 </div>
-
-
-
 
                 {/* ATTACHMENTS */}
                 <div className="">
@@ -130,8 +141,6 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                             <p className="text-sm">Add Attachment</p>
                         </button>
                     </div>
-
-
 
                     <div className="px-6 py-4 space-y-5 text-sm">
 
@@ -190,21 +199,25 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                         <div className="">
 
                             <ul class="list rounded-box text-left flex flex-col gap-2 *:cursor-pointer">
+                                {
+                                    selectedTask && selectedTask.subTasks.length > 0 ? (
+                                        selectedTask.subTasks.map((subTask, index) => (
+                                            <li class="w-full bg-gray-100 rounded-lg">
+                                                <div className="collapse-title font-semibold" onClick={() => {
+                                                    console.log("Subtask Clicked:", subTask)
+                                                    setShowDetails(false)
+                                                    setShowSubDetails(true)
+                                                    setSelectedSubTask(subTask)
 
-                                <li class="w-full bg-gray-100 rounded-lg">
-                                    <div className="collapse-title font-semibold" onClick={() => {
-                                        setShowDetails(false)
-                                        setShowSubDetails(true)
-                                    }}>
-                                        #1 Account Page
-                                    </div>
-                                </li>
-                                <li class="w-full bg-gray-100 rounded-lg">
-                                    <div className="collapse-title font-semibold">#2 Login Page</div>
-                                </li>
-                                <li class="w-full bg-gray-100 rounded-lg">
-                                    <div className="collapse-title font-semibold">#3 Registration Page</div>
-                                </li>
+                                                }}>
+                                                    {subTask.subTitle}
+                                                </div>
+                                            </li>
+                                        )
+                                        )) : (
+                                        <p className='text-sm text-gray-500'>No sub tasks available</p>
+                                    )
+                                }
                             </ul>
 
                         </div>
@@ -228,7 +241,7 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
 
                     <div className="px-6 pt-3 font-jukarta">
                         <div className=" px-2  py-1.5 mb-2 rounded-lg">
-                            <form action="" onSubmit={console.log("Submited")}>
+                            <form action="" onSubmit={console.log("")}>
                                 <fieldset className="fieldset  text-left relative" >
                                     <legend className="fieldset-legend text-black gap-1 justify-center items-center flex">
                                         <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>

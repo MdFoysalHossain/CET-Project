@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Home,
   LayoutDashboard,
@@ -18,10 +18,16 @@ import {
   Frame
 } from "lucide-react";
 import { Link } from "react-router";
+import { AuthContext } from "../Context/AccountProvidor";
+import { SettingsContext } from "../Context/SettingsProvidor";
+
 
 const SidebarUI = () => {
+  const { isLoggedIn, googlePopUpLogin, accountDetails, googleSignOut } = useContext(AuthContext)
 
   const [activeProject, setActiveProject] = useState(null);
+
+  console.log("User Logged in?", accountDetails)
 
   const projects = [
     { name: "Untitled UI icons", color: "bg-purple-500" },
@@ -48,11 +54,11 @@ const SidebarUI = () => {
   ];
 
   return (
-    <div className="w-64 h-screen bg-white flex flex-col font-jukarta border-r border-[#e5e7eb] fixed left-0 top-0">
+    <div className="w-64 h-screen bg-white flex flex-col font-jukarta border-r border-[#e5e7eb] fixed left-0 top-0 z-100">
 
       <div className="border-b border-[#e5e7eb] p-4 flex items-center justify-center">
         <h2 className="flex items-center gap-2 font-bold text-2xl text-blue-500">
-          PROXT
+          TrackLio
         </h2>
       </div>
 
@@ -111,7 +117,7 @@ const SidebarUI = () => {
       </div>
 
       {/* PROJECTS */}
-      <div className="mt-2 p-4 border-t border-[#e5e7eb]">
+      <div className="mt-2 p-4 border-t border-[#e5e7eb] hidden">
 
         <div className="flex justify-between items-center mb-3">
           <p className="text-xs second-color font-semibold">Clients</p>
@@ -137,6 +143,37 @@ const SidebarUI = () => {
             </div>
           ))}
         </div>
+
+
+      </div>
+
+
+      <div className="  h-full flex items-center  p-4 flex-col gap-5 justify-end border-t border-[#e5e7eb]">
+
+
+        {
+          isLoggedIn ?
+            <div className="w-full">
+              <div className="border border-gray-200 rounded-sm flex items-center w-full px-2 mb-1">
+                <div className="h-10 w-10 bg-gray-200 rounded-lg overflow-hidden">
+                  <img src={accountDetails?.photoURL} alt="" />
+                </div>
+
+                <div className="text-left p-2">
+                  <p className="text-sm text-gray-600">Logged in as</p>
+                  <h2 className="font-bold text-md">{accountDetails?.displayName}</h2>
+                </div>
+              </div>
+
+              <button className="btn bg-indigo-500 text-white border-0  w-full " onClick={googleSignOut}>
+                Log Out
+              </button>
+            </div> :
+            <button className="btn bg-white text-black border-[#e5e5e5] " onClick={googlePopUpLogin}>
+              <svg aria-label="Google logo" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="m0 0H512V512H0" fill="#fff"></path><path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path><path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path><path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"></path><path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path></g></svg>
+              Login with Google
+            </button>
+        }
       </div>
 
     </div>

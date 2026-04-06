@@ -108,6 +108,7 @@ export default function Allusers() {
 
     return (
         <div className="w-full overflow-x-hidden">
+            <title>TrackLio - Users & Teams</title>
             <div className="flex items-center justify-start px-6 border-b border-gray-200 h-[65px] text-left">
                 <div className="max-w-[1330px] mx-auto w-full flex items-center justify-start gap-4">
                     <h2 className="text-2xl font-semibold font-jukarta">Users & Teams</h2>

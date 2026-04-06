@@ -6,6 +6,7 @@ const TaskSummury = () => {
         {
             id: 1,
             title: "Creating Mobile UI for bKash App",
+            project: "Creating Mobile UI for bKash App",
             status: "To Do",
             deadline: "6/12/2026",
             assignedTo: ["Foysal Hossain", "Easeen Hasan", "Farhana Akter"],
@@ -13,6 +14,7 @@ const TaskSummury = () => {
         {
             id: 2,
             title: "Dashboard API Integration",
+            project: "Rocket App Backend API Integration",
             status: "In Progress",
             deadline: "8/12/2026",
             assignedTo: ["John Doe"],
@@ -32,7 +34,8 @@ const TaskSummury = () => {
                     <thead className="text-left">
                         <tr>
                             <th className="p-3 border border-gray-200">No</th>
-                            <th className="p-3 border border-gray-200 text-left">Task</th>
+                            <th className="p-3 border border-gray-200 text-left">Project Name</th>
+                            <th className="p-3 border border-gray-200 text-left">Task Name</th>
                             <th className="p-3 border border-gray-200 text-left">Status</th>
                             <th className="p-3 border border-gray-200 text-left">Deadline</th>
                             <th className="p-3 border border-gray-200 text-left">Assigned To</th>
@@ -46,6 +49,7 @@ const TaskSummury = () => {
 
                                 <td className="p-3 border border-gray-200">#{task.id}</td>
 
+                                <td className="p-3 border border-gray-200">{task.project}</td>
                                 <td className="p-3 border border-gray-200">{task.title}</td>
 
                                 <td className="p-3 border border-gray-200">

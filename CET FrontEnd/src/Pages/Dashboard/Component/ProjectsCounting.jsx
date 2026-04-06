@@ -35,7 +35,7 @@ const ProjectsCounting = () => {
                             <TriangleAlert size={25} className='text-yellow-500' />
                             <p className='text-4xl '>1</p>
                         </div>
-                        <p className='absolute top-2 left-2 text-sm font-semibold uppercase flex items-center gap-2 text-gray-600'> Near Deadline</p>
+                        <p className='absolute top-2 left-2 text-sm font-semibold uppercase flex items-center gap-2 text-gray-600'> Upcoming Deadline</p>
                     </div>
                     <div className="border bg-white border-[#e5e7eb] rounded-sm p-6 font-jukarta relative">
                         <div className=' mt-5 font-rubik flex items-center justify-start gap-2'>

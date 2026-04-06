@@ -165,6 +165,8 @@ const CalendarPage = () => {
 
     return (
         <div className="">
+
+            <title>TrackLio - Calendar</title>
             {showEventModal && (
                 <div className="fixed inset-0  items-center justify-center z-50 font-jukarta hidden">
                     <div className="bg-white w-[500px] rounded-2xl shadow-2xl relative z-50 max-h-[85vh] flex flex-col overflow-hidden">
@@ -419,12 +421,12 @@ const CalendarPage = () => {
                                 </div>
 
                                 {/* Body */}
-                                <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-3 max-h-[560px] overflow-y-scroll"  >
+                                <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3 max-h-[560px] overflow-y-scroll"  >
                                     {(events[selectedDate] && events[selectedDate].length > 0) ? (
                                         events[selectedDate].map((event, idx) => (
                                             <div
                                                 key={idx}
-                                                className="group border text-left bg-gray-100/10 border-gray-200 rounded-xl p-4 hover:shadow-sm transition flex flex-col gap-2"
+                                                className="group border text-left bg-gray-100/10 border-gray-200 rounded-sm p-2 px-3 hover:shadow-sm transition flex flex-col gap-2"
                                             >
                                                 <div className="flex items-center justify-between">
                                                     <p className="font-semibold text-gray-800">
@@ -467,61 +469,83 @@ const CalendarPage = () => {
 
 
             {showCreateModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-xl shadow-xl w-80 relative z-50">
-                        <h2 className="text-lg font-semibold mb-4">Create Event</h2>
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
 
-                        <div className="flex flex-col gap-3">
+                    {/* Overlay */}
+                    <div
+                        onClick={() => setShowCreateModal(false)}
+                        className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+                    />
+
+                    {/* Modal */}
+                    <div className="relative z-10 w-[380px] bg-white rounded-2xl shadow-2xl border border-gray-200 p-6 transition-all duration-300 scale-100">
+
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-5">
+                            <h2 className="text-lg font-semibold text-gray-800">
+                                Create Event
+                            </h2>
+                            <button
+                                onClick={() => setShowCreateModal(false)}
+                                className="text-gray-400 hover:text-black transition"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Inputs */}
+                        <div className="flex flex-col gap-4">
+
                             <input
                                 type="date"
                                 value={newEvent.date}
                                 onChange={(e) =>
                                     setNewEvent({ ...newEvent, date: e.target.value })
                                 }
-                                className="border p-2 rounded-md"
+                                className="border border-gray-200  focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-lg text-sm transition"
                             />
 
                             <input
                                 type="text"
-                                placeholder="Header"
+                                placeholder="Event title"
                                 value={newEvent.header}
                                 onChange={(e) =>
                                     setNewEvent({ ...newEvent, header: e.target.value })
                                 }
-                                className="border p-2 rounded-md"
+                                className="border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-lg text-sm transition"
                             />
 
                             <textarea
-                                placeholder="Details"
+                                placeholder="Add details..."
                                 value={newEvent.details}
                                 onChange={(e) =>
                                     setNewEvent({ ...newEvent, details: e.target.value })
                                 }
-                                className="border p-2 rounded-md"
+                                className="border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-lg text-sm transition resize-none"
+                                rows={3}
                             />
+
                         </div>
 
-                        <div className="flex justify-end gap-2 mt-4">
+                        {/* Actions */}
+                        <div className="flex justify-end gap-3 mt-6">
+
                             <button
                                 onClick={() => setShowCreateModal(false)}
-                                className="px-3 py-1 bg-gray-200 rounded-md"
+                                className="px-4 py-2 text-sm rounded-lg bg-gray-100 hover:bg-gray-200 transition"
                             >
                                 Cancel
                             </button>
+
                             <button
                                 onClick={handleCreateEvent}
-                                className="px-3 py-1 bg-black text-white rounded-md"
+                                className="px-4 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm"
                             >
-                                Add
+                                Add Event
                             </button>
+
                         </div>
                     </div>
-
-                    {/* Overlay */}
-                    <div
-                        onClick={() => setShowCreateModal(false)}
-                        className="fixed inset-0 bg-black/30"
-                    />
                 </div>
             )}
         </div>

@@ -11,8 +11,8 @@ const DashbordProjects = () => {
 
     return (
         <div className='flex flex-col'>
-
-
+            
+            <title>TrackLio - All Projects</title>
 
             <div className="w-full  mx-auto flex-1 border-b border-[#e5e7eb]">
                 <div className="max-w-[1330px] mx-auto">

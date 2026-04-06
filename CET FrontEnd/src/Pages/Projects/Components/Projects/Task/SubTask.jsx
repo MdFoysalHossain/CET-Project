@@ -1,25 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File, Trash2 } from "lucide-react";
 
-const SubTask = ({ showSubDetails, setShowSubDetails }) => {
+const SubTask = ({ showSubDetails, setShowSubDetails, selectedSubTask }) => {
+
+    console.log("ENTERED SUBTASK")
+    useEffect(() => {
+        console.log("Updated:", selectedSubTask)
+    }, [selectedSubTask])
+
+
+    // console.log("Sub Task Details", selectedSubTask);
     return (
-        <div className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-jukarta absolute top-0 right-0 ${showSubDetails || "hidden"}`}
+        <div className={`flex items-center justify-end pr-5 font-sans w-screen h-screen bg-black/50 font-jukarta absolute top-0 right-0 z-100 ${showSubDetails || "hidden"}`}
         >
-
-
             {/* CARD */}
             <div className="w-[600px] bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto font-jukarta">
 
                 {/* HEADER */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-[#e5e7eb]">
                     <button className="text-gray-500 hover:text-black hover:scale-110 cursor-pointer transition duration-200" onClick={() => setShowSubDetails(false)}>
-                        <X size={18} className='hover:scale-110 transition duration-200'/>
+                        <X size={18} className='hover:scale-110 transition duration-200' />
                     </button>
 
                     <div className="flex gap-5">
                         <div className="flex gap-3 text-gray-500 cursor-pointer">
-                            <SquarePen size={18} className='hover:scale-110 hover:text-indigo-500 transition duration-200'/>
+                            <SquarePen size={18} className='hover:scale-110 hover:text-indigo-500 transition duration-200' />
                         </div>
                         <div className="flex gap-3 text-gray-500 cursor-pointer">
                             <Trash2 size={18} className='hover:scale-110 hover:text-red-500 transition duration-200' />
@@ -33,10 +39,11 @@ const SubTask = ({ showSubDetails, setShowSubDetails }) => {
                     {/* TITLE */}
                     <div className="">
                         <h2 className="text-sm text-left text-gray-500">
-                            Main: Design Homepage Wireframe
+                            {selectedSubTask ? selectedSubTask.projectName : "Sub Task Title"}
+                            {/* {selectedSubTask ? selectedSubTask : "Sub Task Title"} */}
                         </h2>
                         <h2 className="text-lg font-semibold text-left">
-                            Sub Task: Design Homepage Wireframe
+                            {selectedSubTask ? selectedSubTask.subTitle : "Sub Task Title"}
                         </h2>
                     </div>
 
@@ -46,18 +53,6 @@ const SubTask = ({ showSubDetails, setShowSubDetails }) => {
                         <p className="mb-2 text-gray-700 font-semibold">
                             Project Description
                         </p>
-
-                        {/* <pre className="whitespace-pre-wrap break-words leading-relaxed font-sans">
-                            {`- Create a modern, clean, and responsive homepage layout
-- Design a strong hero section with headline, subtext, and call-to-action
-- Include sections for features, services, and key highlights
-- Add a testimonials or social proof section
-- Ensure clear and intuitive navigation
-- Maintain consistent spacing, colors, and typography
-- Optimize for mobile, tablet, and desktop screens
-- Focus on user experience and fast loading performance
-- Include a well-structured footer with essential links and info`}
-                        </pre> */}
 
                         <pre className="whitespace-pre-wrap break-words leading-relaxed font-jukarta">
                             Design a modern, responsive homepage that clearly communicates the brand’s identity and value. The layout should include a clean hero section with a strong headline and call-to-action, followed by sections for features, services, testimonials, and a footer. Focus on intuitive navigation, visually appealing UI, and consistent spacing, colors, and typography. Ensure the design is mobile-friendly and optimized for performance and user experience.
@@ -129,7 +124,7 @@ const SubTask = ({ showSubDetails, setShowSubDetails }) => {
 
                     <div className="px-6 pt-3 font-jukarta">
                         <div className=" px-2  py-1.5 mb-2 rounded-lg">
-                            <form action="" onSubmit={console.log("Submited")}>
+                            <form action="">
                                 <fieldset className="fieldset  text-left relative" >
                                     <legend className="fieldset-legend text-black gap-1 justify-center items-center flex">
                                         <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
