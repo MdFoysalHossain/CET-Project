@@ -14,7 +14,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const uri = process.env.MONGODB_URI;
 
@@ -55,6 +55,10 @@ async function run() {
         const projects = client.db("projects");
         const allProjects = projects.collection("allProjects");
 
+        const tasksDb = client.db("Task");
+        const allTasks = tasksDb.collection("AllTask");
+        const subTasks = tasksDb.collection("SubTask");
+
 
         const verifyFirebaseToken = async (req, res, next) => {
             try {
@@ -65,6 +69,7 @@ async function run() {
                 }
 
                 const token = authHeader.split(" ")[1];
+                // console.log(token)
 
                 const decoded = await admin.auth().verifyIdToken(token);
 
@@ -83,6 +88,9 @@ async function run() {
         const verifyEmailMatch = (req, res, next) => {
             const requestEmail = req.query.email; // or req.body.email
             const tokenEmail = req.user.email;
+
+            console.log("Requested Email:", requestEmail)
+            console.log("Token Email:", tokenEmail)
 
             if (!requestEmail) {
                 console.log("Email Not Found")
@@ -138,7 +146,6 @@ async function run() {
             const postDetails = {
                 ...req.body
             };
-
             const createProject = await allProjects.insertOne(postDetails)
             console.log(createProject)
             res.send(createProject)
@@ -162,6 +169,212 @@ async function run() {
             }
         });
 
+        // app.delete("/deleteProject", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+        //     console.log("Project Delete Hit");
+
+        //     try {
+        //         const email = req.user.email;
+        //         const projectId = req.query.projectId;
+
+        //         if (!projectId) {
+        //             return res.status(400).send({ error: "Project ID is required" });
+        //         }
+
+        //         const result = await allProjects.deleteOne({
+        //             _id: new ObjectId(projectId),
+        //             createdBy: email
+        //         });
+
+        //         console.log("Delete Result:", result);
+
+        //         if (result.deletedCount === 0) {
+        //             return res.status(404).send({ error: "Project not found or unauthorized" });
+        //         }
+
+        //         res.send({
+        //             success: true,
+        //             deletedCount: result.deletedCount
+        //         });
+
+        //     } catch (error) {
+        //         console.error(error);
+        //         res.status(500).send({ error: "Failed to delete project" });
+        //     }
+        // });
+
+
+
+        app.delete("/deleteProject", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            console.log("Project Soft Delete Hit");
+
+            try {
+                const email = req.user.email;
+                const projectId = req.query.projectId;
+
+                if (!projectId) {
+                    return res.status(400).send({ error: "Project ID is required" });
+                }
+
+                const result = await allProjects.updateOne(
+                    {
+                        _id: new ObjectId(projectId),
+                        createdBy: email
+                    },
+                    {
+                        $set: {
+                            state: "deleted",
+                            deletedAt: new Date().toISOString() // optional but 🔥 useful
+                        }
+                    }
+                );
+
+                console.log("Update Result:", result);
+
+                if (result.matchedCount === 0) {
+                    return res.status(404).send({ error: "Project not found or unauthorized" });
+                }
+
+                res.send({
+                    success: true,
+                    modifiedCount: result.modifiedCount
+                });
+
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({ error: "Failed to delete project" });
+            }
+        });
+
+
+        app.get("/getTasks", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            try {
+                const email = req.user.email;            // from token
+                const projectId = req.query.projectId;   // from query
+                const status = req.query.status;         // from query
+
+
+                console.log(email, status, projectId);
+                if (status === "todo") {
+                    const getData = await allTasks.find({
+                        // assignees: email,
+                        projectId: projectId,
+                        status: "To Do"
+                    }).toArray();
+                    res.send(getData);
+                } else if (status === "inprogress") {
+                    const getData = await allTasks.find({
+                        // assignees: email,
+                        projectId: projectId,
+                        status: "In Progress"
+                    }).toArray();
+                    res.send(getData);
+                } else if (status === "QA") {
+                    const getData = await allTasks.find({
+                        // assignees: email,
+                        projectId: projectId,
+                        status: "Q&A"
+                    }).toArray();
+                    res.send(getData);
+                } else if (status === "Finished") {
+                    const getData = await allTasks.find({
+                        // assignees: email,
+                        projectId: projectId,
+                        status: "Finished"
+                    }).toArray();
+                    res.send(getData);
+                }
+
+
+            } catch (error) {
+                res.status(500).send({ error: "Failed to fetch projects" });
+            }
+        });
+
+        app.get("/getSubTasks", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            try {
+                const email = req.user.email;            // from token
+                const taskId = req.query.taskId;   // from query
+
+                const getData = await subTasks.find({
+                    // assignees: email,
+                    taskId: taskId,
+                }).toArray();
+                console.log(getData)
+                res.send(getData);
+
+            } catch (error) {
+                res.status(500).send({ error: "Failed to fetch projects" });
+            }
+        });
+
+        app.post("/createTask", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            const email = { email: req.user.email };
+            // const projectId = req.user.projectId ;
+            const taskDetails = {
+                ...req.body
+            };
+
+            const createTask = await allTasks.insertOne(taskDetails)
+            console.log(createTask)
+            res.send(createTask)
+        })
+
+        app.put("/tasks/:taskId/attachments", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            try {
+                const email = req.user.email;
+                const { taskId } = req.params;
+                const attachment = req.body;
+
+                console.log("BODY:", attachment);
+
+                if (!attachment || !taskId) {
+                    return res.status(400).send({ error: "Missing data" });
+                }
+
+                const result = await allTasks.updateOne(
+                    {
+                        _id: new ObjectId(taskId)
+                    },
+                    {
+                        $push: {
+                            attachments: {
+                                $each: [
+                                    {
+                                        ...attachment,
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                );
+
+                if (result.modifiedCount === 0) {
+                    return res.status(404).send({ error: "Task not found or unauthorized" });
+                }
+
+                res.send({
+                    success: true,
+                    message: "Attachment added",
+                    result
+                });
+
+            } catch (err) {
+                console.error(err);
+                res.status(500).send({ error: "Server error" });
+            }
+        });
+
+        app.post("/createSubTask", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            const email = { email: req.user.email };
+            const taskDetails = {
+                ...req.body
+            };
+
+            const createSubTask = await subTasks.insertOne(taskDetails)
+            console.log(createSubTask)
+            res.send(createSubTask)
+        })
+
     } catch (err) {
         console.error(err);
     }
@@ -169,7 +382,6 @@ async function run() {
 
 run();
 
-// Start server
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

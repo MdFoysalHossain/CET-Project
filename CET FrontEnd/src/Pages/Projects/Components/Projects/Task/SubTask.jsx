@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 
 import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File, Trash2 } from "lucide-react";
 
-const SubTask = ({ showSubDetails, setShowSubDetails, selectedSubTask }) => {
+const SubTask = ({ showSubDetails, setShowSubDetails, selectedSubTask, allSubTask }) => {
 
-    console.log("ENTERED SUBTASK")
     useEffect(() => {
         console.log("Updated:", selectedSubTask)
     }, [selectedSubTask])
@@ -38,12 +37,12 @@ const SubTask = ({ showSubDetails, setShowSubDetails, selectedSubTask }) => {
 
                     {/* TITLE */}
                     <div className="">
-                        <h2 className="text-sm text-left text-gray-500">
-                            {selectedSubTask ? selectedSubTask.projectName : "Sub Task Title"}
+                        <h2 className="text-xs text-left text-gray-500">
+                            #{selectedSubTask ? selectedSubTask._id : "Sub Task Title"}
                             {/* {selectedSubTask ? selectedSubTask : "Sub Task Title"} */}
                         </h2>
                         <h2 className="text-lg font-semibold text-left">
-                            {selectedSubTask ? selectedSubTask.subTitle : "Sub Task Title"}
+                            {selectedSubTask ? selectedSubTask.subTaskName : "Sub Task Title"}
                         </h2>
                     </div>
 
@@ -55,7 +54,9 @@ const SubTask = ({ showSubDetails, setShowSubDetails, selectedSubTask }) => {
                         </p>
 
                         <pre className="whitespace-pre-wrap break-words leading-relaxed font-jukarta">
-                            Design a modern, responsive homepage that clearly communicates the brand’s identity and value. The layout should include a clean hero section with a strong headline and call-to-action, followed by sections for features, services, testimonials, and a footer. Focus on intuitive navigation, visually appealing UI, and consistent spacing, colors, and typography. Ensure the design is mobile-friendly and optimized for performance and user experience.
+                            {
+                                selectedSubTask?.description
+                            }
                         </pre>
                     </div>
 
@@ -131,7 +132,7 @@ const SubTask = ({ showSubDetails, setShowSubDetails, selectedSubTask }) => {
                                         <p className='text-[14px]'>Foysa Hossain</p>
                                     </legend>
                                     <textarea className="textarea h-30 w-full bg-white border border-gray-500/20" placeholder="Write your thought.."></textarea>
-                                    <button class="absolute bottom-2.5 right-2 w-15 bg-indigo-200 text-indigo-800 font-semibold text-[14px] p-1.5 rounded-sm cursor-pointer z-10" type='submit'>Post</button>
+                                    <button className="absolute bottom-2.5 right-2 w-15 bg-indigo-200 text-indigo-800 font-semibold text-[14px] p-1.5 rounded-sm cursor-pointer z-10" type='submit'>Post</button>
                                 </fieldset>
                             </form>
                         </div>

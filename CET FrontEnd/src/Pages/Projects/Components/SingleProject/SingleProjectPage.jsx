@@ -1,14 +1,25 @@
 import { ChevronLeft, Ellipsis, MessagesSquare, Paperclip, Plus, SquareChevronLeft, StepBack } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MainTasks from '../Projects/Task/MainTasks';
 import CreateTask from '../Projects/Task/Component/CreateTask';
 import SubTask from '../Projects/Task/SubTask';
 import CreateSubTask from '../Projects/Task/Component/CreateSubTask';
 import SingleToDo from './Component/SingleToDo';
 import { link, sub } from 'framer-motion/client';
-import { Link } from 'react-router';
+import { Link, useParams } from 'react-router';
+import { SettingsContext } from '../../../../Context/SettingsProvidor';
+import { AuthContext } from '../../../../Context/AccountProvidor';
+import { cosineDistance } from 'firebase/firestore/pipelines';
+import CreateAttachment from '../Projects/Task/Component/CreateAttachment';
 
 const SingleProjectPage = () => {
+
+    const { backEndUrl } = useContext(SettingsContext)
+    const { accountDetails } = useContext(AuthContext)
+
+    const { id: projectId } = useParams()
+
+    console.log("Single Project Parems", projectId)
 
     const [showDetails, setShowDetails] = useState(false);
     const [showSubDetails, setShowSubDetails] = useState(false);
@@ -17,14 +28,98 @@ const SingleProjectPage = () => {
     const [createSubTaskOpen, setCreateSubTaskOpen] = useState(false);
 
     const [selectedTask, setSelectedTask] = useState(null);
-    const [selectedSubTask, setSelectedSubTask] = useState({});
+    const [selectedSubTask, setSelectedSubTask] = useState();
 
-    console.log("Subtask Single Projet Page:", selectedSubTask)
+    const [allSubTask, setAllSubTask] = useState([])
+
+    const [todoTask, setTodoTask] = useState(null)
+    const [inProgressTask, setInProgress] = useState(null)
+    const [inQATask, setInQATask] = useState(null)
+    const [finishedTask, setFinishedTask] = useState(null)
+
+    const [showAttachment, setShowAttachment] = useState(false)
+
+    const [attachUpdated, setAttachUpdated] = useState(false)
 
 
+    useEffect(() => {
+        const fetchTodo = async () => {
+            const token = await accountDetails.getIdToken();
+            fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=todo`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    setTodoTask([...res])
+                })
+                .catch(error => console.log("Can not get projects:", error))
+        }
+        console.log("Fetched Details")
 
+        const fetchInProgress = async () => {
+            const token = await accountDetails.getIdToken();
+            fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=inprogress`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    setInProgress([...res])
+                })
+                .catch(error => console.log("Can not get projects:", error))
+        }
+        console.log("Fetched Details")
 
+        const fetchQA = async () => {
+            const token = await accountDetails.getIdToken();
+            fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=QA`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    setInQATask([...res])
+                })
+                .catch(error => console.log("Can not get projects:", error))
+        }
+        console.log("Fetched Details")
 
+        const fetchFinished = async () => {
+            const token = await accountDetails.getIdToken();
+            fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=Finished`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    setFinishedTask([...res])
+                })
+                .catch(error => console.log("Can not get projects:", error))
+        }
+        console.log("Fetched Details")
+
+        fetchTodo()
+        fetchInProgress()
+        fetchQA()
+        fetchFinished()
+    }, [backEndUrl, accountDetails])
 
     const [allTodo, setAllTodo] = useState([
         {
@@ -297,19 +392,25 @@ const SingleProjectPage = () => {
     return (
         <div className='' >
             <MainTasks showDetails={showDetails}
+                allSubTask={allSubTask}
+                setAllSubTask={setAllSubTask}
                 setShowDetails={setShowDetails}
                 setShowSubDetails={setShowSubDetails}
                 createSubTaskOpen={createSubTaskOpen}
                 setCreateSubTaskOpen={setCreateSubTaskOpen}
                 selectedTask={selectedTask}
                 setSelectedSubTask={setSelectedSubTask}
+                setShowAttachment={setShowAttachment}
+                attachUpdated={attachUpdated}
             />
 
-            <SubTask selectedSubTask={selectedSubTask} showSubDetails={showSubDetails} setShowSubDetails={setShowSubDetails} setShowDetails={setShowDetails} />
+            <SubTask allSubTask={allSubTask} selectedSubTask={selectedSubTask} showSubDetails={showSubDetails} setShowSubDetails={setShowSubDetails} setShowDetails={setShowDetails} />
 
-            <CreateTask isOpen={createTaskOpen} onClose={() => setCreateTaskOpen(false)} />
+            <CreateTask isOpen={createTaskOpen} setCreateTaskOpen={setCreateTaskOpen} onClose={() => setCreateTaskOpen(false)} />
 
-            <CreateSubTask createSubTaskOpen={createSubTaskOpen} setCreateSubTaskOpen={setCreateSubTaskOpen} />
+            <CreateAttachment setAttachUpdated={setAttachUpdated} selectedTask={selectedTask} showAttachment={showAttachment} setShowAttachment={setShowAttachment}/>
+
+            <CreateSubTask selectedTask={selectedTask} allSubTask={allSubTask} setAllSubTask={setAllSubTask} createSubTaskOpen={createSubTaskOpen} setCreateSubTaskOpen={setCreateSubTaskOpen} />
 
             <div className="border-b border-[#e5e7eb]  h-[65px] mb-5">
                 <div className="text-left max-w-[1330px] mx-auto flex items-center">
@@ -344,8 +445,8 @@ const SingleProjectPage = () => {
                         {/* ALL TO DO TASK */}
                         <div className="mt-4">
                             {
-                                allTodo.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
-                                    allTodo.map((todo) => (
+                                todoTask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
+                                    todoTask?.map((todo) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
                                         <div className="" key={todo.id} onClick={() => {
                                             console.log("Rendering ToDo:", selectedTask)
@@ -359,11 +460,6 @@ const SingleProjectPage = () => {
                                                 setSelectedTask={setSelectedTask}
                                                 selectedTask={selectedTask}
 
-                                            // onClick={() => {
-                                            //     console.log("ToDo Clicked:", todo, selectedTask);
-                                            //     // setSelectedTask(todo);
-                                            // }
-                                            // }
                                             />
 
                                         </div>
@@ -373,6 +469,7 @@ const SingleProjectPage = () => {
                         </div>
 
                     </div>
+
 
 
                     <div className="bg-gray-300/30 rounded-xl  p-2 pb-0 pt-4">
@@ -390,8 +487,8 @@ const SingleProjectPage = () => {
                         {/* ALL TO DO TASK */}
                         <div className="mt-4">
                             {
-                                allTodo.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
-                                    allTodo.map((todo) => (
+                                inProgressTask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
+                                    inProgressTask?.map((todo) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
                                         <div className="" key={todo.id} onClick={() => {
                                             console.log("Rendering ToDo:", selectedTask)
@@ -404,12 +501,6 @@ const SingleProjectPage = () => {
                                                 setSelectedSubTask={setSelectedSubTask}
                                                 setSelectedTask={setSelectedTask}
                                                 selectedTask={selectedTask}
-
-                                            // onClick={() => {
-                                            //     console.log("ToDo Clicked:", todo, selectedTask);
-                                            //     // setSelectedTask(todo);
-                                            // }
-                                            // }
                                             />
 
                                         </div>
@@ -436,8 +527,8 @@ const SingleProjectPage = () => {
                         {/* ALL TO DO TASK */}
                         <div className="mt-4">
                             {
-                                allTodo.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
-                                    allTodo.map((todo) => (
+                                inQATask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
+                                    inQATask?.map((todo) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
                                         <div className="" key={todo.id} onClick={() => {
                                             console.log("Rendering ToDo:", selectedTask)
@@ -451,11 +542,6 @@ const SingleProjectPage = () => {
                                                 setSelectedTask={setSelectedTask}
                                                 selectedTask={selectedTask}
 
-                                            // onClick={() => {
-                                            //     console.log("ToDo Clicked:", todo, selectedTask);
-                                            //     // setSelectedTask(todo);
-                                            // }
-                                            // }
                                             />
 
                                         </div>
@@ -482,8 +568,8 @@ const SingleProjectPage = () => {
                         {/* ALL TO DO TASK */}
                         <div className="mt-4">
                             {
-                                allTodo.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
-                                    allTodo.map((todo) => (
+                                finishedTask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
+                                    finishedTask?.map((todo) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
                                         <div className="" key={todo.id} onClick={() => {
                                             console.log("Rendering ToDo:", selectedTask)
@@ -496,12 +582,6 @@ const SingleProjectPage = () => {
                                                 setSelectedSubTask={setSelectedSubTask}
                                                 setSelectedTask={setSelectedTask}
                                                 selectedTask={selectedTask}
-
-                                            // onClick={() => {
-                                            //     console.log("ToDo Clicked:", todo, selectedTask);
-                                            //     // setSelectedTask(todo);
-                                            // }
-                                            // }
                                             />
 
                                         </div>

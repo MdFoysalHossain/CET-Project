@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../../../../../Context/AccountProvidor';
+import { SettingsContext } from '../../../../../../Context/SettingsProvidor';
+import { useParams } from 'react-router';
 
-const CreateTask = ({ isOpen, onClose }) => {
+const CreateTask = ({ isOpen, onClose, setCreateTaskOpen,  }) => {
     const [search, setSearch] = useState("");
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const { accountDetails } = useContext(AuthContext)
+    const { backEndUrl } = useContext(SettingsContext)
+
+    
+    const { id: projectId } = useParams();
+
+    
 
     const users = [
         { id: 1, name: "Foysal Hossain", role: "Admin", email: "foysal@example.com" },
@@ -22,18 +32,66 @@ const CreateTask = ({ isOpen, onClose }) => {
         );
     });
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const dueDateValue = e.target.dueDate.value;
+        const details = {
+            projectId: projectId,
+            taskName: e.target.taskName.value,
+            descriptions: e.target.descriptions.value,
+            status: e.target.status.value,
+            createdAt: new Date().toISOString(),
+            dueDate: dueDateValue
+                ? (() => {
+                    const localDate = new Date(dueDateValue);
+                    localDate.setHours(23, 59, 59, 999);
+                    return localDate.toISOString();
+                })()
+                : "",
+            assignees: [...selectedUsers],
+            createdBy: accountDetails.email,
+            priority: e.target.priority.value,
+            attachments: []
+        };
+        // console.log(details)
+
+        const token = await accountDetails.getIdToken();
+
+        try {
+            const res = await fetch(
+                backEndUrl + "/createTask?email=" + accountDetails.email,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(details)
+                }
+            );
+
+            const data = await res.json();
+            console.log("Submit Res:", data);
+            setCreateTaskOpen(false);
+            
+        } catch (error) {
+            console.log("Submit Res Error:", error);
+        }
+    };
+
+
     if (!isOpen) return null;
 
     return (
-        <div className="fixed absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className="fixed absolute inset-0 z-100 flex items-center justify-center bg-black/40 backdrop-blur-sm">
 
             {/* Modal Container */}
-            <div className="w-full max-w-xl bg-white rounded-2xl shadow-2xl p-8 relative animate-fadeIn max-h-[700px] overflow-y-auto font-jukarta text-left">
+            <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-8 relative animate-fadeIn max-h-[700px] overflow-y-auto font-jukarta text-left">
 
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-black text-xl"
+                    className="absolute cursor-pointer top-4 right-4 text-gray-400 hover:text-black text-xl"
                 >
                     ✕
                 </button>
@@ -44,7 +102,7 @@ const CreateTask = ({ isOpen, onClose }) => {
                 </h2>
 
                 {/* Form */}
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleSubmit}>
 
                     {/* Project Name */}
                     <div>
@@ -52,6 +110,7 @@ const CreateTask = ({ isOpen, onClose }) => {
                         <input
                             type="text"
                             placeholder="Enter task name"
+                            name='taskName'
                             className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100  border border-transparent  outline-none transition"
                         />
                     </div>
@@ -61,6 +120,7 @@ const CreateTask = ({ isOpen, onClose }) => {
                         <textarea
                             rows={4}
                             placeholder="Write task description..."
+                            name='descriptions'
                             className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100 border border-transparent outline-none  focus:bg-white focus:border-blue-500 focus:shadow-sm transition"
                         />
                     </div>
@@ -68,31 +128,22 @@ const CreateTask = ({ isOpen, onClose }) => {
                     {/* Date + Time */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                        {/* Date */}
-                        {/* <div>
-                            <label className="text-sm text-gray-500">Due Date</label>
-                            <input
-                                type="date"
-                                className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100  outline-none"
-                            />
-                        </div> */}
-
                         {/* Priority */}
                         <div className='flex-1'>
                             <label className="text-sm text-gray-500">Status</label>
-                            <select className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100   outline-none">
-                                <option value="low">To Do</option>
-                                <option value="medium">In Progress</option>
-                                <option value="high">Q&A</option>
-                                <option value="high">Finished</option>
-                                <option value="high">Halt</option>
+                            <select name='status' className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100   outline-none">
+                                <option value="To Do">To Do</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Q&A">Q&A</option>
+                                <option value="Finished">Finished</option>
+                                {/* <option value="Halt">Halt</option> */}
                             </select>
                         </div>
 
 
                         <div className='flex-1'>
                             <label className="text-sm text-gray-500">Priority</label>
-                            <select className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100   outline-none">
+                            <select name='priority' className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100   outline-none">
                                 <option value="low">🟢 Low</option>
                                 <option value="medium">🟡 Medium</option>
                                 <option value="high">🔴 High</option>
@@ -101,21 +152,12 @@ const CreateTask = ({ isOpen, onClose }) => {
                     </div>
 
                     <div className="flex gap-4">
-                        {/* Priority */}
-                        {/* <div className='flex-1'>
-                            <label className="text-sm text-gray-500">Status</label>
-                            <select className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100   outline-none">
-                                <option value="in-research">In Research</option>
-                                <option value="in-progress">In Progress</option>
-                                <option value="completed">Completed</option>
-                            </select>
-                        </div> */}
-                        {/* Priority */}
 
-                        <div  className='flex-1'>
+                        <div className='flex-1'>
                             <label className="text-sm text-gray-500">Due Date</label>
                             <input
                                 type="date"
+                                name='dueDate'
                                 className="w-full mt-1 px-4 py-3 rounded-lg bg-gray-100  outline-none"
                             />
                         </div>

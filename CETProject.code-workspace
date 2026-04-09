@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "CET FrontEnd"
+		},
+		{
+			"path": "CET Backend"
+		}
+	],
+	"settings": {
+		"editor.cursorBlinking": "blink"
+	}
+}

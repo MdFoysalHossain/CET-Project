@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
-import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File, Trash2 } from "lucide-react";
+import React, { useContext, useEffect, useState } from 'react';
+import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, SquarePen, Image, File, Trash2, Link2 } from "lucide-react";
+import { SettingsContext } from '../../../../../Context/SettingsProvidor';
+import { AuthContext } from '../../../../../Context/AccountProvidor';
+import { p } from 'framer-motion/client';
 
-const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSubTaskOpen, selectedTask, setSelectedSubTask }) => {
+const MainTasks = ({ attachUpdated,showDetails, setShowDetails, setShowSubDetails, setCreateSubTaskOpen, selectedTask, setSelectedSubTask, setAllSubTask, allSubTask, setShowAttachment }) => {
+    const { backEndUrl } = useContext(SettingsContext)
+    const { accountDetails } = useContext(AuthContext)
 
-    // console.log("Main Task Details", selectedTask);
+    useEffect(() => {
+        const fetechSubTasks = async () => {
+            const token = await accountDetails.getIdToken();
+            const isUpdated = attachUpdated;
+            fetch(`${backEndUrl}/getSubTasks?email=${accountDetails.email}&taskId=${selectedTask?._id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res)
+                    // setTodoTask([...res])
+                    setAllSubTask(res)
+                    console.log(res)
+                    console.log(isUpdated)
+                })
+                .catch(error => console.log("Can not get projects:", error))
+        }
+        fetechSubTasks()
+    }, [selectedTask, setAllSubTask, accountDetails, backEndUrl, attachUpdated])
 
     return (
 
@@ -42,9 +69,15 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                 <div className="p-6 space-y-5">
 
                     {/* TITLE */}
+                    <p className="text-xs text-left text-gray-400  mb-0">
+                        #{selectedTask ? selectedTask._id : "Task Id"}
+                    </p>
+
                     <h2 className="text-lg font-semibold text-left">
-                        {selectedTask ? selectedTask.title : "Task Title"}
+                        {selectedTask ? selectedTask.taskName : "Task Title"}
                     </h2>
+
+
 
                     {/* META INFO */}
                     <div className="space-y-3 text-sm text-gray-600">
@@ -79,7 +112,7 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                         {/* Priority */}
                         <div className="flex justify-between">
                             <span>Priority</span>
-                            <span className={`px-2 py-1 text-xs rounded  ${selectedTask?.priority === "High" ? "bg-red-200  text-red-600" : selectedTask?.priority === "Medium" ? "bg-yellow-200  text-yellow-600" : "bg-indigo-100 text-indigo-600 "}`}>
+                            <span className={`px-2 py-1 text-xs rounded capitalize  ${selectedTask?.priority === "High" ? "bg-red-200  text-red-600" : selectedTask?.priority === "Medium" ? "bg-yellow-200  text-yellow-600" : "bg-indigo-100 text-indigo-600 "}`}>
                                 {selectedTask ? selectedTask.priority : "Priority"}
                             </span>
                         </div>
@@ -89,16 +122,18 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                             <span className="flex items-center gap-2">
                                 <Calendar size={14} /> Due Date
                             </span>
-                            {/* <span>{selectedTask ? selectedTask.dueDate : "Due Date"}</span> */}
                             <span className='capitalize'>
+
                                 {selectedTask
                                     ? new Date(selectedTask.dueDate).toLocaleString('en-GB', {
                                         day: 'numeric',
                                         month: 'short',
                                         year: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
                                         hour12: true
                                     }).replace(',', ' -')
-                                    : "Due Date"}
+                                    : "Created Date"}
                             </span>
                         </div>
 
@@ -121,9 +156,8 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                         <p className="mb-2 text-gray-700 font-semibold">
                             Project Description
                         </p>
-
                         <pre className="whitespace-pre-wrap break-words leading-relaxed font-jukarta">
-                            {selectedTask ? selectedTask.description : "Description"}
+                            {selectedTask ? selectedTask.descriptions : "Description"}
                         </pre>
                     </div>
                 </div>
@@ -136,7 +170,7 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                                 Attachments
                             </button>
                         </div>
-                        <button className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer">
+                        <button onClick={() => setShowAttachment(true)} className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer">
                             <CirclePlus size={16} />
                             <p className="text-sm">Add Attachment</p>
                         </button>
@@ -144,27 +178,30 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
 
                     <div className="px-6 py-4 space-y-5 text-sm">
 
-                        <div className="grid grid-cols-4 gap-2 justify-items-center">
-                            <div className="flex items-center bg-indigo-300/50 px-2 py-1 rounded text-indigo-800 text-sm w-max gap-2 cursor-pointer">
-                                <p><Image size={16} /></p>
-                                <p>Image Name</p>
-                            </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                            {
+                                selectedTask?.attachments?.length > 0 ? (
+                                    selectedTask.attachments.map((attach, index) => (
+                                        <div
+                                            key={index}
+                                            onClick={() => window.open(attach.link, "_blank")}
+                                            className="flex items-center bg-indigo-100 hover:bg-indigo-200 px-3 py-2 rounded-lg text-indigo-800 text-sm w-full gap-2 cursor-pointer transition"
+                                        >
+                                            <span>
+                                                {attach.type === "image" ? <Image size={16} /> : <Link2 size={16} />}
+                                            </span>
 
-                            <div className="flex items-center bg-indigo-300/50 px-2 py-1 rounded text-indigo-800 text-sm w-max gap-2 cursor-pointer">
-                                <p><File size={16} /></p>
-                                <p>File Name</p>
-                            </div>
-
-                            <div className="flex items-center bg-indigo-300/50 px-2 py-1 rounded text-indigo-800 text-sm w-max gap-2 cursor-pointer">
-                                <p><Image size={16} /></p>
-                                <p>Image Name</p>
-                            </div>
-
-                            <div className="flex items-center bg-indigo-300/50 px-2 py-1 rounded text-indigo-800 text-sm w-max gap-2 cursor-pointer">
-                                <p><File size={16} /></p>
-                                <p>File Name</p>
-                            </div>
-
+                                            <p className="truncate w-full">
+                                                {attach.name}
+                                            </p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="col-span-full text-center p-6 text-sm  text-gray-600">
+                                        No attachments yet
+                                    </p>
+                                )
+                            }
                         </div>
 
                     </div>
@@ -198,11 +235,11 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
 
                         <div className="">
 
-                            <ul class="list rounded-box text-left flex flex-col gap-2 *:cursor-pointer">
+                            <ul className="list rounded-box text-left flex flex-col gap-2 *:cursor-pointer">
                                 {
-                                    selectedTask && selectedTask.subTasks.length > 0 ? (
-                                        selectedTask.subTasks.map((subTask, index) => (
-                                            <li class="w-full bg-gray-100 rounded-lg">
+                                    allSubTask && allSubTask?.length > 0 ?
+                                        allSubTask.map((subTask, index) => (
+                                            <li key={index} className="w-full bg-gray-100 rounded-lg">
                                                 <div className="collapse-title font-semibold" onClick={() => {
                                                     console.log("Subtask Clicked:", subTask)
                                                     setShowDetails(false)
@@ -210,23 +247,16 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                                                     setSelectedSubTask(subTask)
 
                                                 }}>
-                                                    {subTask.subTitle}
+                                                    {subTask.subTaskName}
                                                 </div>
                                             </li>
-                                        )
-                                        )) : (
-                                        <p className='text-sm text-gray-500'>No sub tasks available</p>
-                                    )
+                                        )) : <p className='w-full text-sm text-center p-6 text-gray-600'>No sub task found, Create One!</p>
                                 }
                             </ul>
 
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 {/* COMMENT */}
                 <div className="">
@@ -248,7 +278,7 @@ const MainTasks = ({ showDetails, setShowDetails, setShowSubDetails, setCreateSu
                                         <p className='text-[14px]'>Foysa Hossain</p>
                                     </legend>
                                     <textarea className="textarea h-30 w-full bg-white border border-gray-500/20" placeholder="Write your thought.."></textarea>
-                                    <button class="absolute bottom-2.5 right-2 w-15 bg-indigo-200 text-indigo-800 font-semibold text-[14px] p-1.5 rounded-sm cursor-pointer z-10" type='submit'>Post</button>
+                                    <button className="absolute bottom-2.5 right-2 w-15 bg-indigo-200 text-indigo-800 font-semibold text-[14px] p-1.5 rounded-sm cursor-pointer z-10" type='submit'>Post</button>
                                 </fieldset>
                             </form>
                         </div>

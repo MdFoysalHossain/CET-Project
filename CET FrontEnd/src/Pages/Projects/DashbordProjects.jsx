@@ -7,21 +7,23 @@ import ProjectInputForm from './Components/Projects/ProjectInputForm';
 const DashbordProjects = () => {
 
     const [showDetails, setShowDetails] = useState(false);
+    const [createdProject, setCreatedProject] = useState([])
+    const [allProjects, setAllProjects] = useState()
 
 
     return (
         <div className='flex flex-col'>
-            
+
             <title>TrackLio - All Projects</title>
 
             <div className="w-full  mx-auto flex-1 border-b border-[#e5e7eb]">
                 <div className="max-w-[1330px] mx-auto">
-                    <ProjectsFilter />
+                    <ProjectsFilter setCreatedProject={setCreatedProject} setAllProjects={setAllProjects} allProjects={allProjects}/>
                 </div>
             </div>
 
             <div className="max-w-[1330px] mx-auto">
-                <AllProjects showDetails={showDetails} setShowDetails={setShowDetails} />
+                <AllProjects allProjects={allProjects} setAllProjects={setAllProjects} createdProject={createdProject} showDetails={showDetails} setShowDetails={setShowDetails} />
             </div>
 
             {/* <OrgProjectDetails showDetails={showDetails} setShowDetails={setShowDetails} /> */}

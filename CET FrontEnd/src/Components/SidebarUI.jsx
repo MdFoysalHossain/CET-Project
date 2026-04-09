@@ -15,7 +15,9 @@ import {
   Settings,
   Info,
   CalendarRange,
-  Frame
+  Frame,
+  ChartNoAxesCombined,
+  Activity
 } from "lucide-react";
 import { Link } from "react-router";
 import { AuthContext } from "../Context/AccountProvidor";
@@ -44,6 +46,7 @@ const SidebarUI = () => {
     { icon: CheckSquare, label: "Tasks", to: "/Dashboard/Projects/MyTasks" },
     { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
     { icon: Users, label: "Users", to: "/Dashboard/Users" },
+    { icon: Activity, label: "Insights", to: "/Dashboard/Users" },
     { icon: Bell, label: "Notification" }
   ];
   const systemMenu = [

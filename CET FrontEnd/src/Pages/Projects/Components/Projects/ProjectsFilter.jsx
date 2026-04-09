@@ -2,7 +2,7 @@ import { Funnel, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import ProjectDashboardPage from './ProjectInputForm';
 
-const ProjectsFilter = () => {
+const ProjectsFilter = ({setCreatedProject, allProjects, setAllProjects}) => {
     const [open, setOpen] = useState(false);
 
 
@@ -33,18 +33,17 @@ const ProjectsFilter = () => {
                     </div>
 
                     <div className="flex gap-2 cursor-pointer rounded-sm bg-white border border-[#e5e7eb] justify-center items-center p-2  px-4">
-                        <Funnel size={15} /> <p className='text-[15px]'>Filter</p>
+                        <Funnel size={15} strokeWidth={2.5}/> <p className='text-sm font-semibold font-jukarta'>Filter</p>
                     </div>
 
-                    <div className="flex gap-2 cursor-pointer rounded-sm bg-white border border-[#e5e7eb] justify-center items-center p-2 px-4" onClick={() => setOpen(true)}>
-                        <Plus size={18} /> <p className='text-[15px] font-jukarta' >Create Task</p>
+                    <div className="flex font-jukarta gap-2 cursor-pointer rounded-sm bg-indigo-500 text-white hover:scale-105 transition border border-[#e5e7eb] justify-center items-center p-2 px-4" onClick={() => setOpen(true)}>
+                        <Plus size={18}  strokeWidth={2.5}/> <p className='text-sm font-semibold font-jukarta' >Create Task</p>
                     </div>
 
                 </div>
             </div>
-            
 
-            <ProjectDashboardPage isOpen={open} onClose={() => setOpen(false)} />
+            <ProjectDashboardPage allProjects={allProjects} setAllProjects={setAllProjects} setCreatedProject={setCreatedProject} isOpen={open} setOpen={setOpen} onClose={() => setOpen(false)} />
         </div>
     );
 };
