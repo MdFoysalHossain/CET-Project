@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 
 const CalendarPage = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -166,7 +167,9 @@ const CalendarPage = () => {
     return (
         <div className="">
 
-            <title>TrackLio - Calendar</title>
+            <Helmet>
+                <title>TrackLio - Calendar</title>
+            </Helmet>
             {showEventModal && (
                 <div className="fixed inset-0  items-center justify-center z-50 font-jukarta hidden">
                     <div className="bg-white w-[500px] rounded-2xl shadow-2xl relative z-50 max-h-[85vh] flex flex-col overflow-hidden">

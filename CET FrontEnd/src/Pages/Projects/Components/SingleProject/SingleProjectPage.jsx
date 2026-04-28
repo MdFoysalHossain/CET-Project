@@ -11,11 +11,13 @@ import { SettingsContext } from '../../../../Context/SettingsProvidor';
 import { AuthContext } from '../../../../Context/AccountProvidor';
 import { cosineDistance } from 'firebase/firestore/pipelines';
 import CreateAttachment from '../Projects/Task/Component/CreateAttachment';
+import { Helmet } from 'react-helmet';
 
 const SingleProjectPage = () => {
+    
 
     const { backEndUrl } = useContext(SettingsContext)
-    const { accountDetails } = useContext(AuthContext)
+    const { accountDetails, accountLoading, isLoggedIn } = useContext(AuthContext)
 
     const { id: projectId } = useParams()
 
@@ -38,13 +40,43 @@ const SingleProjectPage = () => {
     const [finishedTask, setFinishedTask] = useState(null)
 
     const [showAttachment, setShowAttachment] = useState(false)
-
+    const [attachments, setAttachment] = useState([])
     const [attachUpdated, setAttachUpdated] = useState(false)
+
+    const [projectDetails, setProjectDetails] = useState()
+
+    
+
+    useEffect(() => {
+        if(accountLoading === true){return}
+
+        const fetchDetails = async () => {
+            const token = await accountDetails?.getIdToken();
+            fetch(backEndUrl + "/getProjects?email=" + accountDetails.email, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    const currentProject = res.find(item => item._id === projectId)
+                    setProjectDetails(currentProject)
+                })
+                .catch(error => console.log("Can not get projects:", error))
+        }
+        console.log("Fetched Details")
+
+        fetchDetails()
+    }, [backEndUrl, accountDetails])
 
 
     useEffect(() => {
+        if(accountLoading === true || isLoggedIn === false){return}
+
         const fetchTodo = async () => {
-            const token = await accountDetails.getIdToken();
+            const token = await accountDetails?.getIdToken();
             fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=todo`, {
                 method: "GET",
                 headers: {
@@ -62,7 +94,7 @@ const SingleProjectPage = () => {
         console.log("Fetched Details")
 
         const fetchInProgress = async () => {
-            const token = await accountDetails.getIdToken();
+            const token = await accountDetails?.getIdToken();
             fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=inprogress`, {
                 method: "GET",
                 headers: {
@@ -80,7 +112,7 @@ const SingleProjectPage = () => {
         console.log("Fetched Details")
 
         const fetchQA = async () => {
-            const token = await accountDetails.getIdToken();
+            const token = await accountDetails?.getIdToken();
             fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=QA`, {
                 method: "GET",
                 headers: {
@@ -98,7 +130,7 @@ const SingleProjectPage = () => {
         console.log("Fetched Details")
 
         const fetchFinished = async () => {
-            const token = await accountDetails.getIdToken();
+            const token = await accountDetails?.getIdToken();
             fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=Finished`, {
                 method: "GET",
                 headers: {
@@ -391,7 +423,15 @@ const SingleProjectPage = () => {
 
     return (
         <div className='' >
+            {
+                console.log(projectDetails)
+            }
+            <Helmet>
+                <title>{`TrackLio - ${projectDetails && projectDetails?.name}`}</title>
+            </Helmet>
+
             <MainTasks showDetails={showDetails}
+                attachments={attachments}
                 allSubTask={allSubTask}
                 setAllSubTask={setAllSubTask}
                 setShowDetails={setShowDetails}
@@ -404,11 +444,13 @@ const SingleProjectPage = () => {
                 attachUpdated={attachUpdated}
             />
 
+            {console.log("Selected Task", selectedTask)}
+
             <SubTask allSubTask={allSubTask} selectedSubTask={selectedSubTask} showSubDetails={showSubDetails} setShowSubDetails={setShowSubDetails} setShowDetails={setShowDetails} />
 
             <CreateTask isOpen={createTaskOpen} setCreateTaskOpen={setCreateTaskOpen} onClose={() => setCreateTaskOpen(false)} />
 
-            <CreateAttachment setAttachUpdated={setAttachUpdated} selectedTask={selectedTask} showAttachment={showAttachment} setShowAttachment={setShowAttachment}/>
+            <CreateAttachment setAttachment={setAttachment} setAttachUpdated={setAttachUpdated} selectedTask={selectedTask} showAttachment={showAttachment} setShowAttachment={setShowAttachment} />
 
             <CreateSubTask selectedTask={selectedTask} allSubTask={allSubTask} setAllSubTask={setAllSubTask} createSubTaskOpen={createSubTaskOpen} setCreateSubTaskOpen={setCreateSubTaskOpen} />
 
@@ -419,7 +461,7 @@ const SingleProjectPage = () => {
                     </Link>
                     <div className=" flex flex-col items-start justify-center ">
                         <h2 className='text-2xl font-semibold font-jukarta'>All Task</h2>
-                        <p className='text-md font-jukarta text-gray-600/90'>{allTodo[0].projectName}</p>
+                        <p className='text-md font-jukarta text-gray-600/90'>{projectDetails && projectDetails?.name}</p>
                     </div>
                 </div>
             </div>
@@ -445,10 +487,13 @@ const SingleProjectPage = () => {
                         {/* ALL TO DO TASK */}
                         <div className="mt-4">
                             {
+                                console.log("Tasks", todoTask)
+                            }
+                            {
                                 todoTask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
-                                    todoTask?.map((todo) => (
+                                    todoTask?.map((todo, index) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
-                                        <div className="" key={todo.id} onClick={() => {
+                                        <div className="" key={index} onClick={() => {
                                             console.log("Rendering ToDo:", selectedTask)
                                             setSelectedTask(todo)
                                         }}>
@@ -488,9 +533,9 @@ const SingleProjectPage = () => {
                         <div className="mt-4">
                             {
                                 inProgressTask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
-                                    inProgressTask?.map((todo) => (
+                                    inProgressTask?.map((todo, index) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
-                                        <div className="" key={todo.id} onClick={() => {
+                                        <div className="" key={index} onClick={() => {
                                             console.log("Rendering ToDo:", selectedTask)
                                             setSelectedTask(todo)
                                         }}>
@@ -528,9 +573,9 @@ const SingleProjectPage = () => {
                         <div className="mt-4">
                             {
                                 inQATask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
-                                    inQATask?.map((todo) => (
+                                    inQATask?.map((todo, index) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
-                                        <div className="" key={todo.id} onClick={() => {
+                                        <div className="" key={index} onClick={() => {
                                             console.log("Rendering ToDo:", selectedTask)
                                             setSelectedTask(todo)
                                         }}>
@@ -569,9 +614,9 @@ const SingleProjectPage = () => {
                         <div className="mt-4">
                             {
                                 finishedTask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
-                                    finishedTask?.map((todo) => (
+                                    finishedTask?.map((todo, index) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
-                                        <div className="" key={todo.id} onClick={() => {
+                                        <div className="" key={index} onClick={() => {
                                             console.log("Rendering ToDo:", selectedTask)
                                             setSelectedTask(todo)
                                         }}>

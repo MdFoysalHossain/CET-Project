@@ -51,6 +51,7 @@ async function run() {
         console.log("✅ Connected to MongoDB");
         const usersDb = client.db("UsersDb");
         const usersCollection = usersDb.collection("UsersCollection");
+        const subUsers = usersDb.collection("subUsers");
 
         const projects = client.db("projects");
         const allProjects = projects.collection("allProjects");
@@ -373,7 +374,74 @@ async function run() {
             const createSubTask = await subTasks.insertOne(taskDetails)
             console.log(createSubTask)
             res.send(createSubTask)
-        })
+        });
+
+        app.post("/createUser", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            try {
+                const userDetails = { ...req.body };
+
+                // 🔍 Check if username already exists
+                const existingUser = await subUsers.findOne({
+                    username: userDetails.username
+                });
+
+                if (existingUser) {
+                    return res.status(400).send({
+                        message: "Username already exists"
+                    });
+                }
+
+                const createUser = await subUsers.insertOne(userDetails);
+                res.send(createUser);
+
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({ message: "Server error" });
+            }
+        });
+
+        app.put("/updateUser", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            try {
+                const userDetails = { ...req.body };
+
+                // 🔍 Check if username already exists
+                const existingUser = await subUsers.findOne({
+                    username: userDetails.username
+                });
+
+                if (existingUser) {
+                    return res.status(400).send({
+                        message: "Username already exists"
+                    });
+                }
+
+                const createUser = await subUsers.insertOne(userDetails);
+                res.send(createUser);
+
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({ message: "Server error" });
+            }
+        });
+
+
+        app.get("/getUsers", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            try {
+                const email = req.user.email;
+
+                const users = await subUsers
+                    .find({ createdBy: email })
+                    .toArray();
+
+                res.send(users);
+
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({ message: "Server error" });
+            }
+        });
+
+
 
     } catch (err) {
         console.error(err);

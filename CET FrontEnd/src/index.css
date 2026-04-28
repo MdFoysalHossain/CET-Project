@@ -79,3 +79,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 * {
   outline: 1px solid red;
 } */
+
+@keyframes modalFadeScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal {
+  animation: modalFadeScale 0.25s ease-out;
+}

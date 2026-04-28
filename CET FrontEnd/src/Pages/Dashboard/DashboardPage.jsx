@@ -4,11 +4,15 @@ import ProjectProgress from './Component/ProjectProgress';
 import DashboardActivity from './Component/DashboardActivity';
 import UpcomingCalanderEvents from './Component/UpcomingCalanderEvents';
 import TaskSummury from './Component/TaskSummury';
+import { Helmet } from 'react-helmet';
 
 const DashboardPage = () => {
+    
     return (
         <div>
-            <title>TrackLio - Dashboard</title>
+            <Helmet>
+                <title>TrackLio - Dashboard</title>
+            </Helmet>
             <div className="flex items-center justify-start px-6 border-b border-gray-200 h-[65px] text-left">
                 <div className="max-w-[1330px] mx-auto w-full  flex  gap-0 items-start justify-between">
                     <h2 className="text-2xl font-semibold font-jukarta">Dashboard</h2>
@@ -26,9 +30,9 @@ const DashboardPage = () => {
                         <ProjectProgress />
                     </div>
 
-                    <div className="">
+                    {/* <div className="">
                         <DashboardActivity />
-                    </div>
+                    </div> */}
                 </div>
 
                 <UpcomingCalanderEvents />

@@ -7,7 +7,7 @@ const HomeRoot = () => {
     <div className="flex h-screen w-screen gap-0 overflow-hidden ">
       
       {/* Sidebar */}
-      <div className=" h-screen bg-gray-50 shrink-0">
+            <div className="w-[260px] -mr-0 h-screen bg-gray-50 shrink-0">
         <SidebarUI />
       </div>
 

@@ -4,9 +4,12 @@ import { SettingsContext } from '../../../../../Context/SettingsProvidor';
 import { AuthContext } from '../../../../../Context/AccountProvidor';
 import { p } from 'framer-motion/client';
 
-const MainTasks = ({ attachUpdated,showDetails, setShowDetails, setShowSubDetails, setCreateSubTaskOpen, selectedTask, setSelectedSubTask, setAllSubTask, allSubTask, setShowAttachment }) => {
+const MainTasks = ({ attachments, attachUpdated, showDetails, setShowDetails, setShowSubDetails, setCreateSubTaskOpen, selectedTask, setSelectedSubTask, setAllSubTask, allSubTask, setShowAttachment }) => {
     const { backEndUrl } = useContext(SettingsContext)
     const { accountDetails } = useContext(AuthContext)
+
+    const [attachmentsDetails, setAttachmentsDetails] = useState()
+
 
     useEffect(() => {
         const fetechSubTasks = async () => {
@@ -21,16 +24,32 @@ const MainTasks = ({ attachUpdated,showDetails, setShowDetails, setShowSubDetail
             })
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res)
+                    // console.log(res)
                     // setTodoTask([...res])
                     setAllSubTask(res)
-                    console.log(res)
-                    console.log(isUpdated)
+                    // console.log(res)
+                    // console.log(isUpdated)
                 })
                 .catch(error => console.log("Can not get projects:", error))
         }
+
         fetechSubTasks()
     }, [selectedTask, setAllSubTask, accountDetails, backEndUrl, attachUpdated])
+
+
+    useEffect(() => {
+        const fetAttachment = () => {
+            const hasAttachment = selectedTask && selectedTask?.attachments;
+            // console.log("Has Attachments:", hasAttachment)
+            const newAttachments = hasAttachment && [...attachments, ...hasAttachment]
+            setAttachmentsDetails(newAttachments)
+
+            // console.log("Attachments Details:", attachmentsDetails)
+        }
+
+        fetAttachment()
+    }, [attachments, selectedTask])
+
 
     return (
 
@@ -43,9 +62,10 @@ const MainTasks = ({ attachUpdated,showDetails, setShowDetails, setShowSubDetail
 
             {/* CARD */}
             <div
-                className={`w-[600px] bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto font-jukarta
+                className={`w-[600px] relative bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[800px] overflow-y-auto font-jukarta
                     transform transition-all duration-300 ease-in-out
                     ${showDetails ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
+                    bg-white rounded-2xl shadow-xl border border-gray-200 flex flex-col
                 `}
             >
 
@@ -66,7 +86,7 @@ const MainTasks = ({ attachUpdated,showDetails, setShowDetails, setShowSubDetail
                 </div>
 
                 {/* BODY */}
-                <div className="p-6 space-y-5">
+                <div className="p-6 space-y-5 overflow-y-auto flex-1">
 
                     {/* TITLE */}
                     <p className="text-xs text-left text-gray-400  mb-0">
@@ -160,157 +180,139 @@ const MainTasks = ({ attachUpdated,showDetails, setShowDetails, setShowSubDetail
                             {selectedTask ? selectedTask.descriptions : "Description"}
                         </pre>
                     </div>
-                </div>
 
-                {/* ATTACHMENTS */}
-                <div className="">
-                    <div className="border-t border-[#e5e7eb] px-6 pt-3 flex justify-between items-center">
-                        <div className="flex gap-6 text-sm text-gray-500">
-                            <button className="border-b-2 border-indigo-500 pb-1 text-indigo-600 text-sm">
-                                Attachments
+
+
+                    {/* ATTACHMENTS */}
+                    <div className="-mx-6">
+                        <div className="border-t border-[#e5e7eb] px-6 pt-3 flex justify-between items-center">
+                            <div className="flex gap-6 text-sm text-gray-500">
+                                <button className="border-b-2 border-indigo-500 pb-1 text-indigo-600 text-sm">
+                                    Attachments
+                                </button>
+                            </div>
+                            <button onClick={() => setShowAttachment(true)} className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer">
+                                <CirclePlus size={16} />
+                                <p className="text-sm">Add Attachment</p>
                             </button>
                         </div>
-                        <button onClick={() => setShowAttachment(true)} className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer">
-                            <CirclePlus size={16} />
-                            <p className="text-sm">Add Attachment</p>
-                        </button>
-                    </div>
 
-                    <div className="px-6 py-4 space-y-5 text-sm">
+                        <div className="px-6 py-4 space-y-5 text-sm">
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                            {
-                                selectedTask?.attachments?.length > 0 ? (
-                                    selectedTask.attachments.map((attach, index) => (
-                                        <div
-                                            key={index}
-                                            onClick={() => window.open(attach.link, "_blank")}
-                                            className="flex items-center bg-indigo-100 hover:bg-indigo-200 px-3 py-2 rounded-lg text-indigo-800 text-sm w-full gap-2 cursor-pointer transition"
-                                        >
-                                            <span>
-                                                {attach.type === "image" ? <Image size={16} /> : <Link2 size={16} />}
-                                            </span>
-
-                                            <p className="truncate w-full">
-                                                {attach.name}
-                                            </p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="col-span-full text-center p-6 text-sm  text-gray-600">
-                                        No attachments yet
-                                    </p>
-                                )
-                            }
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-
-
-                {/* SUB TASK */}
-                <div className="">
-                    <div className="border-t border-[#e5e7eb] px-6 pt-3 flex justify-between items-center">
-                        <div className="flex gap-6 text-sm text-gray-500">
-                            <button className="border-b-2 border-indigo-500 pb-1 text-indigo-600 text-sm">
-                                Sub Tasks
-                            </button>
-                        </div>
-                        <button className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer" onClick={() => {
-                            // console.log("Create Sub Task Clicked");
-                            setCreateSubTaskOpen(true);
-                        }}>
-                            <CirclePlus size={16} />
-                            <p className="text-sm">Create a Sub Task</p>
-                        </button>
-                    </div>
-
-
-
-                    <div className="px-6 py-4 space-y-5 text-sm">
-
-                        <div className="">
-
-                            <ul className="list rounded-box text-left flex flex-col gap-2 *:cursor-pointer">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                                 {
-                                    allSubTask && allSubTask?.length > 0 ?
-                                        allSubTask.map((subTask, index) => (
-                                            <li key={index} className="w-full bg-gray-100 rounded-lg">
-                                                <div className="collapse-title font-semibold" onClick={() => {
-                                                    console.log("Subtask Clicked:", subTask)
-                                                    setShowDetails(false)
-                                                    setShowSubDetails(true)
-                                                    setSelectedSubTask(subTask)
+                                    attachmentsDetails?.length > 0 ? (
+                                        attachmentsDetails.map((attach, index) => (
+                                            <div
+                                                key={index}
+                                                onClick={() => window.open(attach.link, "_blank")}
+                                                className="flex items-center bg-indigo-100 hover:bg-indigo-200 px-3 py-2 rounded-lg text-indigo-800 text-sm w-full gap-2 cursor-pointer transition"
+                                            >
+                                                <span>
+                                                    {attach.type === "image" ? <Image size={16} /> : <Link2 size={16} />}
+                                                </span>
 
-                                                }}>
-                                                    {subTask.subTaskName}
-                                                </div>
-                                            </li>
-                                        )) : <p className='w-full text-sm text-center p-6 text-gray-600'>No sub task found, Create One!</p>
+                                                <p className="truncate w-full">
+                                                    {attach.name}
+                                                </p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="col-span-full text-center p-6 text-sm  text-gray-600">
+                                            No attachments yet
+                                        </p>
+                                    )
                                 }
-                            </ul>
+                            </div>
 
                         </div>
-                    </div>
-                </div>
 
-                {/* COMMENT */}
-                <div className="">
-                    <div className="border-t border-[#e5e7eb] px-6 pt-3">
-                        <div className="flex gap-6 text-sm text-gray-500">
-                            <button className="border-b-2 border-indigo-500 pb-1 text-sm text-indigo-600">
-                                Comments
+                    </div>
+
+
+
+
+
+                    {/* SUB TASK */}
+                    <div className="-mx-6">
+                        <div className="border-t border-[#e5e7eb] px-6 pt-3 flex justify-between items-center">
+                            <div className="flex gap-6 text-sm text-gray-500">
+                                <button className="border-b-2 border-indigo-500 pb-1 text-indigo-600 text-sm">
+                                    Sub Tasks
+                                </button>
+                            </div>
+                            <button className=" pb-2 text-indigo-600 flex items-center gap-1 cursor-pointer" onClick={() => {
+                                // console.log("Create Sub Task Clicked");
+                                setCreateSubTaskOpen(true);
+                            }}>
+                                <CirclePlus size={16} />
+                                <p className="text-sm">Create a Sub Task</p>
                             </button>
                         </div>
+
+
+
+                        <div className="px-6 py-4 space-y-5 text-sm">
+
+                            <div className="">
+
+                                <ul className="list rounded-box text-left flex flex-col gap-2 *:cursor-pointer">
+                                    {
+                                        allSubTask && allSubTask?.length > 0 ?
+                                            allSubTask.map((subTask, index) => (
+                                                <li key={index} className="w-full bg-gray-100 rounded-lg">
+                                                    <div className="collapse-title font-semibold" onClick={() => {
+                                                        // console.log("Subtask Clicked:", subTask)
+                                                        setShowDetails(false)
+                                                        setShowSubDetails(true)
+                                                        setSelectedSubTask(subTask)
+
+                                                    }}>
+                                                        {subTask.subTaskName}
+                                                    </div>
+                                                </li>
+                                            )) : <p className='w-full text-sm text-center p-6 text-gray-600'>No sub task found, Create One!</p>
+                                    }
+
+                                </ul>
+
+                            </div>
+                        </div>
                     </div>
 
-
-                    <div className="px-6 pt-3 font-jukarta">
-                        <div className=" px-2  py-1.5 mb-2 rounded-lg">
-                            <form action="" onSubmit={console.log("")}>
-                                <fieldset className="fieldset  text-left relative" >
-                                    <legend className="fieldset-legend text-black gap-1 justify-center items-center flex">
-                                        <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
-                                        <p className='text-[14px]'>Foysa Hossain</p>
-                                    </legend>
-                                    <textarea className="textarea h-30 w-full bg-white border border-gray-500/20" placeholder="Write your thought.."></textarea>
-                                    <button className="absolute bottom-2.5 right-2 w-15 bg-indigo-200 text-indigo-800 font-semibold text-[14px] p-1.5 rounded-sm cursor-pointer z-10" type='submit'>Post</button>
-                                </fieldset>
-                            </form>
+                    {/* COMMENT */}
+                    <div className="-mx-6">
+                        <div className="border-t border-[#e5e7eb] px-6 pt-3">
+                            <div className="flex gap-6 text-sm text-gray-500">
+                                <button className="border-b-2 border-indigo-500 pb-1 text-sm text-indigo-600">
+                                    Comments
+                                </button>
+                            </div>
                         </div>
 
 
-                        <div className="flex flex-col gap-4 mb-5">
-                            <div className="text-left">
-
-                                {/* MAIN COMMENT */}
-                                <div className=" p-2 rounded-lg">
-
-                                    <div className="">
-                                        <div className="flex gap-1 justify-between items-center ">
-                                            <div className="flex items-center gap-1">
-                                                <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
-                                                <p className='text-[14px]'>Foysa Hossain</p>
-                                            </div>
-                                            <div className="flex items-center gap-1">
-                                                <p className='text-[14px]'>Oct 16, 2026</p>
-                                                <p className='text-[14px]'>10:41 AM</p>
-                                            </div>
-                                        </div>
-
-                                        <p className='text-sm text-left mt-1 ml-7'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
-
-                                    </div>
+                        <div className="px-6 pt-3 font-jukarta">
+                            <div className=" px-2  py-1.5 mb-2 rounded-lg">
+                                <form action="" onSubmit={console.log("")}>
+                                    <fieldset className="fieldset  text-left relative" >
+                                        <legend className="fieldset-legend text-black gap-1 justify-center items-center flex">
+                                            <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
+                                            <p className='text-[14px]'>Foysa Hossain</p>
+                                        </legend>
+                                        <textarea className="textarea h-30 w-full bg-white border border-gray-500/20" placeholder="Write your thought.."></textarea>
+                                        <button className="absolute bottom-2.5 right-2 w-15 bg-indigo-200 text-indigo-800 font-semibold text-[14px] p-1.5 rounded-sm cursor-pointer z-10" type='submit'>Post</button>
+                                    </fieldset>
+                                </form>
+                            </div>
 
 
-                                    {/* SUB COMMENTS */}
+                            <div className="flex flex-col gap-4 mb-5">
+                                <div className="text-left">
 
-                                    <div className="pl-5 mt-2">
-                                        <div className="border-l border-gray-300 pl-4">
+                                    {/* MAIN COMMENT */}
+                                    <div className=" p-2 rounded-lg">
+
+                                        <div className="">
                                             <div className="flex gap-1 justify-between items-center ">
                                                 <div className="flex items-center gap-1">
                                                     <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
@@ -322,42 +324,66 @@ const MainTasks = ({ attachUpdated,showDetails, setShowDetails, setShowSubDetail
                                                 </div>
                                             </div>
 
-                                            <p className='text-sm text-left mt-1 ml-7 pb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
+                                            <p className='text-sm text-left mt-1 ml-7'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
 
                                         </div>
 
 
-                                        <div className="border-l border-gray-300 pl-4">
-                                            <div className="flex gap-1 justify-between items-center ">
-                                                <div className="flex items-center gap-1">
-                                                    <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
-                                                    <p className='text-[14px]'>Foysa Hossain</p>
+                                        {/* SUB COMMENTS */}
+
+                                        <div className="pl-5 mt-2">
+                                            <div className="border-l border-gray-300 pl-4">
+                                                <div className="flex gap-1 justify-between items-center ">
+                                                    <div className="flex items-center gap-1">
+                                                        <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
+                                                        <p className='text-[14px]'>Foysa Hossain</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-1">
+                                                        <p className='text-[14px]'>Oct 16, 2026</p>
+                                                        <p className='text-[14px]'>10:41 AM</p>
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center gap-1">
-                                                    <p className='text-[14px]'>Oct 16, 2026</p>
-                                                    <p className='text-[14px]'>10:41 AM</p>
-                                                </div>
+
+                                                <p className='text-sm text-left mt-1 ml-7 pb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
+
                                             </div>
 
-                                            <p className='text-sm text-left mt-1 ml-7 pb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
+
+                                            <div className="border-l border-gray-300 pl-4">
+                                                <div className="flex gap-1 justify-between items-center ">
+                                                    <div className="flex items-center gap-1">
+                                                        <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
+                                                        <p className='text-[14px]'>Foysa Hossain</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-1">
+                                                        <p className='text-[14px]'>Oct 16, 2026</p>
+                                                        <p className='text-[14px]'>10:41 AM</p>
+                                                    </div>
+                                                </div>
+
+                                                <p className='text-sm text-left mt-1 ml-7 pb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
+
+                                            </div>
+
 
                                         </div>
+
 
 
                                     </div>
-
-
 
                                 </div>
 
                             </div>
 
+
                         </div>
 
-
                     </div>
-
                 </div>
+
+
+
             </div>
         </div>
     );

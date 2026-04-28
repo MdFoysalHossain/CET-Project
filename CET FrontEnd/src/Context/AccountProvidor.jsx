@@ -13,6 +13,7 @@ const AccountProvider = ({ children }) => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [accountDetails, setAccountDetails] = useState({});
+    const [accountLoading, setAccountLoading] = useState(true);
 
     const googlePopUpLogin = async () => {
         try {
@@ -61,8 +62,10 @@ const AccountProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setAccountLoading(true)
             setAccountDetails(user);
             user ? setIsLoggedIn(true) : setIsLoggedIn(false);
+            setAccountLoading(false)
 
         });
 
@@ -78,7 +81,9 @@ const AccountProvider = ({ children }) => {
             accountDetails,
             setAccountDetails,
             googlePopUpLogin,
-            googleSignOut
+            googleSignOut,
+            accountLoading,
+            setAccountLoading
         }}>
             {children}
         </AuthContext.Provider>

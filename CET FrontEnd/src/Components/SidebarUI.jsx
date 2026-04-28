@@ -17,7 +17,8 @@ import {
   CalendarRange,
   Frame,
   ChartNoAxesCombined,
-  Activity
+  Activity,
+  CornerDownRight
 } from "lucide-react";
 import { Link } from "react-router";
 import { AuthContext } from "../Context/AccountProvidor";
@@ -28,8 +29,7 @@ const SidebarUI = () => {
   const { isLoggedIn, googlePopUpLogin, accountDetails, googleSignOut } = useContext(AuthContext)
 
   const [activeProject, setActiveProject] = useState(null);
-
-  console.log("User Logged in?", accountDetails)
+  const [openMenu, setOpenMenu] = useState(null);
 
   const projects = [
     { name: "Untitled UI icons", color: "bg-purple-500" },
@@ -40,10 +40,17 @@ const SidebarUI = () => {
   ];
 
   const menu = [
-    // { icon: Home, label: "Home" },
     { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
     { icon: Folder, label: "Projects", to: "/Dashboard/Projects" },
-    { icon: CheckSquare, label: "Tasks", to: "/Dashboard/Projects/MyTasks" },
+    {
+      icon: CheckSquare,
+      label: "My Tasks",
+      children: [
+        { label: "bKash Website Redesign", to: "/Dashboard/Projects/MyTasks" },
+        { label: "Rocket App Backend Design", to: "/Dashboard/Projects/MyTasks" },
+        { label: "Nagad Attachement", to: "/Dashboard/Projects/MyTasks" },
+      ]
+    },
     { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
     { icon: Users, label: "Users", to: "/Dashboard/Users" },
     { icon: Activity, label: "Insights", to: "/Dashboard/Users" },
@@ -75,20 +82,54 @@ const SidebarUI = () => {
 
           <div className="flex flex-col gap-1">
             {menu.map((item, i) => (
-              <Link
-                key={i}
-                to={item.to}
-                className="flex justify-between text-[15px] text-black items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer transition font-semibold"
-              >
-                <div className="flex items-center gap-2">
-                  <item.icon strokeWidth={2.25} size={16} />
-                  {item.label}
+              <div key={i}>
+                {/* Parent */}
+                <div
+                  onClick={() =>
+                    item.children
+                      ? setOpenMenu(openMenu === item.label ? null : item.label)
+                      : null
+                  }
+                  className="flex justify-between text-[15px] text-black items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer transition font-semibold"
+                >
+                  <div className="flex items-center gap-2">
+
+                    <item.icon strokeWidth={2.25} size={16} />
+
+                    {/* Only link if NO children */}
+                    {item.to && !item.children ? (
+                      <Link to={item.to}>{item.label}</Link>
+                    ) : (
+                      <span>{item.label}</span>
+                    )}
+
+                  </div>
+
+                  {item.children && (
+                    <ChevronRight
+                      size={16}
+                      className={`transition ${openMenu === item.label ? "rotate-90" : ""
+                        }`}
+                    />
+                  )}
                 </div>
 
-                <div className={`bg-gray-200 rounded-md h-6 w-6 flex justify-around items-center text-xs text-gray-700 ${item.label === "Notification" ? "block" : "hidden"}`}>
-                  2
-                </div>
-              </Link>
+                {/* Children */}
+                {item.children && openMenu === item.label && (
+                  <div className="ml-8 mt-1 flex flex-col gap-1 text-left ">
+                    {item.children.map((child, idx) => (
+                      <Link
+                        key={idx}
+                        to={child.to}
+                        className="text-sm text-gray-600 px-3 py-1.5 rounded-md hover:bg-gray-100 flex flex-row gap-2 items-center"
+                      >
+                        <CornerDownRight size={18} strokeWidth={2} />
+                        <p className="line-clamp-1">{child.label}</p>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>

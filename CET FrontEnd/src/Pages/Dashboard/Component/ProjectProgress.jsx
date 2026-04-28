@@ -7,7 +7,7 @@ const ProjectProgress = () => {
             <div className="text-left">
                 <h2 className='text-lg font-jukarta font-semibold'>Project Progress</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2.5 mt-5 *:cursor-pointer *:hover:shadow-xs *:transition-transform *:duration-300">
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-2.5 mt-5 *:cursor-pointer *:hover:shadow-xs *:transition-transform *:duration-300">
 
 
                 <div className="flex items-center justify-center bg-white border border-gray-200 rounded-sm p-3 gap-2 max-w-[400px] ">

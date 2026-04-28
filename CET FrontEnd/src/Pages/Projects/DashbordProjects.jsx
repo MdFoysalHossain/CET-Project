@@ -3,6 +3,7 @@ import ProjectsFilter from './Components/Projects/ProjectsFilter';
 import AllProjects from './Components/Projects/AllProjects';
 // import OrgProjectDetails from '../../Public/OrgProjectDetails';
 import ProjectInputForm from './Components/Projects/ProjectInputForm';
+import { Helmet } from 'react-helmet';
 
 const DashbordProjects = () => {
 
@@ -14,7 +15,9 @@ const DashbordProjects = () => {
     return (
         <div className='flex flex-col'>
 
-            <title>TrackLio - All Projects</title>
+            <Helmet>
+                <title>TrackLio - All Projects</title>
+            </Helmet>
 
             <div className="w-full  mx-auto flex-1 border-b border-[#e5e7eb]">
                 <div className="max-w-[1330px] mx-auto">

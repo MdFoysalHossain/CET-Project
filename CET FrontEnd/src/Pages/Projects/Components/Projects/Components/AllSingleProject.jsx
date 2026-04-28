@@ -4,6 +4,7 @@ import { BookOpen, SquarePen, Trash2 } from 'lucide-react';
 import Swal from 'sweetalert2'
 import { AuthContext } from '../../../../../Context/AccountProvidor';
 import { SettingsContext } from '../../../../../Context/SettingsProvidor';
+import AllSingleProjectSkeleton from './AllSingleProjectSkeleton';
 
 const AllSingleProject = ({ project, index, setAllProjects, allProjects }) => {
 
@@ -180,7 +181,7 @@ const AllSingleProject = ({ project, index, setAllProjects, allProjects }) => {
         <Link key={index} to={`/Dashboard/Projects/${project._id}`}
 
             // onClick={() => setShowDetails(true)}
-            className="w-full text-left relative bg-white border border-[#e5e7eb] rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+            className="w-full text-left relative bg-white border border-[#e5e7eb] rounded-md p-5 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
         >
             {/* Header */}
             <div className="flex justify-between items-start">
