@@ -5,6 +5,7 @@
 
 const express = require("express");
 const cors = require("cors");
+
 require("dotenv").config();
 // require("dotenv").config();
 
@@ -139,6 +140,14 @@ async function run() {
                 console.log("Alreadu Has A Account")
             }
 
+        });
+
+
+        // Gets the real user details from the database
+        app.get("/getRealUser", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            const email = { email: req.user.email };
+            const findResult = await usersCollection.findOne(email);
+            res.send(findResult)
         });
 
 
@@ -308,17 +317,57 @@ async function run() {
             }
         });
 
-        app.post("/createTask", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
-            const email = { email: req.user.email };
-            // const projectId = req.user.projectId ;
-            const taskDetails = {
-                ...req.body
-            };
+        // app.post("/createTask", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+        //     const email = { email: req.user.email };
+        //     // const projectId = req.user.projectId ;
+        //     const taskDetails = {
+        //         ...req.body
+        //     };
 
-            const createTask = await allTasks.insertOne(taskDetails)
-            console.log(createTask)
-            res.send(createTask)
-        })
+        //     console.log("Creating Task:", taskDetails)
+
+        //     const createTask = await allTasks.insertOne(taskDetails)
+        //     console.log(createTask)
+        //     res.send(createTask)
+        // })
+
+
+
+
+
+        app.post("/createTask", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
+            try {
+                const taskDetails = { ...req.body };
+
+                // console.log("Creating Task:", taskDetails);
+
+                // 👉 Insert task first
+                const createTask = await allTasks.insertOne(taskDetails);
+
+                // 👉 Extract usernames from assignees
+                const usernames = (taskDetails.assignees || []).map(u => u.username);
+
+                // 👉 Update project
+                if (taskDetails.projectId && usernames.length > 0) {
+                    await allProjects.updateOne(
+                        { _id: new ObjectId(taskDetails.projectId) },
+                        {
+                            $addToSet: {
+                                assignees: { $each: usernames }
+                            }
+                        }
+                    );
+                }
+                res.send(createTask);
+
+            } catch (error) {
+                console.error("Create Task Error:", error);
+                res.status(500).send({ error: "Failed to create task" });
+            }
+        });
+
+
+
 
         app.put("/tasks/:taskId/attachments", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
             try {
@@ -404,19 +453,126 @@ async function run() {
             try {
                 const userDetails = { ...req.body };
 
-                // 🔍 Check if username already exists
-                const existingUser = await subUsers.findOne({
-                    username: userDetails.username
-                });
+                const result = await subUsers.updateOne(
+                    { username: userDetails.username }, // filter
+                    { $set: userDetails },              // update fields
+                    { upsert: false }                  // don't create new if not found
+                );
 
-                if (existingUser) {
-                    return res.status(400).send({
-                        message: "Username already exists"
+                if (result.matchedCount === 0) {
+                    return res.status(404).send({
+                        message: "User not found"
                     });
                 }
 
-                const createUser = await subUsers.insertOne(userDetails);
-                res.send(createUser);
+                res.send({
+                    message: "User updated successfully",
+                    result
+                });
+
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({ message: "Server error" });
+            }
+        });
+
+        // app.post("/Login", async (req, res) => {
+        //     console.log("Login Attempt Hit");
+        //     const { loginType, username, password } = req.body;
+
+        //     if (loginType === "username") {
+        //         try {
+        //             console.log("Login Attempt:", { loginType, username, password });
+        //             const existingUser = await subUsers.findOne({
+        //                 username: username
+        //             });
+
+        //             // console.log("Found User:", existingUser);
+
+        //             if (!existingUser || existingUser.password !== password) {
+        //                 return res.status(400).send({
+        //                     message: "Invalid username or password"
+        //                 });
+        //             } else if (existingUser.password === password && existingUser.username === username) {
+        //                 return res.send({
+        //                     message: "Login successful",
+        //                     user: existingUser
+        //                 });
+        //             }
+
+        //         } catch (error) {
+        //             console.error(error);
+        //             res.status(500).send({ message: "Server error" });
+        //         }
+
+        //     }
+
+
+        // })
+
+
+
+        app.post("/Login", async (req, res) => {
+            const { loginType, username, password } = req.body;
+
+            if (loginType !== "username") return;
+
+            try {
+                const user = await subUsers.findOne({ username });
+
+                // ❌ User not found
+                if (!user) {
+                    return res.status(400).send({
+                        message: "invalid username",
+                    });
+                }
+
+                // 🚫 Check if disabled
+                if (user.status === "disabled") {
+                    return res.status(403).send({
+                        message: "Account disabled. Contact admin.",
+                    });
+                }
+
+                // ❌ Wrong password
+                if (user.password !== password) {
+                    const attempts = (user.failedAttempts || 0) + 1;
+
+                    // 🔒 Disable after 5 attempts
+                    if (attempts >= 5) {
+                        await subUsers.updateOne(
+                            { _id: user._id },
+                            {
+                                $set: { status: "disabled" },
+                                $unset: { failedAttempts: "" },
+                            }
+                        );
+
+                        return res.status(403).send({
+                            message: "Account disabled after too many failed attempts.",
+                        });
+                    }
+
+                    await subUsers.updateOne(
+                        { _id: user._id },
+                        { $set: { failedAttempts: attempts } }
+                    );
+
+                    return res.status(400).send({
+                        message: "invalid password",
+                    });
+                }
+
+                // ✅ Correct password
+                await subUsers.updateOne(
+                    { _id: user._id },
+                    { $set: { failedAttempts: 0 } }
+                );
+
+                return res.send({
+                    message: "Login successful",
+                    user,
+                });
 
             } catch (error) {
                 console.error(error);

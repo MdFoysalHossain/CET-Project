@@ -31,7 +31,6 @@ const SingleToDo = ({ todo, setShowDetails, selectedTask, setSelectedTask }) => 
                     <p className='text-sm text-gray-500'>Assigned To:</p>
 
                     <div className="flex items-center justify-end gap-1 w-[150px]">
-
                         {
                             todo.assignees.map((User, ind) => (
                                 ind < 3 &&
@@ -41,13 +40,13 @@ const SingleToDo = ({ todo, setShowDetails, selectedTask, setSelectedTask }) => 
                                                                                             ${ind % 2 === 0 ? "bg-amber-200 -ml-3" : "bg-amber-400 -ml-3"}`}
                                 >
                                     {/* Avatar */}
-                                    <p className="font-jukarta capitalize text-[12px]">{User.email[0]}</p>
+                                    <p className="font-jukarta capitalize text-[12px]">{User.username?.[0]}</p>
 
                                     {/* Tooltip */}
                                     <div className="absolute bottom-10 left-1/2 -translate-x-1/2 
                                                 opacity-0 group-hover:opacity-100 transition-all duration-200 
                                                 bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50">
-                                        {User.email}
+                                        @{User?.username}
                                     </div>
                                 </div>
                             ))

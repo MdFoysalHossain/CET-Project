@@ -14,7 +14,7 @@ const MainTasks = ({ attachments, attachUpdated, showDetails, setShowDetails, se
     useEffect(() => {
         const fetechSubTasks = async () => {
             const token = await accountDetails.getIdToken();
-            const isUpdated = attachUpdated;
+            // const isUpdated = attachUpdated;
             fetch(`${backEndUrl}/getSubTasks?email=${accountDetails.email}&taskId=${selectedTask?._id}`, {
                 method: "GET",
                 headers: {

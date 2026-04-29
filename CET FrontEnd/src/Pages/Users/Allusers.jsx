@@ -4,6 +4,8 @@ import CreateUser from "./Components/CreateUser";
 import { SettingsContext } from "../../Context/SettingsProvidor";
 import { AuthContext } from "../../Context/AccountProvidor";
 import UpdateUser from "./Components/UpdateUser";
+import Swal from "sweetalert2";
+import SingleUser from "./Components/SingleUser";
 
 const rolesList = ["PM", "Developer", "QA", "Client"];
 
@@ -18,6 +20,9 @@ export default function Allusers() {
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [usersCount, setUsersCount] = useState(0);
+    const [realUser, setRealUser] = useState(null);
+    const usersLimit = realUser?.accountType === "Free" ? 5 : realUser?.accountType === "Premium" ? 15 : realUser?.accountType === "Enterprise" ? 25 : 0;
+    const [buttonPressed, setButtonPressed] = useState(0);
 
 
 
@@ -30,6 +35,9 @@ export default function Allusers() {
         window.addEventListener("keydown", handleEsc);
         return () => window.removeEventListener("keydown", handleEsc);
     }, []);
+
+
+
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -58,10 +66,40 @@ export default function Allusers() {
             }
         };
 
+
+
+        const fetchRealUser = async () => {
+            try {
+                const token = await accountDetails.getIdToken();
+
+                const response = await fetch(
+                    `${backEndUrl}/getRealUser?email=${accountDetails.email}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                    }
+                );
+
+                const data = await response.json();
+
+                console.log("Fetched real user:", data);
+                setRealUser(data);
+
+                console.log("This is Real User:", realUser)
+
+            } catch (error) {
+                console.error("Error fetching real user:", error);
+            }
+        };
+
         if (accountDetails?.email) {
             fetchUsers();
+            fetchRealUser();
         }
-    }, [backEndUrl, accountDetails]);
+    }, [backEndUrl, accountDetails, accountDetails?.email,]);
 
 
     return (
@@ -80,7 +118,51 @@ export default function Allusers() {
                     </h2>
 
                     <button
-                        onClick={() => setShowModal(true)}
+                        onClick={() => {
+                            setButtonPressed(prev => prev + 1);
+                            if ((users?.length ?? 0) < (usersLimit ?? 0)) {
+                                console.log("User Count:", users?.length, "Users Limit:", usersLimit)
+                                setShowModal(true);
+                            } else {
+                                // alert("User limit reached for your account type. Please upgrade to add more users.")
+                                setShowModal(false)
+                                Swal.fire({
+                                    html: `
+                                            <div class="flex flex-col items-center text-center w-full">
+                        
+                                                <!-- Success Icon -->
+                                                <div class="w-16 h-16 flex items-center justify-center rounded-full bg-red-500/10 mb-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                                        class="w-6 h-6 text-red-500" 
+                                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                            d="M6 18L18 6M6 6l12 12"/>
+                                                    </svg>
+                                                </div>
+                        
+                                                <!-- Title -->
+                                                <h2 class="text-xl font-semibold text-gray-800 font-rubik">
+                                                    Limit Reached!
+                                                </h2>
+                                                <!-- Text -->
+                                                <p class="text-sm text-gray-500 font-jukarta mt-2 max-w-[280px]">
+                                                    User Limit Has Been Reached. Please upgrade your account to add more users.
+                                                </p>
+                        
+                                            </div>
+                                        `,
+
+                                    width: "400px",
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+
+                                    customClass: {
+                                        popup: "rounded-2xl p-8"
+                                    }
+                                });
+                            }
+                        }}
                         className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition"
                     >
                         Create User
@@ -88,18 +170,13 @@ export default function Allusers() {
                 </div>
             </div>
 
-            {/* MODAL */}
             {showModal && (
                 <div className="fixed inset-0 z-100 flex items-center justify-center">
-
-                    {/* Overlay */}
                     <div
-                        // className="absolute inset-0 bg-black/20 backdrop-blur-md transition-opacity duration-300"
                         className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
                         onClick={() => setShowModal(false)}
                     ></div>
 
-                    {/* Modal Content */}
                     <div className="relative z-50 animate-modal">
                         <CreateUser setUsers={setUsers} users={users} closeModal={() => setShowModal(false)} />
                     </div>
@@ -109,14 +186,11 @@ export default function Allusers() {
             {showUpdateModal && (
                 <div className="fixed inset-0 z-100 flex items-center justify-center">
 
-                    {/* Overlay */}
                     <div
-                        // className="absolute inset-0 bg-black/20 backdrop-blur-md transition-opacity duration-300"
                         className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
                         onClick={() => setShowUpdateModal(false)}
                     ></div>
 
-                    {/* Modal Content */}
                     <div className="relative z-50 animate-modal">
                         <UpdateUser selectedUser={selectedUser} setUsers={setUsers} users={users} closeModal={() => setShowUpdateModal(false)} />
                     </div>
@@ -131,7 +205,7 @@ export default function Allusers() {
 
                         {/* Title */}
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-lg font-semibold">All Users ({usersCount?.length} / 10)</h2>
+                            <h2 className="text-lg font-semibold">All Users ({users?.length} / {usersLimit})</h2>
                             <span className="text-sm text-gray-400">{users?.length} users</span>
                         </div>
 
@@ -153,73 +227,7 @@ export default function Allusers() {
 
                                 {/* BODY */}
                                 <tbody className="">
-                                    {users?.map((user, index) => (
-                                        <tr key={user.id} className={`transition bg-gray-100`}>
-
-                                            {/* INDEX */}
-                                            <td className="bg-white  border-gray-200 py-4 ">
-                                                #{index + 1}
-                                            </td>
-
-                                            {/* USER */}
-                                            <td className="bg-white  border-gray-200">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="h-10 w-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-semibold">
-                                                        {user.name.charAt(0)}
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <span className="text-xs">{user.name}</span>
-                                                        <span className=" text-md -mt-0">@{user.username}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            {/* STATUS */}
-                                            <td className="bg-white  border-gray-200">
-                                                <span
-                                                    className={`badge text-xs capitalize ${user.status === "active"
-                                                        ? "badge-success"
-                                                        : "badge-ghost"
-                                                        }`}
-                                                >
-                                                    {user.status}
-                                                </span>
-                                            </td>
-
-                                            {/* PROJECT */}
-                                            <td className="bg-white  border-gray-200">
-                                                <span className="badge badge-outline">
-                                                    {user.projectHas.length}
-                                                </span>
-                                            </td>
-
-                                            {/* TASK */}
-                                            <td className="bg-white  border-gray-200">
-                                                <span className="badge badge-outline">
-                                                    {user.taskHas.length}
-                                                </span>
-                                            </td>
-
-                                            <td className="bg-white border-gray-200">
-                                                <span className="px-4 border border-gray-200 w-full py-1.75 text-sm bg-gray-100 rounded-lg inline-block">
-                                                    {user.role || "Not assigned"}
-                                                </span>
-                                            </td>
-
-                                            {/* ACTION */}
-                                            <td className="bg-white  border-gray-200 ">
-                                                <button 
-                                                    className="bg-indigo-500 text-white font-medium px-4 py-1.5 rounded-md hover:bg-indigo-600 transition"
-                                                    onClick={() => {
-                                                        setShowUpdateModal(true)
-                                                        setSelectedUser(user);}}
-                                                >
-                                                    Update
-                                                </button>
-                                            </td>
-
-                                        </tr>
-                                    ))}
+                                    <SingleUser users={users} setShowUpdateModal={setShowUpdateModal} setSelectedUser={setSelectedUser} />
                                 </tbody>
 
                             </table>

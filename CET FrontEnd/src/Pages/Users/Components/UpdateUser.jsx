@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SettingsContext } from '../../../Context/SettingsProvidor';
 import { AuthContext } from '../../../Context/AccountProvidor';
 import Swal from 'sweetalert2';
@@ -11,6 +11,12 @@ const UpdateUser = ({ closeModal, users, setUsers, selectedUser }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [selectedRole, setSelectedRole] = useState("");
+
+    useEffect(() => {
+        if (selectedUser?.role) {
+            setSelectedRole(selectedUser.role); // Set the selected role based on the selectedUser prop
+        }
+    }, [selectedUser, setSelectedRole]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,6 +49,8 @@ const UpdateUser = ({ closeModal, users, setUsers, selectedUser }) => {
             taskHas: [],
             createdAt: new Date() // UTC timestamp
         };
+
+        console.log("This is the details object being sent:", details);
 
 
         const token = await accountDetails.getIdToken();
@@ -94,9 +102,10 @@ const UpdateUser = ({ closeModal, users, setUsers, selectedUser }) => {
                             popup: "rounded-2xl p-8"
                         }
                     });
-                } else if (data.insertedId) {
+                } else if (data.message === "User updated successfully") {
                     closeModal();
-                    setUsers(prev => [...prev, { ...details }])
+                    const newUsers = users.filter(user => user.username !== selectedUser.username);
+                    setUsers([...newUsers, { ...details }])
                     Swal.fire({
                         html: `
                                             <div class="flex flex-col items-center text-center w-full">

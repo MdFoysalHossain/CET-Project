@@ -1,35 +1,59 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../../../../Context/AccountProvidor';
 import { SettingsContext } from '../../../../../../Context/SettingsProvidor';
 import { useParams } from 'react-router';
 
-const CreateTask = ({ isOpen, onClose, setCreateTaskOpen,  }) => {
-    const [search, setSearch] = useState("");
-    const [selectedUsers, setSelectedUsers] = useState([]);
+const CreateTask = ({ isOpen, onClose, setCreateTaskOpen, setFinishedTask, setInQATask, setInProgress, setTodoTask }) => {
     const { accountDetails } = useContext(AuthContext)
     const { backEndUrl } = useContext(SettingsContext)
+    const [users, setUsers] = useState([]);
+    const [search, setSearch] = useState("");
+    const [selectedUsers, setSelectedUsers] = useState([]);
 
-    
+
     const { id: projectId } = useParams();
 
-    
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const token = await accountDetails.getIdToken();
 
-    const users = [
-        { id: 1, name: "Foysal Hossain", role: "Admin", email: "foysal@example.com" },
-        { id: 5, name: "Foysal Hossain", role: "Developer", email: "foysal2@example.com" },
-        { id: 2, name: "John Doe", role: "Developer", email: "john@example.com" },
-        { id: 3, name: "Jane Smith", role: "UI Designer", email: "jane@example.com" },
-        { id: 4, name: "Alice Johnson", role: "Researcher", email: "alice@example.com" },
-    ];
+                const response = await fetch(
+                    `${backEndUrl}/getUsers?email=${accountDetails.email}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                    }
+                );
 
-    const filteredUsers = users.filter((user) => {
-        const searchText = search.toLowerCase();
+                const data = await response.json();
 
-        return (
-            (user.name.toLowerCase().includes(searchText) ||
-                user.email?.toLowerCase().includes(searchText)) &&
-            !selectedUsers.some((u) => u.id === user.id)
-        );
+                console.log("Fetched users:", data);
+                setUsers(data);
+
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+
+        fetchUsers()
+    }, [backEndUrl, accountDetails, accountDetails?.email]);
+
+
+    const filteredUsers = users?.filter((user) => {
+        const query = search.toLowerCase();
+
+        const matchesSearch =
+            user.name.toLowerCase().includes(query) ||
+            user.username.toLowerCase().includes(query) ||
+            user.role.toLowerCase().includes(query);
+
+        const notSelected = !selectedUsers.some(u => u._id === user._id);
+
+        return matchesSearch && notSelected;
     });
 
     const handleSubmit = async (e) => {
@@ -53,7 +77,7 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen,  }) => {
             priority: e.target.priority.value,
             attachments: []
         };
-        // console.log(details)
+        console.log(details)
 
         const token = await accountDetails.getIdToken();
 
@@ -73,7 +97,7 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen,  }) => {
             const data = await res.json();
             console.log("Submit Res:", data);
             setCreateTaskOpen(false);
-            
+
         } catch (error) {
             console.log("Submit Res Error:", error);
         }
@@ -173,9 +197,9 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen,  }) => {
                         <div className="mt-1 w-full rounded-xl bg-gray-100 px-3 py-2 flex flex-wrap gap-2 items-center border border-transparent  transition">
 
                             {/* Selected Users */}
-                            {selectedUsers.map((user) => (
+                            {selectedUsers?.map((user) => (
                                 <div
-                                    key={user.id}
+                                    key={user._id}
                                     className="flex items-center gap-2 bg-blue-50 text-blue-700 px-2.5 pl-1 py-1 rounded-full text-sm border border-blue-100"
                                 >
                                     {/* Avatar */}
@@ -197,7 +221,6 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen,  }) => {
                                     </button>
                                 </div>
                             ))}
-
                             {/* Input */}
                             <input
                                 type="text"
@@ -215,9 +238,15 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen,  }) => {
                                 {filteredUsers.length > 0 ? (
                                     filteredUsers.map((user) => (
                                         <div
-                                            key={user.id}
+                                            key={user._id}
                                             onClick={() => {
-                                                setSelectedUsers([...selectedUsers, user]);
+                                                const minimalUser = {
+                                                    _id: user._id,
+                                                    username: user.username,
+                                                    name: user.name,
+                                                };
+
+                                                setSelectedUsers((prev) => [...prev, minimalUser]);
                                                 setSearch("");
                                             }}
                                             className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition"
@@ -229,11 +258,14 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen,  }) => {
 
                                             {/* Info */}
                                             <div className="flex flex-col text-left text-black">
-                                                <p className="text-xs  mb-1">
-                                                    <span>{user.name}</span> <span className='bg-gray-200 rounded-sm p-1'>{user.role}</span>
+                                                <p className="text-xs mb-1">
+                                                    <span>{user.name}</span>{" "}
+                                                    <span className="bg-gray-200 rounded-sm p-1">
+                                                        {user.role}
+                                                    </span>
                                                 </p>
-                                                <span className="text-xs ">
-                                                    {user.email}
+                                                <span className="text-xs text-gray-500">
+                                                    @{user.username}
                                                 </span>
                                             </div>
                                         </div>

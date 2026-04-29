@@ -83,30 +83,30 @@ const AllSingleProject = ({ project, index, setAllProjects, allProjects }) => {
                         .catch(error => {
                             Swal.fire({
                                 html: `
-                        <div class="flex flex-col items-center text-center w-full">
+                                    <div class="flex flex-col items-center text-center w-full">
 
-                            <!-- Error Icon -->
-                            <div class="w-16 h-16 flex items-center justify-center rounded-full bg-red-500/10 mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" 
-                                    class="w-6 h-6 text-red-500" 
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                        d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </div>
+                                        <!-- Error Icon -->
+                                        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-red-500/10 mb-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" 
+                                                class="w-6 h-6 text-red-500" 
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                    d="M6 18L18 6M6 6l12 12"/>
+                                            </svg>
+                                        </div>
 
-                            <!-- Title -->
-                            <h2 class="text-xl font-semibold text-gray-800 font-rubik">
-                                Could Not Delete
-                            </h2>
+                                        <!-- Title -->
+                                        <h2 class="text-xl font-semibold text-gray-800 font-rubik">
+                                            Could Not Delete
+                                        </h2>
 
-                            <!-- Text -->
-                            <p class="text-sm text-gray-500 font-jukarta mt-2 max-w-[280px]">
-                                Something went wrong while deleting the project. Please try again.
-                            </p>
+                                        <!-- Text -->
+                                        <p class="text-sm text-gray-500 font-jukarta mt-2 max-w-[280px]">
+                                            Something went wrong while deleting the project. Please try again.
+                                        </p>
 
-                        </div>
-                    `,
+                                    </div>
+                                `,
 
                                 width: "400px",
                                 showConfirmButton: false,
@@ -232,16 +232,14 @@ const AllSingleProject = ({ project, index, setAllProjects, allProjects }) => {
 
                     <div className="flex items-center ml-3">
                         {
-                            project.assignees.map((User, ind) => (
+                            project.assignees.slice(0, 2).map((User, ind) => (
                                 <div
                                     key={ind}
                                     className={`relative group w-8 h-8 rounded-full border-2 border-white flex justify-center items-center 
                                                                     ${ind % 2 === 0 ? "bg-amber-200 -ml-3" : "bg-amber-400 -ml-3"}`}
                                 >
-                                    {/* Avatar */}
                                     <p className="font-jukarta capitalize">{User[0]}</p>
 
-                                    {/* Tooltip */}
                                     <div className="absolute bottom-10 left-1/2 -translate-x-1/2 
                                                             opacity-0 group-hover:opacity-100 transition-all duration-200 
                                                             bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50">

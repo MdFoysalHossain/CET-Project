@@ -15,8 +15,13 @@ import Allusers from "./Pages/Users/Allusers.jsx";
 import DashboardPage from "./Pages/Dashboard/DashboardPage.jsx";
 import AccountProvidor from "./Context/AccountProvidor.jsx";
 import SettingsProvider from "./Context/SettingsProvidor.jsx";
+import Login from "./Pages/Login/Login.jsx";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomeRoot />
+  },
   {
     path: "/Dashboard",
     element: <HomeRoot />,
@@ -24,6 +29,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardPage />
+      },
+      {
+        path: "/Dashboard/Client",
+        element: <DashbordProjects />
       },
       {
         path: "/Dashboard/Projects",
@@ -51,6 +60,10 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path: "/Login",
+    element: <Login/>
+  }
 ]);
 
 const root = document.getElementById("root");
