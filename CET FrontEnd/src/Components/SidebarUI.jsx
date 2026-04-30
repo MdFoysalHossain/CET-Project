@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Home,
   LayoutDashboard,
@@ -21,7 +21,7 @@ import {
   CornerDownRight,
   FileBox
 } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { AuthContext } from "../Context/AccountProvidor";
 import { SettingsContext } from "../Context/SettingsProvidor";
 
@@ -29,23 +29,47 @@ const SidebarUI = () => {
   const { isLoggedIn, googlePopUpLogin, accountDetails, googleSignOut, accountLoading, setAccountDetails, setIsLoggedIn, setAccountLoading } =
     useContext(AuthContext);
 
-
-
   const { backEndUrl } = useContext(SettingsContext)
 
   const [activeProject, setActiveProject] = useState(null);
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   if (accountDetails) {
+  //     setIsLoggedIn(true);
+  //     setAccountLoading(false);
+  //   } else if (!accountDetails && !accountLoading) {
+  //     console.log("No user logged in, redirecting to login page.");
+  //     // setIsLoggedIn(false);
+  //     // setAccountLoading(false);
+  //     navigate("/Login")
+  //   }
+  // }, [isLoggedIn, navigate, accountLoading, accountDetails, setIsLoggedIn, setAccountLoading, googleSignOut]);
+
+
   useEffect(() => {
-    console.log("Sidebar Rendered. isLoggedIn:", isLoggedIn, "accountDetails:", accountDetails, "accountLoading:", accountLoading);
-    if (accountDetails) {
-      setIsLoggedIn(true);
-      setAccountLoading(false);
-    } else if (!accountDetails && !accountLoading && !isLoggedIn) {
-      navigate("/Login")
+    console.log("Account Rerendered");
+
+    if(accountLoading) {
+      console.log("Account is loading...");
     }
-  }, [isLoggedIn, navigate, accountLoading, accountDetails, setIsLoggedIn, setAccountLoading]);
+
+    if (accountLoading === false) {
+      if (!accountDetails) {
+        navigate("/Login");
+        return;
+      }
+
+      if (isLoggedIn) {
+        navigate("/Dashboard");
+      } else {
+        navigate("/Login");
+      }
+    }
+  }, [accountLoading, accountDetails, navigate, isLoggedIn]);
+
+
 
   const handleLogout = async () => {
     await fetch(backEndUrl + "/Logout", {
@@ -59,13 +83,7 @@ const SidebarUI = () => {
     navigate("/Login");
   };
 
-  const projects = [
-    { name: "Untitled UI icons", color: "bg-purple-500" },
-    { name: "Marketing site 2.0", color: "bg-blue-500" },
-    { name: "Blog navigation", color: "bg-green-500" },
-    { name: "Design system", color: "bg-pink-500" },
-    { name: "Waitlist pages", color: "bg-gray-400" }
-  ];
+
 
   const menu = [
     { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
@@ -192,21 +210,20 @@ const SidebarUI = () => {
       {/* USER SECTION */}
       <div className="h-full flex items-center p-4 flex-col gap-5 justify-end border-t border-[#e5e7eb]">
 
-        {isLoggedIn ? (
+        {isLoggedIn && (
           <div className="w-full">
             <div className="border border-gray-200 rounded-sm flex items-center w-full px-2 mb-1">
               <div className="h-10 w-10 bg-indigo-200 rounded-lg overflow-hidden flex justify-center items-center text-xl text-indigo-500 font-bold">
                 {
-                    accountDetails._id ? accountDetails.name[0] : accountDetails?.displayName[0] || <img src={accountDetails?.photoURL} alt="" /> 
-                  }
+                  accountDetails?._id ? accountDetails?.name[0] : <img src={accountDetails?.photoURL} alt="" />
+                }
               </div>
 
               <div className="text-left p-2">
                 <p className="text-sm text-gray-600">Logged in as</p>
                 <h2 className="font-bold text-md">
-                  {/* {accountDetails?.displayName} */}
                   {
-                    accountDetails._id ? accountDetails.name : accountDetails?.displayName
+                    accountDetails._id ? accountDetails?.name : accountDetails?.displayName
                   }
                 </h2>
               </div>
@@ -218,7 +235,7 @@ const SidebarUI = () => {
                 className="btn bg-indigo-500 text-white border-0 w-full"
                 onClick={handleLogout}
               >
-                Log account Out
+                Log Out
               </button> : <button
                 className="btn bg-indigo-500 text-white border-0 w-full"
                 onClick={googleSignOut}
@@ -229,14 +246,18 @@ const SidebarUI = () => {
             }
 
           </div>
-        ) : (
-          <button
-            className="btn bg-white text-black border-[#e5e5e5]"
-            onClick={googlePopUpLogin}
-          >
-            Login with Google
-          </button>
-        )}
+        )
+
+          // : (
+          //   <button
+          //     className="btn bg-white text-black border-[#e5e5e5]"
+          //     onClick={googlePopUpLogin}
+          //   >
+          //     Login with Google
+          //   </button>
+          // )
+
+        }
       </div>
 
     </div>

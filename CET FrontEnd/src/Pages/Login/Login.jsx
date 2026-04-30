@@ -25,6 +25,14 @@ export default function Login() {
     const [loginChecker, setLoginChecker] = useState(false);
 
     useEffect(() => {
+        if (accountDetails) {
+            setIsLoggedIn(true);
+            setAccountLoading(false);
+            setLoginChecker(true)
+        }
+    }, [accountDetails, accountLoading, isLoggedIn, setIsLoggedIn, setAccountLoading, setLoginChecker]);
+
+    useEffect(() => {
         const fetchUser = async () => {
             const res = await fetch(backEndUrl + "/me", {
                 credentials: "include"
@@ -38,7 +46,7 @@ export default function Login() {
                 setLoginChecker(true)
                 // console.log("Fetch User Response:", data.user);
                 navigate("/Dashboard"); // ⭐ move it here
-            } else(
+            } else (
                 setLoginChecker(null)
             )
         };
@@ -197,8 +205,14 @@ export default function Login() {
                 <span className="loading text-indigo-500 loading-infinity loading-xl scale-200"></span>
             </div>
         );
-    } else if (loginChecker && !accountLoading && accountDetails) {
-        navigate("/Dashboard")
+    } else if (
+        loginChecker &&
+        accountLoading === false &&
+        accountDetails &&
+        Object.keys(accountDetails).length !== 0
+    ) {
+        console.log("Login Checker True - Navigating to Dashboard");
+        navigate("/Dashboard");
     }
 
 

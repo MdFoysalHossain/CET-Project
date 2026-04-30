@@ -84,6 +84,7 @@ const AccountProvider = ({ children }) => {
         signOut(auth).then(() => {
             setAccountDetails({})
             setIsLoggedIn(false)
+            setAccountLoading(false)
         }).catch((error) => {
             console.log("Google Sign out Error: ", error)
         })
