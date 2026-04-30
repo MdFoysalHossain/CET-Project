@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { use, useContext, useEffect, useRef, useState } from "react";
 import {
   Home,
   LayoutDashboard,
@@ -26,32 +26,24 @@ import { AuthContext } from "../Context/AccountProvidor";
 import { SettingsContext } from "../Context/SettingsProvidor";
 
 const SidebarUI = () => {
-  const { isLoggedIn, googlePopUpLogin, accountDetails, googleSignOut, accountLoading, setAccountDetails, setIsLoggedIn, setAccountLoading } =
-    useContext(AuthContext);
+  const { isLoggedIn, googlePopUpLogin, accountDetails, googleSignOut, accountLoading, setAccountDetails, setIsLoggedIn, setAccountLoading } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const { backEndUrl } = useContext(SettingsContext)
 
   const [activeProject, setActiveProject] = useState(null);
   const [openMenu, setOpenMenu] = useState(null);
-  const navigate = useNavigate();
+  const [assignedTasks, setAssignedTasks] = useState([]);
 
-  // useEffect(() => {
-  //   if (accountDetails) {
-  //     setIsLoggedIn(true);
-  //     setAccountLoading(false);
-  //   } else if (!accountDetails && !accountLoading) {
-  //     console.log("No user logged in, redirecting to login page.");
-  //     // setIsLoggedIn(false);
-  //     // setAccountLoading(false);
-  //     navigate("/Login")
-  //   }
-  // }, [isLoggedIn, navigate, accountLoading, accountDetails, setIsLoggedIn, setAccountLoading, googleSignOut]);
+  const [userRole, setUserRole] = useState(null);
+
+  const [menu, setMenu] = useState([]);
 
 
   useEffect(() => {
     console.log("Account Rerendered");
 
-    if(accountLoading) {
+    if (accountLoading) {
       console.log("Account is loading...");
     }
 
@@ -67,7 +59,90 @@ const SidebarUI = () => {
         navigate("/Login");
       }
     }
-  }, [accountLoading, accountDetails, navigate, isLoggedIn]);
+
+    console.log("Account Details:", accountDetails);
+
+    if (accountDetails?.accessToken) {
+      setMenu(
+        [
+          { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
+          { icon: FileBox, label: "Client", to: "/Dashboard/Client" },
+          { icon: Folder, label: "Projects", to: "/Dashboard/Projects" },
+          { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
+          { icon: Users, label: "Users", to: "/Dashboard/Users" },
+          { icon: Activity, label: "Insights", to: "/Dashboard/Users" },
+          { icon: Bell, label: "Notification" }
+        ]
+      )
+    }
+
+    if (accountDetails?._id) {
+      setUserRole(accountDetails.role);
+
+      fetch(backEndUrl + "/myProjects", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // 👈 this is the key
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the response data
+          // console.log("Assigned Tasks:", data);
+
+          const projectsWithUser = data.map((project) => ({
+            label: project.name,
+            to: `/Dashboard/Projects/${project._id}`,
+          }));
+
+          console.log("Projects with User:", projectsWithUser);
+
+          if (accountDetails.role === "PM") {
+            setMenu([
+              { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
+              { icon: Folder, label: "Projects", to: "/Dashboard/Projects" },
+              { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
+              { icon: Activity, label: "Insights", to: "/Dashboard/Users" },
+              { icon: Users, label: "Users", to: "/Dashboard/Users" },
+              { icon: Bell, label: "Notification" }
+            ]
+            )
+          }
+          else if (accountDetails.role === "QA" || accountDetails.role === "Developer" || accountDetails.role === "Designer") {
+            setMenu([
+              { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
+              // { icon: Folder, label: "Projects", to: "/Dashboard/Projects" },
+              {
+                icon: CheckSquare,
+                label: "My Tasks",
+                children: projectsWithUser?.length
+                  && projectsWithUser.map(task => ({
+                    label: task.label,
+                    to: task.to
+                  }))
+
+              },
+              { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
+              { icon: Activity, label: "Insights", to: "/Dashboard/Users" },
+              { icon: Bell, label: "Notification" }
+            ]);
+          } else if (accountDetails.role === "Client") {
+            setMenu([
+              { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
+              { icon: FileBox, label: "Projects", to: "/Dashboard/Client" },
+              { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
+              { icon: Bell, label: "Notification" }
+            ]
+            )
+          }
+          setAssignedTasks(prev => [...prev, ...projectsWithUser]);
+        });
+
+
+
+    }
+  }, [accountLoading, accountDetails, navigate, isLoggedIn, backEndUrl,]);
 
 
 
@@ -85,32 +160,32 @@ const SidebarUI = () => {
 
 
 
-  const menu = [
-    { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
-    { icon: FileBox, label: "Client", to: "/Dashboard/Client" },
-    { icon: Folder, label: "Projects", to: "/Dashboard/Projects" },
-    {
-      icon: CheckSquare,
-      label: "My Tasks",
-      children: [
-        { label: "bKash Website Redesign", to: "/Dashboard/Projects/MyTasks" },
-        { label: "Rocket App Backend Design", to: "/Dashboard/Projects/MyTasks" },
-        { label: "Nagad Attachement", to: "/Dashboard/Projects/MyTasks" }
-      ]
-    },
-    { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
-    { icon: Users, label: "Users", to: "/Dashboard/Users" },
-    { icon: Activity, label: "Insights", to: "/Dashboard/Users" },
-    { icon: Bell, label: "Notification" }
-  ];
+
+  // const menu =
+  //   userRole === "PM" && [
+  //     { icon: Blocks, label: "Dashboard", to: "/Dashboard" },
+  //     { icon: FileBox, label: "Client", to: "/Dashboard/Client" },
+  //     { icon: Folder, label: "Projects", to: "/Dashboard/Projects" },
+  //     {
+  //       icon: CheckSquare,
+  //       label: "My Tasks",
+  //       children: [
+  //         { label: "bKash Website Redesign", to: "/Dashboard/Projects/MyTasks" },
+  //         { label: "Rocket App Backend Design", to: "/Dashboard/Projects/MyTasks" },
+  //         { label: "Nagad Attachement", to: "/Dashboard/Projects/MyTasks" }
+  //       ]
+  //     },
+  //     { icon: CalendarRange, label: "Schedule", to: "/Dashboard/Calendar" },
+  //     { icon: Users, label: "Users", to: "/Dashboard/Users" },
+  //     { icon: Activity, label: "Insights", to: "/Dashboard/Users" },
+  //     { icon: Bell, label: "Notification" }
+  //   ];
 
   const systemMenu = [
     { icon: Frame, label: "Backlog", to: "/Dashboard/Projects" },
     { icon: Settings, label: "Settings", to: "/Dashboard" },
     { icon: Info, label: "Help", to: "/Dashboard/Projects" }
   ];
-
-
 
   return (
     <div className="w-64 h-screen bg-white flex flex-col font-jukarta border-r border-[#e5e7eb] fixed left-0 top-0 z-100">
@@ -130,7 +205,7 @@ const SidebarUI = () => {
 
         <div className="flex flex-col gap-1">
 
-          {menu.map((item, i) => (
+          {menu?.map((item, i) => (
             <div key={i}>
 
               {/* PARENT */}

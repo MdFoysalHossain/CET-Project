@@ -14,7 +14,7 @@ import CreateAttachment from '../Projects/Task/Component/CreateAttachment';
 import { Helmet } from 'react-helmet';
 
 const SingleProjectPage = () => {
-    
+
 
     const { backEndUrl } = useContext(SettingsContext)
     const { accountDetails, accountLoading, isLoggedIn } = useContext(AuthContext)
@@ -45,10 +45,12 @@ const SingleProjectPage = () => {
 
     const [projectDetails, setProjectDetails] = useState()
 
-    
+    console.log("Project Details", projectDetails)
+
+
 
     useEffect(() => {
-        if(accountLoading === true){return}
+        if (accountLoading === true) { return }
 
         const fetchDetails = async () => {
             const token = await accountDetails?.getIdToken();
@@ -66,92 +68,188 @@ const SingleProjectPage = () => {
                 })
                 .catch(error => console.log("Can not get projects:", error))
         }
-        console.log("Fetched Details")
+
+
+        // const fetchUserDetails = async () => {
+        //     fetch(backEndUrl + "/getProjects?email=" + accountDetails.email, {
+        //         method: "GET",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //         },
+        //         credentials: "include"
+        //     })
+        //         .then(res => res.json())
+        //         .then(res => {
+        //             const currentProject = res.find(item => item._id === projectId)
+        //             setProjectDetails(currentProject)
+        //         })
+        //         .catch(error => console.log("Can not get projects:", error))
+        // }
 
         fetchDetails()
     }, [backEndUrl, accountDetails])
 
 
     useEffect(() => {
-        if(accountLoading === true || isLoggedIn === false){return}
+        if (accountLoading === true || isLoggedIn === false) { return }
 
-        const fetchTodo = async () => {
-            const token = await accountDetails?.getIdToken();
-            fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=todo`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-                .then(res => res.json())
-                .then(res => {
-                    console.log(res)
-                    setTodoTask([...res])
+        const fetchGoogleDetails = async () => {
+            const fetchTodo = async () => {
+                const token = await accountDetails?.getIdToken();
+                fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=todo`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
                 })
-                .catch(error => console.log("Can not get projects:", error))
-        }
-        console.log("Fetched Details")
+                    .then(res => res.json())
+                    .then(res => {
+                        setTodoTask([...res])
+                    })
+                    .catch(error => console.log("Can not get projects:", error))
+            }
+            console.log("Fetched Details")
 
-        const fetchInProgress = async () => {
-            const token = await accountDetails?.getIdToken();
-            fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=inprogress`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-                .then(res => res.json())
-                .then(res => {
-                    console.log(res)
-                    setInProgress([...res])
+            const fetchInProgress = async () => {
+                const token = await accountDetails?.getIdToken();
+                fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=inprogress`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
                 })
-                .catch(error => console.log("Can not get projects:", error))
-        }
-        console.log("Fetched Details")
+                    .then(res => res.json())
+                    .then(res => {
+                        setInProgress([...res])
+                    })
+                    .catch(error => console.log("Can not get projects:", error))
+            }
+            console.log("Fetched Details")
 
-        const fetchQA = async () => {
-            const token = await accountDetails?.getIdToken();
-            fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=QA`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-                .then(res => res.json())
-                .then(res => {
-                    console.log(res)
-                    setInQATask([...res])
+            const fetchQA = async () => {
+                const token = await accountDetails?.getIdToken();
+                fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=QA`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
                 })
-                .catch(error => console.log("Can not get projects:", error))
-        }
-        console.log("Fetched Details")
+                    .then(res => res.json())
+                    .then(res => {
+                        setInQATask([...res])
+                    })
+                    .catch(error => console.log("Can not get projects:", error))
+            }
+            console.log("Fetched Details")
 
-        const fetchFinished = async () => {
-            const token = await accountDetails?.getIdToken();
-            fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=Finished`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-                .then(res => res.json())
-                .then(res => {
-                    console.log(res)
-                    setFinishedTask([...res])
+            const fetchFinished = async () => {
+                const token = await accountDetails?.getIdToken();
+                fetch(`${backEndUrl}/getTasks?email=${accountDetails.email}&projectId=${projectId}&status=Finished`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
                 })
-                .catch(error => console.log("Can not get projects:", error))
-        }
-        console.log("Fetched Details")
+                    .then(res => res.json())
+                    .then(res => {
+                        setFinishedTask([...res])
+                    })
+                    .catch(error => console.log("Can not get projects:", error))
+            }
+            console.log("Fetched Details")
 
-        fetchTodo()
-        fetchInProgress()
-        fetchQA()
-        fetchFinished()
-    }, [backEndUrl, accountDetails])
+            fetchTodo()
+            fetchInProgress()
+            fetchQA()
+            fetchFinished()
+        }
+
+        const fetchUserDetails = async () => {
+            const fetchTodo = async () => {
+                fetch(`${backEndUrl}/getUserTasks?&projectId=${projectId}&status=todo`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include"
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        setTodoTask([...res])
+                    })
+                    .catch(error => console.log("Can not get projects:", error))
+            }
+            console.log("Fetched Details")
+
+            const fetchInProgress = async () => {
+                fetch(`${backEndUrl}/getUserTasks?&projectId=${projectId}&status=inprogress`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include"
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        setInProgress([...res])
+                    })
+                    .catch(error => console.log("Can not get projects:", error))
+            }
+            console.log("Fetched Details")
+
+            const fetchQA = async () => {
+                fetch(`${backEndUrl}/getUserTasks?&projectId=${projectId}&status=QA`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include"
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        setInQATask([...res])
+                    })
+                    .catch(error => console.log("Can not get projects:", error))
+            }
+            console.log("Fetched Details")
+
+            const fetchFinished = async () => {
+                fetch(`${backEndUrl}/getUserTasks?&projectId=${projectId}&status=Finished`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include"
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        setFinishedTask([...res])
+                    })
+                    .catch(error => console.log("Can not get projects:", error))
+            }
+            console.log("Fetched Details")
+
+            fetchTodo()
+            fetchInProgress()
+            fetchQA()
+            fetchFinished()
+        }
+
+
+
+
+
+        if (accountDetails.email) {
+            fetchGoogleDetails()
+        } else {
+            console.log("No email found, fetching user details without token")
+            fetchUserDetails()
+        }
+    }, [backEndUrl, accountDetails,])
 
 
     return (
@@ -179,13 +277,35 @@ const SingleProjectPage = () => {
 
             {console.log("Selected Task", selectedTask)}
 
-            <SubTask allSubTask={allSubTask} selectedSubTask={selectedSubTask} showSubDetails={showSubDetails} setShowSubDetails={setShowSubDetails} setShowDetails={setShowDetails} />
+            <SubTask allSubTask={allSubTask}
+                selectedSubTask={selectedSubTask}
+                showSubDetails={showSubDetails}
+                setShowSubDetails={setShowSubDetails}
+                setShowDetails={setShowDetails}
+            />
 
-            <CreateTask setFinishedTask={setFinishedTask} setInQATask={setInQATask} setInProgress={setInProgress} setTodoTask={setTodoTask} isOpen={createTaskOpen} setCreateTaskOpen={setCreateTaskOpen} onClose={() => setCreateTaskOpen(false)} />
+            <CreateTask setFinishedTask={setFinishedTask}
+                setInQATask={setInQATask}
+                setInProgress={setInProgress}
+                setTodoTask={setTodoTask}
+                isOpen={createTaskOpen}
+                setCreateTaskOpen={setCreateTaskOpen}
+                onClose={() => setCreateTaskOpen(false)}
+            />
 
-            <CreateAttachment setAttachment={setAttachment} setAttachUpdated={setAttachUpdated} selectedTask={selectedTask} showAttachment={showAttachment} setShowAttachment={setShowAttachment} />
+            <CreateAttachment setAttachment={setAttachment}
+                setAttachUpdated={setAttachUpdated}
+                selectedTask={selectedTask}
+                showAttachment={showAttachment}
+                setShowAttachment={setShowAttachment}
+            />
 
-            <CreateSubTask selectedTask={selectedTask} allSubTask={allSubTask} setAllSubTask={setAllSubTask} createSubTaskOpen={createSubTaskOpen} setCreateSubTaskOpen={setCreateSubTaskOpen} />
+            <CreateSubTask selectedTask={selectedTask}
+                allSubTask={allSubTask}
+                setAllSubTask={setAllSubTask}
+                createSubTaskOpen={createSubTaskOpen}
+                setCreateSubTaskOpen={setCreateSubTaskOpen}
+            />
 
             <div className="border-b border-[#e5e7eb]  h-[65px] mb-5">
                 <div className="text-left max-w-[1330px] mx-auto flex items-center">
@@ -201,10 +321,27 @@ const SingleProjectPage = () => {
 
 
             <div className="max-w-[1330px] mx-auto">
+
+                {
+                    accountDetails?.role === "PM" || accountDetails?.accessToken ?
+                        <div className="">
+                            <div className="w-[320px]  bg-white border border-gray-200 rounded-sm">
+                                <h3 className='text-lg font-jukarta text-gray-800 mt-2.5 font-semibold'>Assigned To</h3>
+                                <div className="p-4 pt-0 mt-2.5 font-jukarta">
+                                    {
+                                        projectDetails?.assignees?.map((assignee, index) => (
+                                            <div className="flex items-center gap-2 my-1 border border-gray-200 p-2 rounded-sm" key={index}>
+                                                <p>@{assignee}</p>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        </div> : null
+                }
+
+
                 <div className=" grid grid-cols-4 gap-4 mt-10">
-
-
-
                     <div className="bg-gray-300/30 rounded-xl  p-2 pb-0 pt-4">
                         <div className="flex justify-between items-center">
                             <div className="text-left font-jukarta flex items-center gap-1.5">

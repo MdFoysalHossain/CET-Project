@@ -1,7 +1,7 @@
 
 import { Eye, EyeOff } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate,useLocation } from "react-router";
 import { SettingsContext } from "../../Context/SettingsProvidor";
 import useNotifierError from "../../Hooks/NotifierError";
 import { header } from "framer-motion/client";
@@ -24,6 +24,8 @@ export default function Login() {
 
     const [loginChecker, setLoginChecker] = useState(false);
 
+    const from = location.state?.from?.pathname || "/Dashboard";
+
     useEffect(() => {
         if (accountDetails) {
             setIsLoggedIn(true);
@@ -45,7 +47,7 @@ export default function Login() {
                 setAccountLoading(false);
                 setLoginChecker(true)
                 // console.log("Fetch User Response:", data.user);
-                navigate("/Dashboard"); // ⭐ move it here
+                navigate(from, { replace: true }); // ⭐ move it here
             } else (
                 setLoginChecker(null)
             )
@@ -212,7 +214,8 @@ export default function Login() {
         Object.keys(accountDetails).length !== 0
     ) {
         console.log("Login Checker True - Navigating to Dashboard");
-        navigate("/Dashboard");
+        // navigate("/Dashboard");
+        navigate(from, { replace: true });
     }
 
 

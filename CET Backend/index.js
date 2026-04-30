@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
+const SECRET = process.env.JWT_SECRET;
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
@@ -60,6 +61,27 @@ async function run() {
         const subTasks = tasksDb.collection("SubTask");
 
         const { ObjectId } = require("mongodb");
+
+        const verifyUser = (req, res, next) => {
+            console.log("Cookies:", req.cookies);
+
+            const token = req.cookies?.token;
+
+            if (!token) {
+                console.log("❌ No token found");
+                return res.sendStatus(401);
+            }
+
+            try {
+                const decoded = jwt.verify(token, SECRET);
+                console.log("✅ Token valid:", decoded);
+                req.user = decoded;
+                next();
+            } catch (err) {
+                console.log("❌ JWT error:", err.message);
+                return res.sendStatus(403);
+            }
+        };
 
 
         const verifyFirebaseToken = async (req, res, next) => {
@@ -713,6 +735,80 @@ async function run() {
             }
         });
 
+
+
+
+        app.get("/myProjects", verifyUser, async (req, res) => {
+            try {
+                const userUid = req.user.uid;
+
+                const usersName = await subUsers.findOne({
+                    _id: new ObjectId(userUid)
+                });
+
+                if (!usersName) {
+                    return res.status(404).send({ error: "User not found" });
+                }
+
+                const projects = await allProjects
+                    .find({
+                        assignees: usersName.username, // ✅ matches inside array automatically
+                        state: { $ne: "deleted" }
+                    })
+                    .toArray();
+
+                console.log("Projects for", usersName.username, ":", projects);
+
+                res.json(projects);
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({ error: "Failed to fetch projects" });
+            }
+        });
+
+
+        app.get("/getUserTasks", verifyUser, async (req, res) => {
+            try {
+                const userUid = req.user.uid; // from token
+                const projectId = req.query.projectId;   // from query
+                const status = req.query.status;         // from query
+
+
+                console.log(userUid, status, projectId);
+                if (status === "todo") {
+                    const getData = await allTasks.find({
+                        projectId: projectId,
+                        status: "To Do"
+                    }).toArray();
+                    res.send(getData);
+                } else if (status === "inprogress") {
+                    const getData = await allTasks.find({
+                        // assignees: email,
+                        projectId: projectId,
+                        status: "In Progress"
+                    }).toArray();
+                    res.send(getData);
+                } else if (status === "QA") {
+                    const getData = await allTasks.find({
+                        // assignees: email,
+                        projectId: projectId,
+                        status: "Q&A"
+                    }).toArray();
+                    res.send(getData);
+                } else if (status === "Finished") {
+                    const getData = await allTasks.find({
+                        // assignees: email,
+                        projectId: projectId,
+                        status: "Finished"
+                    }).toArray();
+                    res.send(getData);
+                }
+
+
+            } catch (error) {
+                res.status(500).send({ error: "Failed to fetch projects" });
+            }
+        });
 
         app.get("/getUsers", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
             try {
