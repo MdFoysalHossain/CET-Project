@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, use, useContext, useEffect, useState } from 'react';
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from '../../Firebase/firebase_init';
 import { SettingsContext } from './SettingsProvidor';
@@ -15,6 +15,36 @@ const AccountProvider = ({ children }) => {
     const [accountDetails, setAccountDetails] = useState({});
     const [accountLoading, setAccountLoading] = useState(true);
 
+    useEffect(() => {
+        setAccountLoading(true)
+        const fetchUser = async () => {
+            try {
+                const response = await fetch(backEndUrl + "/me", {
+                    method: "GET",
+                    credentials: "include"
+                });
+
+                const data = await response.json();
+
+
+
+                if (data.user) {
+                    setAccountDetails(data.user);
+                    setIsLoggedIn(true);
+                    setAccountLoading(false)
+                } else {
+                    setIsLoggedIn(false);
+                    setAccountLoading(false)
+                }
+            } finally {
+                setAccountLoading(false);
+            }
+        };
+
+        fetchUser();
+    }, [backEndUrl, setAccountDetails, setIsLoggedIn]);
+
+
     const googlePopUpLogin = async () => {
         try {
             const result = await signInWithPopup(auth, provider);
@@ -27,8 +57,6 @@ const AccountProvider = ({ children }) => {
             // 🔑 Get token (important for backend security)
             const token = await user.getIdToken();
 
-            console.log(backEndUrl + "/checkUser?email=" + email)
-
             fetch(backEndUrl + "/checkUser?email=" + email, {
                 method: "GET",
                 headers: {
@@ -38,10 +66,12 @@ const AccountProvider = ({ children }) => {
 
             })
 
-            .then(res => res.json())
-            .then(res => {
-                console.log("Check User Res:", res)
-            })
+                .then(res => res.json())
+                .then(res => {
+                    console.log("Check User Res:", res)
+                })
+
+            // navigate("/Dashboard") // Redirect to dashboard after login
 
 
 

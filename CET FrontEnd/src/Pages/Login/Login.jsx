@@ -1,16 +1,20 @@
 
 import { Eye, EyeOff } from "lucide-react";
-import { useContext, useState } from "react";
-import { Link } from "react-router";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router";
 import { SettingsContext } from "../../Context/SettingsProvidor";
 import useNotifierError from "../../Hooks/NotifierError";
 import { header } from "framer-motion/client";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../Context/AccountProvidor";
 
 export default function Login() {
     const [show, setShow] = useState(false);
+    const navigate = useNavigate();
 
     const { backEndUrl } = useContext(SettingsContext)
+    const { isLoggedIn, accountLoading, setIsLoggedIn, googlePopUpLogin, accountDetails, setAccountDetails, googleSignOut, setAccountLoading } = useContext(AuthContext);
+
 
     const [isLoading, setIsLoading] = useState(false);
     const [cooldown, setCooldown] = useState(0);
@@ -18,6 +22,29 @@ export default function Login() {
     const [userNameError, setUsernameError] = useState();
     const [passwordError, setPasswordError] = useState();
 
+    const [loginChecker, setLoginChecker] = useState(false);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const res = await fetch(backEndUrl + "/me", {
+                credentials: "include"
+            });
+
+            const data = await res.json();
+
+            if (data.user) {
+                setAccountDetails(data.user);
+                setAccountLoading(false);
+                setLoginChecker(true)
+                // console.log("Fetch User Response:", data.user);
+                navigate("/Dashboard"); // ⭐ move it here
+            } else(
+                setLoginChecker(null)
+            )
+        };
+
+        fetchUser();
+    }, [backEndUrl, navigate, setAccountDetails, setAccountLoading, setLoginChecker]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -42,10 +69,17 @@ export default function Login() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
+                credentials: "include" // ⭐ REQUIRED for cookies
             });
 
             const res = await response.json();
-            console.log("Login Response:", res);
+
+            if (res.message === "Login successful") {
+                setAccountDetails(res.user);
+                setAccountLoading(false);
+                setIsLoggedIn(true);
+                setLoginChecker(true);
+            }
 
             if (res.message === "Account disabled. Contact admin.") {
                 Swal.fire({
@@ -131,6 +165,7 @@ export default function Login() {
                         popup: "rounded-2xl p-8"
                     }
                 });
+                navigate("/Dashboard")
             }
 
 
@@ -156,6 +191,17 @@ export default function Login() {
         }
     };
 
+    if (loginChecker === false || accountLoading) {
+        return (
+            <div className="fixed inset-0 bg-white/75 backdrop-blur-sm flex items-center justify-center z-50">
+                <span className="loading text-indigo-500 loading-infinity loading-xl scale-200"></span>
+            </div>
+        );
+    } else if (loginChecker && !accountLoading && accountDetails) {
+        navigate("/Dashboard")
+    }
+
+
     return (
         <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 relative">
             <div className="w-[1330px] mx-auto h-15 fixed top-0 flex mt-5">
@@ -176,7 +222,7 @@ export default function Login() {
                     </div>
 
                     {/* Google Button */}
-                    <button className="btn shadow-none bg-white  text-black border-[#e5e5e5] w-full mt-5" >
+                    <button className="btn shadow-none bg-white  text-black border-[#e5e5e5] w-full mt-5" onClick={googlePopUpLogin} >
                         <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="m0 0H512V512H0" fill="#fff"></path><path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path><path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path><path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"></path><path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path></g></svg>
                         Login with Google
                     </button>

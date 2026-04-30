@@ -1,19 +1,17 @@
-
-
-// mongodb+srv://TrackLioAdmin:15DO7UR001@cluster0.dq7psmt.mongodb.net/?appName=Cluster0
-
-
+const jwt = require("jsonwebtoken");
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
-// require("dotenv").config();
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
+
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
@@ -21,7 +19,7 @@ const uri = process.env.MONGODB_URI;
 
 // CORS setup
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
@@ -60,6 +58,8 @@ async function run() {
         const tasksDb = client.db("Task");
         const allTasks = tasksDb.collection("AllTask");
         const subTasks = tasksDb.collection("SubTask");
+
+        const { ObjectId } = require("mongodb");
 
 
         const verifyFirebaseToken = async (req, res, next) => {
@@ -117,7 +117,6 @@ async function run() {
         app.get("/", (req, res) => {
             res.send("Server running 🚀");
         });
-
 
         app.get("/checkUser", verifyFirebaseToken, verifyEmailMatch, async (req, res) => {
             const email = { email: req.user.email };
@@ -512,6 +511,81 @@ async function run() {
 
 
 
+        // app.post("/Login", async (req, res) => {
+        //     const { loginType, username, password } = req.body;
+
+        //     if (loginType !== "username") return;
+
+        //     try {
+        //         const user = await subUsers.findOne({ username });
+
+        //         // ❌ User not found
+        //         if (!user) {
+        //             return res.status(400).send({
+        //                 message: "invalid username",
+        //             });
+        //         }
+
+        //         // 🚫 Check if disabled
+        //         if (user.status === "disabled") {
+        //             return res.status(403).send({
+        //                 message: "Account disabled. Contact admin.",
+        //             });
+        //         }
+
+        //         // ❌ Wrong password
+        //         if (user.password !== password) {
+        //             const attempts = (user.failedAttempts || 0) + 1;
+
+        //             // 🔒 Disable after 5 attempts
+        //             if (attempts >= 5) {
+        //                 await subUsers.updateOne(
+        //                     { _id: user._id },
+        //                     {
+        //                         $set: { status: "disabled" },
+        //                         $unset: { failedAttempts: "" },
+        //                     }
+        //                 );
+
+        //                 return res.status(403).send({
+        //                     message: "Account disabled after too many failed attempts.",
+        //                 });
+        //             }
+
+        //             await subUsers.updateOne(
+        //                 { _id: user._id },
+        //                 { $set: { failedAttempts: attempts } }
+        //             );
+
+        //             return res.status(400).send({
+        //                 message: "invalid password",
+        //             });
+        //         }
+
+        //         // ✅ Correct password
+        //         await subUsers.updateOne(
+        //             { _id: user._id },
+        //             { $set: { failedAttempts: 0 } }
+        //         );
+
+        //         return res.send({
+        //             message: "Login successful",
+        //             user,
+        //         });
+
+        //     } catch (error) {
+        //         console.error(error);
+        //         res.status(500).send({ message: "Server error" });
+        //     }
+        // });
+
+
+
+
+
+
+
+
         app.post("/Login", async (req, res) => {
             const { loginType, username, password } = req.body;
 
@@ -538,7 +612,6 @@ async function run() {
                 if (user.password !== password) {
                     const attempts = (user.failedAttempts || 0) + 1;
 
-                    // 🔒 Disable after 5 attempts
                     if (attempts >= 5) {
                         await subUsers.updateOne(
                             { _id: user._id },
@@ -563,20 +636,80 @@ async function run() {
                     });
                 }
 
-                // ✅ Correct password
+                // ✅ Reset failed attempts
                 await subUsers.updateOne(
                     { _id: user._id },
                     { $set: { failedAttempts: 0 } }
                 );
 
+                // ⭐ CREATE JWT TOKEN (NEW)
+                const token = jwt.sign(
+                    { uid: user._id },
+                    process.env.JWT_SECRET,
+                    { expiresIn: "7d" }
+                );
+
+                // ⭐ SET HTTP-ONLY COOKIE (NEW)
+                res.cookie("token", token, {
+                    httpOnly: true,
+                    secure: false,   // true in production (HTTPS)
+                    sameSite: "lax",
+                    maxAge: 7 * 24 * 60 * 60 * 1000
+                });
+
+                // ❗ Remove password before sending user
+                const { password: _, ...safeUser } = user._doc || user;
+
                 return res.send({
                     message: "Login successful",
-                    user,
+                    user: safeUser,
                 });
 
             } catch (error) {
                 console.error(error);
                 res.status(500).send({ message: "Server error" });
+            }
+        });
+
+        app.post("/Logout", (req, res) => {
+            res.cookie("token", "", {
+                httpOnly: true,
+                secure: false,   // true in production (HTTPS)
+                sameSite: "lax",
+                expires: new Date(0) // 🔥 immediately expires cookie
+            });
+
+            res.json({ message: "Logged out successfully" });
+        });
+
+
+
+        app.get("/me", async (req, res) => {
+            try {
+                const token = req.cookies?.token;
+
+                if (!token) {
+                    return res.status(401).json({ user: null });
+                }
+
+                const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+                const user = await subUsers.findOne({
+                    _id: new ObjectId(decoded.uid)
+                });
+
+                if (!user) {
+                    return res.status(404).json({ user: null });
+                }
+
+                const { password, ...safeUser } = user;
+
+                console.log("Authenticated User:", safeUser);
+
+                res.json({ user: safeUser });
+
+            } catch (err) {
+                res.status(401).json({ user: null });
             }
         });
 
