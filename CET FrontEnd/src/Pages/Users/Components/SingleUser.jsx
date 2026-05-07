@@ -89,7 +89,7 @@ const SingleUser = ({ users, setShowUpdateModal, setSelectedUser }) => {
     return (
         <>
             {users?.map((user, index) => (
-                <tr key={user.id} className={`transition bg-gray-100`}>
+                <tr key={index} className={`transition bg-gray-100`}>
 
                     {/* INDEX */}
                     <td className="bg-white  border-gray-200 py-4 ">

@@ -21,8 +21,6 @@ const SingleProjectPage = () => {
 
     const { id: projectId } = useParams()
 
-    console.log("Single Project Parems", projectId)
-
     const [showDetails, setShowDetails] = useState(false);
     const [showSubDetails, setShowSubDetails] = useState(false);
 
@@ -44,9 +42,6 @@ const SingleProjectPage = () => {
     const [attachUpdated, setAttachUpdated] = useState(false)
 
     const [projectDetails, setProjectDetails] = useState()
-
-    console.log("Project Details", projectDetails)
-
 
 
     useEffect(() => {
@@ -109,7 +104,7 @@ const SingleProjectPage = () => {
                     })
                     .catch(error => console.log("Can not get projects:", error))
             }
-            console.log("Fetched Details")
+            // console.log("Fetched Details")
 
             const fetchInProgress = async () => {
                 const token = await accountDetails?.getIdToken();
@@ -126,7 +121,7 @@ const SingleProjectPage = () => {
                     })
                     .catch(error => console.log("Can not get projects:", error))
             }
-            console.log("Fetched Details")
+            // console.log("Fetched Details")
 
             const fetchQA = async () => {
                 const token = await accountDetails?.getIdToken();
@@ -143,7 +138,7 @@ const SingleProjectPage = () => {
                     })
                     .catch(error => console.log("Can not get projects:", error))
             }
-            console.log("Fetched Details")
+            // console.log("Fetched Details")
 
             const fetchFinished = async () => {
                 const token = await accountDetails?.getIdToken();
@@ -160,7 +155,7 @@ const SingleProjectPage = () => {
                     })
                     .catch(error => console.log("Can not get projects:", error))
             }
-            console.log("Fetched Details")
+            // console.log("Fetched Details")
 
             fetchTodo()
             fetchInProgress()
@@ -183,7 +178,7 @@ const SingleProjectPage = () => {
                     })
                     .catch(error => console.log("Can not get projects:", error))
             }
-            console.log("Fetched Details")
+            // console.log("Fetched Details")
 
             const fetchInProgress = async () => {
                 fetch(`${backEndUrl}/getUserTasks?&projectId=${projectId}&status=inprogress`, {
@@ -199,7 +194,7 @@ const SingleProjectPage = () => {
                     })
                     .catch(error => console.log("Can not get projects:", error))
             }
-            console.log("Fetched Details")
+            // console.log("Fetched Details")
 
             const fetchQA = async () => {
                 fetch(`${backEndUrl}/getUserTasks?&projectId=${projectId}&status=QA`, {
@@ -215,7 +210,7 @@ const SingleProjectPage = () => {
                     })
                     .catch(error => console.log("Can not get projects:", error))
             }
-            console.log("Fetched Details")
+            // console.log("Fetched Details")
 
             const fetchFinished = async () => {
                 fetch(`${backEndUrl}/getUserTasks?&projectId=${projectId}&status=Finished`, {
@@ -231,7 +226,7 @@ const SingleProjectPage = () => {
                     })
                     .catch(error => console.log("Can not get projects:", error))
             }
-            console.log("Fetched Details")
+            // console.log("Fetched Details")
 
             fetchTodo()
             fetchInProgress()
@@ -254,9 +249,9 @@ const SingleProjectPage = () => {
 
     return (
         <div className='' >
-            {
+            {/* {
                 console.log(projectDetails)
-            }
+            } */}
             <Helmet>
                 <title>{`TrackLio - ${projectDetails && projectDetails?.name}`}</title>
             </Helmet>
@@ -275,7 +270,7 @@ const SingleProjectPage = () => {
                 attachUpdated={attachUpdated}
             />
 
-            {console.log("Selected Task", selectedTask)}
+            {/* {console.log("Selected Task", selectedTask)} */}
 
             <SubTask allSubTask={allSubTask}
                 selectedSubTask={selectedSubTask}
@@ -313,8 +308,9 @@ const SingleProjectPage = () => {
                         <ChevronLeft strokeWidth={1.25} size={45} className='border border-gray-300 hover:border-black hover:text-black mr-2 rounded-sm transition text-gray-400' />
                     </Link>
                     <div className=" flex flex-col items-start justify-center ">
-                        <h2 className='text-2xl font-semibold font-jukarta'>All Task</h2>
+                        <h2 className='text-2xl font-semibold font-jukarta'>All Task </h2>
                         <p className='text-md font-jukarta text-gray-600/90'>{projectDetails && projectDetails?.name}</p>
+
                     </div>
                 </div>
             </div>
@@ -322,7 +318,7 @@ const SingleProjectPage = () => {
 
             <div className="max-w-[1330px] mx-auto">
 
-                {
+                {/* {
                     accountDetails?.role === "PM" || accountDetails?.accessToken ?
                         <div className="">
                             <div className="w-[320px]  bg-white border border-gray-200 rounded-sm">
@@ -338,7 +334,7 @@ const SingleProjectPage = () => {
                                 </div>
                             </div>
                         </div> : null
-                }
+                } */}
 
 
                 <div className=" grid grid-cols-4 gap-4 mt-10">
@@ -357,14 +353,10 @@ const SingleProjectPage = () => {
                         {/* ALL TO DO TASK */}
                         <div className="mt-4">
                             {
-                                console.log("Tasks", todoTask)
-                            }
-                            {
                                 todoTask?.length === 0 ? <p className='text-sm font-jukarta text-gray-500 my-5 bg-white p-4 rounded-sm border border-gray-200'>No tasks available</p> :
                                     todoTask?.map((todo, index) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
                                         <div className="" key={index} onClick={() => {
-                                            console.log("Rendering ToDo:", selectedTask)
                                             setSelectedTask(todo)
                                         }}>
 
@@ -406,7 +398,6 @@ const SingleProjectPage = () => {
                                     inProgressTask?.map((todo, index) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
                                         <div className="" key={index} onClick={() => {
-                                            console.log("Rendering ToDo:", selectedTask)
                                             setSelectedTask(todo)
                                         }}>
 
@@ -446,7 +437,6 @@ const SingleProjectPage = () => {
                                     inQATask?.map((todo, index) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
                                         <div className="" key={index} onClick={() => {
-                                            console.log("Rendering ToDo:", selectedTask)
                                             setSelectedTask(todo)
                                         }}>
 
@@ -487,7 +477,6 @@ const SingleProjectPage = () => {
                                     finishedTask?.map((todo, index) => (
                                         // <div className="" key={todo.id} onClick={() => console.log("Rendering ToDo:", todo)}>
                                         <div className="" key={index} onClick={() => {
-                                            console.log("Rendering ToDo:", selectedTask)
                                             setSelectedTask(todo)
                                         }}>
 

@@ -1,7 +1,7 @@
 
 import { Eye, EyeOff } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate,useLocation } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { SettingsContext } from "../../Context/SettingsProvidor";
 import useNotifierError from "../../Hooks/NotifierError";
 import { header } from "framer-motion/client";
@@ -11,6 +11,7 @@ import { AuthContext } from "../../Context/AccountProvidor";
 export default function Login() {
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation()
 
     const { backEndUrl } = useContext(SettingsContext)
     const { isLoggedIn, accountLoading, setIsLoggedIn, googlePopUpLogin, accountDetails, setAccountDetails, googleSignOut, setAccountLoading } = useContext(AuthContext);
@@ -25,6 +26,9 @@ export default function Login() {
     const [loginChecker, setLoginChecker] = useState(false);
 
     const from = location.state?.from?.pathname || "/Dashboard";
+
+    // console.log("ALL LOCATION:", location, from)
+
 
     useEffect(() => {
         if (accountDetails) {
@@ -213,7 +217,7 @@ export default function Login() {
         accountDetails &&
         Object.keys(accountDetails).length !== 0
     ) {
-        console.log("Login Checker True - Navigating to Dashboard");
+        // console.log("Login Checker True - Navigating to Dashboard");
         // navigate("/Dashboard");
         navigate(from, { replace: true });
     }

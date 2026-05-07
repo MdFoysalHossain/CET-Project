@@ -5,7 +5,7 @@ import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, S
 const SubTask = ({ showSubDetails, setShowSubDetails, selectedSubTask, allSubTask }) => {
 
     useEffect(() => {
-        console.log("Updated:", selectedSubTask)
+        // console.log("Updated:", selectedSubTask)
     }, [selectedSubTask])
 
 

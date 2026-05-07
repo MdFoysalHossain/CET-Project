@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarPlus, ChevronLeft, ChevronRight, X } from "lucide-react";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 
@@ -302,9 +302,9 @@ const CalendarPage = () => {
 
                         <button
                             onClick={() => setShowCreateModal(true)}
-                            className="px-4 py-2 bg-black text-white rounded-md cursor-pointer hover:scale-105 transition"
+                            className="flex text-sm  justify-center items-center gap-1 py-2  bg-indigo-500 px-5 text-white rounded-md cursor-pointer hover:scale-105 transition font-jukarta"
                         >
-                            + Create
+                            Create <CalendarPlus size={18} strokeWidth={2} /> 
                         </button>
                     </div>
                 </div>
@@ -472,7 +472,7 @@ const CalendarPage = () => {
 
 
             {showCreateModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div className="fixed inset-0 z-100 flex items-center justify-center font-jukarta">
 
                     {/* Overlay */}
                     <div
@@ -490,9 +490,9 @@ const CalendarPage = () => {
                             </h2>
                             <button
                                 onClick={() => setShowCreateModal(false)}
-                                className="text-gray-400 hover:text-black transition"
+                                className=" transition cursor-pointer" 
                             >
-                                ✕
+                                <X size={22} strokeWidth='2' className='fill-white hover:text-indigo-500 hover:scale-120 cursor-pointer transition'/>
                             </button>
                         </div>
 
@@ -505,7 +505,7 @@ const CalendarPage = () => {
                                 onChange={(e) =>
                                     setNewEvent({ ...newEvent, date: e.target.value })
                                 }
-                                className="border border-gray-200  focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-lg text-sm transition"
+                                className="border border-gray-200  focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-sm text-sm transition"
                             />
 
                             <input
@@ -515,7 +515,7 @@ const CalendarPage = () => {
                                 onChange={(e) =>
                                     setNewEvent({ ...newEvent, header: e.target.value })
                                 }
-                                className="border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-lg text-sm transition"
+                                className="border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-sm text-sm transition"
                             />
 
                             <textarea
@@ -524,8 +524,8 @@ const CalendarPage = () => {
                                 onChange={(e) =>
                                     setNewEvent({ ...newEvent, details: e.target.value })
                                 }
-                                className="border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-lg text-sm transition resize-none"
-                                rows={3}
+                                className="border border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none p-2.5 rounded-sm text-sm transition"
+                                rows={6}
                             />
 
                         </div>
@@ -542,7 +542,7 @@ const CalendarPage = () => {
 
                             <button
                                 onClick={handleCreateEvent}
-                                className="px-4 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm"
+                                className="px-4 py-2 text-sm rounded-sm bg-indigo-500 text-white hover:bg-indigo-700 transition shadow-sm"
                             >
                                 Add Event
                             </button>

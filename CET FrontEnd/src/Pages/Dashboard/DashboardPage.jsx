@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ProjectsCounting from './Component/ProjectsCounting';
 import ProjectProgress from './Component/ProjectProgress';
 import DashboardActivity from './Component/DashboardActivity';
 import UpcomingCalanderEvents from './Component/UpcomingCalanderEvents';
 import TaskSummury from './Component/TaskSummury';
 import { Helmet } from 'react-helmet';
+import { AuthContext } from '../../Context/AccountProvidor';
 
 const DashboardPage = () => {
-    
     return (
         <div>
             <Helmet>

@@ -117,7 +117,7 @@ const AllSingleProject = ({ project, index, setAllProjects, allProjects }) => {
                                     popup: "rounded-2xl p-8"
                                 }
                             });
-                            console.log("Delete Error:", error)
+                            // console.log("Delete Error:", error)
                         });
                 }
 
@@ -167,7 +167,7 @@ const AllSingleProject = ({ project, index, setAllProjects, allProjects }) => {
 
             // ❌ CANCEL CLICK
             else if (result.dismiss === Swal.DismissReason.cancel) {
-                console.log("User cancelled");
+                // console.log("User cancelled");
 
                 // optional: do something on cancel
                 // example:

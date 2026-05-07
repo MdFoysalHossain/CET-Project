@@ -3,10 +3,12 @@ import { X, Clock, Star, MoreVertical, Calendar, Tag, Users, Info, CirclePlus, S
 import { SettingsContext } from '../../../../../Context/SettingsProvidor';
 import { AuthContext } from '../../../../../Context/AccountProvidor';
 import { p } from 'framer-motion/client';
+import MainTaskComment from './Component/MainTaskComment';
 
 const MainTasks = ({ attachments, attachUpdated, showDetails, setShowDetails, setShowSubDetails, setCreateSubTaskOpen, selectedTask, setSelectedSubTask, setAllSubTask, allSubTask, setShowAttachment }) => {
     const { backEndUrl } = useContext(SettingsContext)
-    const { accountDetails } = useContext(AuthContext)
+    const { accountDetails, accountLoading, isLoggedIn } = useContext(AuthContext)
+
 
     const [attachmentsDetails, setAttachmentsDetails] = useState()
 
@@ -24,11 +26,7 @@ const MainTasks = ({ attachments, attachUpdated, showDetails, setShowDetails, se
             })
                 .then(res => res.json())
                 .then(res => {
-                    // console.log(res)
-                    // setTodoTask([...res])
                     setAllSubTask(res)
-                    // console.log(res)
-                    // console.log(isUpdated)
                 })
                 .catch(error => console.log("Can not get projects:", error))
         }
@@ -40,11 +38,8 @@ const MainTasks = ({ attachments, attachUpdated, showDetails, setShowDetails, se
     useEffect(() => {
         const fetAttachment = () => {
             const hasAttachment = selectedTask && selectedTask?.attachments;
-            // console.log("Has Attachments:", hasAttachment)
             const newAttachments = hasAttachment && [...attachments, ...hasAttachment]
             setAttachmentsDetails(newAttachments)
-
-            // console.log("Attachments Details:", attachmentsDetails)
         }
 
         fetAttachment()
@@ -290,94 +285,34 @@ const MainTasks = ({ attachments, attachUpdated, showDetails, setShowDetails, se
                             </div>
                         </div>
 
-
-                        <div className="px-6 pt-3 font-jukarta">
-                            <div className=" px-2  py-1.5 mb-2 rounded-lg">
+                        <div className="">
+                            <MainTaskComment />
+                            <div className=" px-8  py-1.5 mb-2 rounded-lg">
                                 <form action="" onSubmit={console.log("")}>
                                     <fieldset className="fieldset  text-left relative" >
                                         <legend className="fieldset-legend text-black gap-1 justify-center items-center flex">
-                                            <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
-                                            <p className='text-[14px]'>Foysa Hossain</p>
+                                            <p className='h-7 w-7 text-[14px] bg-indigo-200 rounded-lg flex justify-center items-center text-indigo-600 font-semibold'>
+                                                {
+                                                    accountLoading === false && accountDetails
+                                                        ? (accountDetails?.displayName?.[0] || accountDetails?.name?.[0] || "?")
+                                                        : "?"
+                                                }
+                                            </p>
+                                            <div className="">
+                                                <p className='text-[14px]'>
+                                                    {
+                                                        accountDetails?.displayName ? accountDetails?.displayName : accountDetails?.name
+                                                    }
+                                                </p>
+                                            </div>
                                         </legend>
                                         <textarea className="textarea h-30 w-full bg-white border border-gray-500/20" placeholder="Write your thought.."></textarea>
                                         <button className="absolute bottom-2.5 right-2 w-15 bg-indigo-200 text-indigo-800 font-semibold text-[14px] p-1.5 rounded-sm cursor-pointer z-10" type='submit'>Post</button>
                                     </fieldset>
                                 </form>
                             </div>
-
-
-                            <div className="flex flex-col gap-4 mb-5">
-                                <div className="text-left">
-
-                                    {/* MAIN COMMENT */}
-                                    <div className=" p-2 rounded-lg">
-
-                                        <div className="">
-                                            <div className="flex gap-1 justify-between items-center ">
-                                                <div className="flex items-center gap-1">
-                                                    <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
-                                                    <p className='text-[14px]'>Foysa Hossain</p>
-                                                </div>
-                                                <div className="flex items-center gap-1">
-                                                    <p className='text-[14px]'>Oct 16, 2026</p>
-                                                    <p className='text-[14px]'>10:41 AM</p>
-                                                </div>
-                                            </div>
-
-                                            <p className='text-sm text-left mt-1 ml-7'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
-
-                                        </div>
-
-
-                                        {/* SUB COMMENTS */}
-
-                                        <div className="pl-5 mt-2">
-                                            <div className="border-l border-gray-300 pl-4">
-                                                <div className="flex gap-1 justify-between items-center ">
-                                                    <div className="flex items-center gap-1">
-                                                        <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
-                                                        <p className='text-[14px]'>Foysa Hossain</p>
-                                                    </div>
-                                                    <div className="flex items-center gap-1">
-                                                        <p className='text-[14px]'>Oct 16, 2026</p>
-                                                        <p className='text-[14px]'>10:41 AM</p>
-                                                    </div>
-                                                </div>
-
-                                                <p className='text-sm text-left mt-1 ml-7 pb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
-
-                                            </div>
-
-
-                                            <div className="border-l border-gray-300 pl-4">
-                                                <div className="flex gap-1 justify-between items-center ">
-                                                    <div className="flex items-center gap-1">
-                                                        <p className='h-6 w-6 bg-amber-500 rounded-lg'></p>
-                                                        <p className='text-[14px]'>Foysa Hossain</p>
-                                                    </div>
-                                                    <div className="flex items-center gap-1">
-                                                        <p className='text-[14px]'>Oct 16, 2026</p>
-                                                        <p className='text-[14px]'>10:41 AM</p>
-                                                    </div>
-                                                </div>
-
-                                                <p className='text-sm text-left mt-1 ml-7 pb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quia, dolores cumque ratione iusto dolore ab quas mollitia nihil minima?</p>
-
-                                            </div>
-
-
-                                        </div>
-
-
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
                         </div>
+
 
                     </div>
                 </div>

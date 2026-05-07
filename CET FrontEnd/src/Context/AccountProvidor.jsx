@@ -2,6 +2,7 @@ import React, { createContext, use, useContext, useEffect, useState } from 'reac
 import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from '../../Firebase/firebase_init';
 import { SettingsContext } from './SettingsProvidor';
+import { flushSync } from 'react-dom';
 
 export const AuthContext = createContext();
 
@@ -14,6 +15,7 @@ const AccountProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [accountDetails, setAccountDetails] = useState({});
     const [accountLoading, setAccountLoading] = useState(true);
+    const [sessionChecked, setSessionChecked] = useState(false);
 
     useEffect(() => {
         setAccountLoading(true)
@@ -68,7 +70,7 @@ const AccountProvider = ({ children }) => {
 
                 .then(res => res.json())
                 .then(res => {
-                    console.log("Check User Res:", res)
+                    // console.log("Check User Res:", res)
                 })
 
             // navigate("/Dashboard") // Redirect to dashboard after login
@@ -80,29 +82,50 @@ const AccountProvider = ({ children }) => {
         }
     };
 
-    const googleSignOut = () => {
-        signOut(auth).then(() => {
-            setAccountDetails({})
-            setIsLoggedIn(false)
-            setAccountLoading(false)
-        }).catch((error) => {
-            console.log("Google Sign out Error: ", error)
-        })
-    }
+    // const googleSignOut = () => {
+    //     signOut(auth).then(() => {
+    //         setAccountDetails({})
+    //         setIsLoggedIn(false)
+    //         setAccountLoading(false)
+    //     }).catch((error) => {
+    //         console.log("Google Sign out Error: ", error)
+    //     })
+    // }
 
+    // useEffect(() => {
+    //     setAccountLoading(true);
+
+    //     const unsubscribe = onAuthStateChanged(auth, (user) => {
+    //         flushSync(() => {
+    //             setAccountDetails(user);
+    //             setIsLoggedIn(!!user);
+    //         });
+    //         setAccountLoading(false); // guaranteed after accountDetails is committed
+    //     });
+
+    //     return () => unsubscribe();
+    // }, []);
+
+
+    const googleSignOut = () => {
+        signOut(auth).catch((error) => {
+            console.log("Google Sign out Error: ", error);
+        });
+    };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setAccountLoading(true)
-            setAccountDetails(user);
-            user ? setIsLoggedIn(true) : setIsLoggedIn(false);
-            setAccountLoading(false)
+        setAccountLoading(true);
 
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            flushSync(() => {
+                setAccountDetails(user); // null on sign out
+                setIsLoggedIn(!!user);   // false on sign out
+            });
+            setAccountLoading(false);
         });
 
         return () => unsubscribe();
     }, []);
-
 
 
     return (
@@ -114,7 +137,9 @@ const AccountProvider = ({ children }) => {
             googlePopUpLogin,
             googleSignOut,
             accountLoading,
-            setAccountLoading
+            setAccountLoading,
+            setSessionChecked,
+            sessionChecked
         }}>
             {children}
         </AuthContext.Provider>

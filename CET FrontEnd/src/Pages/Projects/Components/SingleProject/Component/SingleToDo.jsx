@@ -7,7 +7,7 @@ import { useParams } from 'react-router';
 
 const SingleToDo = ({ todo, setShowDetails, selectedTask, setSelectedTask }) => {
 
-    console.log("Task:", todo)
+    // console.log("Task:", todo)
     return (
         <div className="cursor-pointer " onClick={() => {
             setSelectedTask(todo)

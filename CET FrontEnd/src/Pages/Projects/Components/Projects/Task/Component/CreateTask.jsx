@@ -31,7 +31,7 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen, setFinishedTask, setIn
 
                 const data = await response.json();
 
-                console.log("Fetched users:", data);
+                // console.log("Fetched users:", data);
                 setUsers(data);
 
             } catch (error) {
@@ -77,7 +77,7 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen, setFinishedTask, setIn
             priority: e.target.priority.value,
             attachments: []
         };
-        console.log(details)
+        // console.log(details)
 
         const token = await accountDetails.getIdToken();
 
@@ -95,7 +95,7 @@ const CreateTask = ({ isOpen, onClose, setCreateTaskOpen, setFinishedTask, setIn
             );
 
             const data = await res.json();
-            console.log("Submit Res:", data);
+            // console.log("Submit Res:", data);
             setCreateTaskOpen(false);
 
         } catch (error) {

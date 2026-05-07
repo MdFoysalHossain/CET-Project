@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ProjectsCounting from '../Dashboard/Component/ProjectsCounting';
 // import DashboardActivityLogs from '../Dashboard/Component/DashboardActivityLogs';
 

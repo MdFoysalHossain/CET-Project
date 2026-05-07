@@ -9,7 +9,7 @@ const CreateSubTask = ({ createSubTaskOpen, setCreateSubTaskOpen, selectedTask, 
     const { accountDetails } = useContext(AuthContext)
     const { backEndUrl } = useContext(SettingsContext)
     
-    console.log("This is Parems:", selectedTask)
+    // console.log("This is Parems:", selectedTask)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -90,7 +90,7 @@ const CreateSubTask = ({ createSubTaskOpen, setCreateSubTaskOpen, selectedTask, 
     };
 
 
-    console.log("Create Sub Task Rendered", createSubTaskOpen);
+    // console.log("Create Sub Task Rendered", createSubTaskOpen);
     if (!createSubTaskOpen) return null;
 
     return (

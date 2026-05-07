@@ -16,11 +16,14 @@ import DashboardPage from "./Pages/Dashboard/DashboardPage.jsx";
 import AccountProvidor from "./Context/AccountProvidor.jsx";
 import SettingsProvider from "./Context/SettingsProvidor.jsx";
 import Login from "./Pages/Login/Login.jsx";
+import Insights from "./Pages/Insights/insights.jsx";
+import Notification from "./Pages/Notification/Notification.jsx";
+import Home from "./Pages/Home/Home.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomeRoot />
+    element: <Home />
   },
   {
     path: "/Dashboard",
@@ -55,9 +58,17 @@ const router = createBrowserRouter([
         element: <CalendarPage />
       },
       {
+        path: "/Dashboard/Insights",
+        element: <Insights />
+      },
+      {
         path: "/Dashboard/Users",
         element: <Allusers />
-      }
+      },
+      {
+        path: "/Dashboard/Notifications",
+        element: <Notification />
+      },
     ]
   },
   {
