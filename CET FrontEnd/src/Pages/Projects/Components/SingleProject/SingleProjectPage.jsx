@@ -253,7 +253,8 @@ const SingleProjectPage = () => {
                 console.log(projectDetails)
             } */}
             <Helmet>
-                <title>{`TrackLio - ${projectDetails && projectDetails?.name}`}</title>
+                <title>{`TrackLio - ${projectDetails && projectDetails?.name || "Project"}`}</title>
+                {console.log(projectDetails)}
             </Helmet>
 
             <MainTasks showDetails={showDetails}

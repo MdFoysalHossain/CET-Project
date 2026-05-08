@@ -32,6 +32,7 @@ const AllProjects = ({ showDetails, setShowDetails, createdProject, setAllProjec
 
                 const data = await res.json();
                 setAllProjects(data);
+                console.log("DATA GOT", data)
 
             } catch (error) {
                 console.log("Can not get projects:", error);
@@ -51,7 +52,7 @@ const AllProjects = ({ showDetails, setShowDetails, createdProject, setAllProjec
                 <div className="grid grid-cols-3 gap-5">
 
                     {/* 🔹 Show Skeletons While Loading */}
-                    {isLoading ? (
+                    {isLoading && allProjects?.length !== undefined ? (
                         Array.from({ length: 3 }).map((_, i) => (
                             <AllSingleProjectSkeleton key={i} />
                         ))

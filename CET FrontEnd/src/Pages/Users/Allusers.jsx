@@ -200,7 +200,7 @@ export default function Allusers() {
             {/* CONTENT */}
             <div className="max-w-[1330px] w-full mx-auto px-4 py-6 font-jukarta text-black">
 
-                <div className=" p-6 bg-white shadow-md rounded-xl border border-gray-100">
+                <div className=" p-6 rounded-xl  ">
                     <div className="">
 
                         {/* Title */}
@@ -213,8 +213,8 @@ export default function Allusers() {
                             <table className="table w-full border-separate border-spacing-y-0.5 border overflow-hidden border-gray-200 ">
 
                                 {/* HEADER */}
-                                <thead className="bg-gray-100  border-gray-200  ">
-                                    <tr className="text-gray-500 text-sm">
+                                <thead className="bg-gray-50  border-b  border-gray-200">
+                                    <tr className="text-gray-500 text-[12px] uppercase tracking-wider font-bold ">
                                         <th className="py-3">No.</th>
                                         <th>User </th>
                                         <th>Status</th>
@@ -226,7 +226,7 @@ export default function Allusers() {
                                 </thead>
 
                                 {/* BODY */}
-                                <tbody className="">
+                                <tbody className="divide-y divide-gray-100">
                                     <SingleUser users={users} setShowUpdateModal={setShowUpdateModal} setSelectedUser={setSelectedUser} />
                                 </tbody>
 

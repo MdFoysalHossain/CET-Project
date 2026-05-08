@@ -37,10 +37,10 @@ const SingleToDo = ({ todo, setShowDetails, selectedTask, setSelectedTask }) => 
                                 <div
                                     key={ind}
                                     className={`relative group w-6  h-6 rounded-full border-2 border-white flex justify-center items-center 
-                                                                                            ${ind % 2 === 0 ? "bg-amber-200 -ml-3" : "bg-amber-400 -ml-3"}`}
+                                                                                            ${ind % 2 === 0 ? "bg-indigo-200 -ml-3" : "bg-indigo-400 -ml-3"}`}
                                 >
                                     {/* Avatar */}
-                                    <p className="font-jukarta capitalize text-[12px]">{User.username?.[0]}</p>
+                                    <p className="font-jukarta font-semibold capitalize text-[12px]">{User.username?.[0]}</p>
 
                                     {/* Tooltip */}
                                     <div className="absolute bottom-10 left-1/2 -translate-x-1/2 

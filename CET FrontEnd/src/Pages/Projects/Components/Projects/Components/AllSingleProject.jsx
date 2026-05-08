@@ -235,8 +235,8 @@ const AllSingleProject = ({ project, index, setAllProjects, allProjects }) => {
                             project.assignees.slice(0, 2).map((User, ind) => (
                                 <div
                                     key={ind}
-                                    className={`relative group w-8 h-8 rounded-full border-2 border-white flex justify-center items-center 
-                                                                    ${ind % 2 === 0 ? "bg-amber-200 -ml-3" : "bg-amber-400 -ml-3"}`}
+                                    className={`relative group w-8 h-8 rounded-full border-2 border-white flex justify-center items-center  font-jukarta
+                                                                    ${ind % 2 === 0 ? "bg-indigo-200 -ml-3" : "bg-indigo-400 -ml-3"}`}
                                 >
                                     <p className="font-jukarta capitalize">{User[0]}</p>
 

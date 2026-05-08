@@ -1,6 +1,7 @@
 import React from 'react';
 import Swal from 'sweetalert2';
 
+
 const SingleUser = ({ users, setShowUpdateModal, setSelectedUser }) => {
 
 
@@ -89,15 +90,15 @@ const SingleUser = ({ users, setShowUpdateModal, setSelectedUser }) => {
     return (
         <>
             {users?.map((user, index) => (
-                <tr key={index} className={`transition bg-gray-100`}>
+                <tr key={index} className={`transition hover:bg-gray-50/50  font-jukarta`}>
 
                     {/* INDEX */}
-                    <td className="bg-white  border-gray-200 py-4 ">
-                        #{index + 1}
+                    <td className="bg-white  border-gray-200 py-4 px-6 whitespace-nowrap ">
+                        <span className='bg-indigo-50 border border-gray-200 rounded-md text-indigo-600 font-semibold px-3 py-1.5'>#{index < 9 && 0}{index + 1}</span>
                     </td>
 
                     {/* USER */}
-                    <td className="bg-white  border-gray-200">
+                    <td className="bg-white  border-gray-200 px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
                             <div className="h-10 w-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-semibold">
                                 {user.name.charAt(0)}
@@ -110,7 +111,7 @@ const SingleUser = ({ users, setShowUpdateModal, setSelectedUser }) => {
                     </td>
 
                     {/* STATUS */}
-                    <td className="bg-white  border-gray-200">
+                    <td className="bg-white  border-gray-200 px-6 py-4 whitespace-nowrap">
                         <span
                             className={`badge text-xs capitalize ${user.status === "active"
                                 ? "badge-success"
@@ -122,21 +123,21 @@ const SingleUser = ({ users, setShowUpdateModal, setSelectedUser }) => {
                     </td>
 
                     {/* PROJECT */}
-                    <td className="bg-white  border-gray-200">
-                        <span className="badge badge-outline">
+                    <td className="bg-white  border-gray-200 px-6 py-4 whitespace-nowrap">
+                        <span className="border border-gray-200 px-4 rounded-lg bg-indigo-50/50 py-1.5">
                             {user.projectHas.length}
                         </span>
                     </td>
 
                     {/* TASK */}
                     <td className="bg-white  border-gray-200">
-                        <span className="badge badge-outline">
+                        <span className="border border-gray-200 px-4 rounded-lg bg-indigo-50/50 py-1.5">
                             {user.taskHas.length}
                         </span>
                     </td>
 
                     <td className="bg-white border-gray-200">
-                        <span className="px-4 border border-gray-200 w-full py-1.75 text-sm bg-gray-100 rounded-lg inline-block">
+                        <span className="px-4 border border-gray-200 w-full py-1.75 text-sm bg-indigo-50/50 rounded-lg inline-block">
                             {user.role || "Not assigned"}
                         </span>
                     </td>

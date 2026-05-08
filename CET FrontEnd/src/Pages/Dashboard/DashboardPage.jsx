@@ -13,8 +13,8 @@ const DashboardPage = () => {
             <Helmet>
                 <title>TrackLio - Dashboard</title>
             </Helmet>
-            <div className="flex items-center justify-start px-6 border-b border-gray-200 h-[65px] text-left">
-                <div className="max-w-[1330px] mx-auto w-full  flex  gap-0 items-start justify-between">
+            <div className="flex items-center  w-full top-0 justify-start px-6 bg-white border-b border-gray-200 h-[65px] text-left">
+                <div className="max-w-[1330px]  mx-auto w-full  flex  gap-0 items-start justify-between">
                     <h2 className="text-2xl font-semibold font-jukarta">Dashboard</h2>
                     <p className='text-xl font-jukarta font-semibold'>👋Welcome back! </p>
                 </div>

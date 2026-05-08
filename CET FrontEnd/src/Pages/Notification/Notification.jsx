@@ -111,7 +111,7 @@ const Notification = ({ setShowNotifications }) => {
 
     return (
         <div className=''>
-            <div className="border-b border-[#e5e7eb] bg-gray-50   h-[65px] mb-5 flex">
+            <div className="border-b border-[#e5e7eb] bg-gray-50 h-[65px] mb-5 flex">
                 <div className="text-left flex items-center justify-between w-full">
                     <div className="text-left w-full mx-5  flex-1">
                         <h2 className='text-lg font-semibold font-jukarta text-left flex justify-between items-center w-full'>
