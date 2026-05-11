@@ -94,7 +94,7 @@ const SingleUser = ({ users, setShowUpdateModal, setSelectedUser }) => {
 
                     {/* INDEX */}
                     <td className="bg-white  border-gray-200 py-4 px-6 whitespace-nowrap ">
-                        <span className='bg-indigo-50 border border-gray-200 rounded-md text-indigo-600 font-semibold px-3 py-1.5'>#{index < 9 && 0}{index + 1}</span>
+                        <span className='bg-indigo-50/50 border border-gray-200 rounded-md text-indigo-600 font-semibold text-[12px] px-3 py-1.5'>#{index < 9 && 0}{index + 1}</span>
                     </td>
 
                     {/* USER */}

@@ -16,7 +16,7 @@ const DashbordProjects = () => {
         <div className='flex flex-col'>
 
             <Helmet>
-                <title>TrackLio - All Projects</title>
+                <title>ProjectNext - All Projects</title>
             </Helmet>
 
             <div className="w-full  mx-auto flex-1 border-b border-[#e5e7eb]">

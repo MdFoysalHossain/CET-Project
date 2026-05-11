@@ -6,12 +6,13 @@ import UpcomingCalanderEvents from './Component/UpcomingCalanderEvents';
 import TaskSummury from './Component/TaskSummury';
 import { Helmet } from 'react-helmet';
 import { AuthContext } from '../../Context/AccountProvidor';
+import Insights from '../Insights/Insights';
 
 const DashboardPage = () => {
     return (
         <div>
             <Helmet>
-                <title>TrackLio - Dashboard</title>
+                <title>ProjectNext - Dashboard</title>
             </Helmet>
             <div className="flex items-center  w-full top-0 justify-start px-6 bg-white border-b border-gray-200 h-[65px] text-left">
                 <div className="max-w-[1330px]  mx-auto w-full  flex  gap-0 items-start justify-between">
@@ -38,6 +39,8 @@ const DashboardPage = () => {
                 <UpcomingCalanderEvents />
 
                 <TaskSummury />
+
+                <Insights/>
 
 
             </div>

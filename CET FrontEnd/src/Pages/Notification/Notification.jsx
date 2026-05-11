@@ -125,46 +125,7 @@ const Notification = ({ setShowNotifications }) => {
             </div>
 
             <div className=" mx-auto overflow-hidden p-2">
-                {/* <div className="grid grid-cols-3 gap-5">
-                    <div className="text-left font-jukarta">
-                        <p className='text-xl font-semibold text-gray-800 mb-2.5'>Unread ({unreadCount})</p>
-                        <div className="w-full h-200 bg-white border border-gray-200 rounded-sm max-h-200 overflow-x-auto pt-4">
-                            {allNotifications.filter(item => item.status === "unread").map((notif, index) => (
-                                <NotificationCard
-                                    key={index}
-                                    notification={notif}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="text-left font-jukarta">
-                        <p className='text-xl font-semibold text-gray-800 mb-2.5'>Read ({readCount})</p>
-                        <div className="w-full  overflow-x-auto bg-white border border-gray-200 max-h-200 overflow-x-auto rounded-sm pt-4">
-                            {allNotifications.filter(item => item.status === "read").map((notif, index) => (
-                                <NotificationCard
-                                    key={index}
-                                    notification={notif}
-                                    onToggleRead={() => toggleRead(index)}
-                                    onToggleFav={() => toggleFav(index)}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="text-left font-jukarta">
-                        <p className='text-xl font-semibold text-gray-800 mb-2.5'>Marked ({markedCount})</p>
-                        <div className="w-full h-200 bg-white border border-gray-200 rounded-sm max-h-200 overflow-x-auto pt-4">
-                            {allNotifications.filter(item => item.marked === true).map((notif, index) => (
-                                <NotificationCard
-                                    key={index}
-                                    notification={notif}
-                                    onToggleRead={() => toggleRead(index)}
-                                    onToggleFav={() => toggleFav(index)}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                </div> */}
+                
 
                 <div className="flex flex-col gap-5 ">
                     <div className="text-left font-jukarta flex-1">

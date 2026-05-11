@@ -34,7 +34,7 @@ const Workflow = () => {
                     <span>The Process</span>
                 </div>
                 <h2 className='text-5xl font-extrabold text-slate-900 tracking-tight'>
-                    How TrackLio <span className="text-indigo-600">powers your day.</span>
+                    How ProjectNext <span className="text-indigo-600">powers your day.</span>
                 </h2>
             </div>
 

@@ -224,101 +224,6 @@ export default function Login() {
 
 
     return (
-        // <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 relative">
-        //     <div className="w-[1330px] mx-auto h-15 fixed top-0 flex mt-5">
-        //         <h2 className="text-2xl font-jukarta text-center mb-5 text-indigo-500 font-bold">TrackLio</h2>
-        //     </div>
-
-        //     {/* Main Container */}
-        //     <div className="w-100 rounded-xl p-8">
-
-        //         {/* Login Card */}
-
-        //         <div className="max-w-md mx-auto text-center">
-        //             <div className="flex justify-center items-end ">
-        //                 {/* <h2 className="text-2xl uppercase font-semibold text-gray-800 font-jukarta text-left">Login</h2> */}
-        //                 <p className="text-md text-gray-700 font-semibold mt-1 font-jukarta text-left">
-        //                     Hi, There 👋
-        //                 </p>
-        //             </div>
-
-        //             {/* Google Button */}
-        //             <button className="btn shadow-none bg-white  text-black border-[#e5e5e5] w-full mt-5" onClick={googlePopUpLogin} >
-        //                 <svg aria-label="Google logo" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="m0 0H512V512H0" fill="#fff"></path><path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path><path fill="#4285f4" d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path><path fill="#fbbc02" d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"></path><path fill="#ea4335" d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path></g></svg>
-        //                 Login with Google
-        //             </button>
-
-        //             {/* Divider */}
-        //             <div className="flex items-center gap-3 my-6">
-        //                 <div className="flex-1 h-px bg-gray-200"></div>
-        //                 <p className="text-xs text-gray-400">or Login with Username</p>
-        //                 <div className="flex-1 h-px bg-gray-200"></div>
-        //             </div>
-
-        //             {/* Form */}
-        //             <form className="text-left space-y-4" onSubmit={handleLogin}>
-
-        //                 {/* Email */}
-        //                 <div>
-        //                     <label className="text-sm text-gray-600">Username</label>
-        //                     <input
-        //                         type="text"
-        //                         placeholder="Type your username"
-        //                         name="username"
-        //                         required
-        //                         className={`mt-1 w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${userNameError ? 'border-red-500' : ''}`}
-        //                     />
-        //                     <label htmlFor="username" className="text-sm text-red-500">
-        //                         {userNameError}
-        //                     </label>
-        //                 </div>
-
-        //                 {/* Password */}
-        //                 <div>
-        //                     <label className="text-sm text-gray-600">Password</label>
-        //                     <div className="relative mt-1">
-        //                         <input
-        //                             type={show ? "text" : "password"}
-        //                             placeholder="Enter your password"
-        //                             name="password"
-        //                             required
-        //                             className={`w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 ${passwordError ? 'border-red-500' : ''}`}
-        //                         />
-        //                         <label htmlFor="password" className="text-sm text-red-500">
-        //                             {passwordError}
-        //                         </label>
-        //                         <button
-        //                             type="button"
-        //                             onClick={() => setShow(!show)}
-        //                             className="absolute right-2 top-2.5 text-gray-400"
-        //                         >
-        //                             {show ? <EyeOff size={16} /> : <Eye size={16} />}
-        //                         </button>
-        //                     </div>
-        //                 </div>
-
-        //                 {/* Options */}
-        //                 <div className="flex items-center justify-between text-sm">
-        //                     <label className="flex items-center gap-2 text-gray-600 cursor-pointer">
-        //                         <input type="checkbox" className="checkbox checkbox-xs  text-indigo-500 border border-indigo-500" />
-        //                         Remember Me
-        //                     </label>
-
-
-        //                 </div>
-
-        //                 {/* Login Button */}
-        //                 <button disabled={isLoading || cooldown > 0} className="w-full bg-indigo-500 hover:bg-indigo-600 *:hover:scale-105 font-jakarta cursor-pointer text-white py-1.5 rounded-md transition-transform  font-semibold">
-        //                     <p className="transition">{cooldown > 0 ? `Try again in ${cooldown}s` : "Login"}</p>
-        //                 </button>
-        //             </form>
-        //             <Link to="/" className="text-indigo-600 cursor-pointer hover:underline text-right block mt-4 text-sm">
-        //                 Go Back
-        //             </Link>
-        //         </div>
-        //     </div>
-        // </div>
-
         <div className="min-h-screen  w-screen flex flex-col items-center justify-center px-4 bg-[#fbfaff] relative font-jukarta">
             {/* Header Navigation */}
             <div className="max-w-[1330px] w-full fixed top-0 py-8 flex justify-center md:justify-start px-6">
@@ -329,7 +234,7 @@ export default function Login() {
                         <span className="rounded-[3px] bg-indigo-400" />
                         <span className="rounded-[3px] bg-indigo-600" />
                     </div>
-                    <h2 className="text-2xl text-slate-900 font-extrabold tracking-tight">TrackLio</h2>
+                    <h2 className="text-2xl text-slate-900 font-extrabold tracking-tight">ProjectNext</h2>
                 </div>
             </div>
 
@@ -395,14 +300,6 @@ export default function Login() {
                         </div>
                         {passwordError && <p className="text-[11px] font-bold text-red-500 mt-1 ml-1 uppercase tracking-tight">{passwordError}</p>}
                     </div>
-
-                    {/* <div className="flex items-center justify-between">
-                        <label className="flex items-center gap-2 text-sm font-bold text-slate-500 cursor-pointer group">
-                            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" />
-                            <span className="group-hover:text-slate-700 transition-colors">Remember Me</span>
-                        </label>
-                        <Link to="/" className="text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors">Forgot Password?</Link>
-                    </div> */}
 
                     <button
                         disabled={isLoading || cooldown > 0}

@@ -110,7 +110,7 @@ export default function Allusers2() {
     return (
         <div className="w-full overflow-x-hidden">
             <Helmet>
-                <title>TrackLio - Users & Teams</title>
+                <title>ProjectNext - Users & Teams</title>
             </Helmet>
             <div className="flex items-center justify-start px-6 border-b border-gray-200 h-[65px] text-left">
                 <div className="max-w-[1330px] mx-auto w-full flex items-center justify-start gap-4">

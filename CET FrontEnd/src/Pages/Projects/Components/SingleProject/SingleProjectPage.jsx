@@ -253,7 +253,7 @@ const SingleProjectPage = () => {
                 console.log(projectDetails)
             } */}
             <Helmet>
-                <title>{`TrackLio - ${projectDetails && projectDetails?.name || "Project"}`}</title>
+                <title>{`ProjectNext - ${projectDetails && projectDetails?.name || "Project"}`}</title>
                 {console.log(projectDetails)}
             </Helmet>
 
@@ -318,25 +318,6 @@ const SingleProjectPage = () => {
 
 
             <div className="max-w-[1330px] mx-auto">
-
-                {/* {
-                    accountDetails?.role === "PM" || accountDetails?.accessToken ?
-                        <div className="">
-                            <div className="w-[320px]  bg-white border border-gray-200 rounded-sm">
-                                <h3 className='text-lg font-jukarta text-gray-800 mt-2.5 font-semibold'>Assigned To</h3>
-                                <div className="p-4 pt-0 mt-2.5 font-jukarta">
-                                    {
-                                        projectDetails?.assignees?.map((assignee, index) => (
-                                            <div className="flex items-center gap-2 my-1 border border-gray-200 p-2 rounded-sm" key={index}>
-                                                <p>@{assignee}</p>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            </div>
-                        </div> : null
-                } */}
-
 
                 <div className=" grid grid-cols-4 gap-4 mt-10">
                     <div className="bg-gray-300/30 rounded-xl  p-2 pb-0 pt-4">

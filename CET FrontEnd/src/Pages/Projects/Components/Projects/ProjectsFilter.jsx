@@ -12,35 +12,6 @@ const ProjectsFilter = ({ setCreatedProject, allProjects, setAllProjects }) => {
                 <div className="text-2xl font-semibold">
                     All Projects
                 </div>
-
-                {/* <div className="flex gap-5 items-center">
-                    <div className="w-[300px]">
-                        <label className="input bg-white border-[#e5e7eb]">
-                            <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <g
-                                    strokeLinejoin="round"
-                                    strokeLinecap="round"
-                                    strokeWidth="2.5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                >
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <path d="m21 21-4.3-4.3"></path>
-                                </g>
-                            </svg>
-                            <input type="search" required placeholder="Search" />
-                        </label>
-                    </div>
-
-                    <div className="flex gap-2 cursor-pointer rounded-sm bg-white border border-[#e5e7eb] justify-center items-center p-2  px-4">
-                        <Funnel size={15} strokeWidth={2.5}/> <p className='text-sm font-semibold font-jukarta'>Filter</p>
-                    </div>
-
-                    <div className="flex font-jukarta gap-2 cursor-pointer rounded-sm bg-indigo-500 text-white hover:scale-105 transition border border-[#e5e7eb] justify-center items-center p-2 px-4" onClick={() => setOpen(true)}>
-                        <Plus size={18}  strokeWidth={2.5}/> <p className='text-sm font-semibold font-jukarta' >Create Task</p>
-                    </div>
-
-                </div> */}
                 <div className="flex items-center gap-2 ">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />

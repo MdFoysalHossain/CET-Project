@@ -168,7 +168,7 @@ const CalendarPage = () => {
         <div className="">
 
             <Helmet>
-                <title>TrackLio - Calendar</title>
+                <title>ProjectNext - Calendar</title>
             </Helmet>
             {showEventModal && (
                 <div className="fixed inset-0  items-center justify-center z-50 font-jukarta hidden">

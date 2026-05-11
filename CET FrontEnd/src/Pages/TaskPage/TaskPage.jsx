@@ -301,7 +301,7 @@ const TaskPage = () => {
 
             <CreateSubTask createSubTaskOpen={createSubTaskOpen} setCreateSubTaskOpen={setCreateSubTaskOpen} />
 
-            <title>TrackLio - My Tasks</title>
+            <title>ProjectNext - My Tasks</title>
             <div className="">
                 <div className="flex items-center justify-between px-6 border-b border-gray-200 h-[65px]">
                     <div className="max-w-[1330px] mx-auto w-full flex items-center justify-between">

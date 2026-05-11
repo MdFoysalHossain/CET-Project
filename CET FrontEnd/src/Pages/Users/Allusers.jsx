@@ -105,7 +105,7 @@ export default function Allusers() {
     return (
         <div className="w-full overflow-x-hidden">
             <Helmet>
-                <title>TrackLio - Users</title>
+                <title>ProjectNext - Users</title>
             </Helmet>
 
 

@@ -1,85 +1,3 @@
-// import React from "react";
-// import { Link } from "react-router";
-
-// const NavbarHome = () => {
-
-//     const Links = [
-//         { name: "Home", to: "#Banner" },
-//         { name: "Features", to: "#Features" },
-//         { name: "Price", to: "#Price" },
-//         { name: "Contact Us", to: "#Contact" },
-//     ]
-
-//     return (
-//         <nav className=" fixed top-0 z-[1000] w-full border-b border-gray-200 bg-white px-6 py-3">
-//             <div className="mx-auto flex max-w-[1330px] items-center justify-between">
-//                 <div className="flex items-center gap-10">
-//                     <div className="flex items-center gap-2">
-//                         <div className="grid h-5 w-5 grid-cols-2 gap-[2px]">
-//                             <span className="rounded-sm bg-indigo-600" />
-//                             <span className="rounded-sm bg-indigo-400" />
-//                             <span className="rounded-sm bg-indigo-400" />
-//                             <span className="rounded-sm bg-indigo-600" />
-//                         </div>
-//                         <span className="text-2xl text-gray-900 font-jukarta font-bold relative">
-//                             TrackLio
-//                             <p className="h-1.75 w-1.75 rounded-full bg-indigo-500 absolute bottom-1.25 -right-2.25"></p>
-//                         </span>
-//                     </div>
-
-
-//                 </div>
-//                 <div className="hidden items-center gap-10 text-sm text-gray-700  md:flex">
-//                     {
-//                         Links.map((link, key) => (
-//                             <button
-//                                 key={key}
-//                                 className="
-//                                     relative cursor-pointer text-[14px] font-semibold font-jukarta
-//                                     transition-all duration-300
-//                                     hover:text-indigo-600 hover:scale-110
-
-//                                     after:content-['']
-//                                     after:absolute
-//                                     after:left-1/2
-//                                     after:-bottom-1
-//                                     after:h-[2px]
-//                                     after:w-full
-//                                     after:bg-indigo-600
-//                                     after:-translate-x-1/2
-//                                     after:scale-x-0
-//                                     after:origin-center
-//                                     after:transition-transform
-//                                     after:duration-300
-
-//                                     hover:after:scale-x-100
-//                                 "
-//                             >
-//                                 {link.name}
-//                             </button>
-//                         ))
-//                     }
-//                 </div>
-
-//                 <div className="hidden items-center gap-3 md:flex font-jukarta">
-//                     {/* <Link to={"/Dashboard"} className="rounded-md font-jukarta cursor-pointer border text-indigo-600 font-semibold border-indigo-500 px-8 py-2 text-sm   transition-colors hover:bg-indigo-500 hover:text-white">
-//                         Dashboard
-//                     </Link> */}
-//                     <Link to={"/Login"} className="rounded-md cursor-pointer bg-indigo-500 px-8 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-600">
-//                         Start Free
-//                     </Link>
-//                 </div>
-//             </div>
-//         </nav>
-//     );
-// };
-
-// export default NavbarHome;
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { Menu, X, Zap, ArrowRight } from "lucide-react";
@@ -139,7 +57,7 @@ const NavbarHome = () => {
                         <span className="rounded-[3px] bg-indigo-600" />
                     </div>
                     <span className="text-xl md:text-2xl text-slate-900 font-jukarta font-extrabold tracking-tight relative">
-                        TrackLio
+                        ProjectNext
                         <span className="h-2 w-2 rounded-full bg-indigo-500 absolute -bottom-1 -right-3 border-2 border-white shadow-sm animate-pulse"></span>
                     </span>
                 </div>

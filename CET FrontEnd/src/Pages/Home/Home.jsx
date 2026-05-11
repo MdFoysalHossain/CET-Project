@@ -9,10 +9,14 @@ import Workflow from './Component/Workflow';
 import Pricing from './Component/Pricing';
 import FinalCTA from './Component/FinalCTA';
 import Testimonials from './Component/Testimonials';
+import { Helmet } from 'react-helmet';
 
 const Home = () => {
     return (
         <div className='overflow-x-hidden relative overflow-hidden'>
+            <Helmet>
+                <title>ProjectNext - Home</title>
+            </Helmet>
             <NavbarHome/>
             <Banner2/>
             {/* <Banner/> */}

@@ -54,7 +54,7 @@ const Banner = () => {
                 <div className="h-screen flex  items-center justify-center ">
                     <div className="text-left flex flex-col gap-5">
                         <p className="text-4xl font-semibold font-jukarta w-[700px] text-center -mt-50">
-                            <span className='text-indigo-500'>TrackLio</span> <span> helps teams organize projects, collaborate faster,
+                            <span className='text-indigo-500'>ProjectNext</span> <span> helps teams organize projects, collaborate faster,
                                 and deliver work on time with a clean and powerful workspace.</span>
                         </p>
                         <div className="text-center">
@@ -62,16 +62,8 @@ const Banner = () => {
                                 Get Started
                             </Link>
                         </div>
-                        {/* <div className="mt-5 grid grid-cols-3 gap-2.5 w-[450px]">
-                            <span className='font-jukarta text-md bg-white text-indigo-700 font-semibold border-[1.75px] rounded-md border-indigo-500 px-2 py-1.5 text-center'>Project Handle</span>
-                            <span className='font-jukarta text-md bg-white text-indigo-700 font-semibold border-[1.75px] rounded-md border-indigo-500 px-2 py-1.5 text-center'>Track Project</span>
-                            <span className='font-jukarta text-md bg-white text-indigo-700 font-semibold border-[1.75px] rounded-md border-indigo-500 px-2 py-1.5 text-center'>Communication</span>
-                            <span className='font-jukarta text-md bg-white text-indigo-700 font-semibold border-[1.75px] rounded-md border-indigo-500 px-2 py-1.5 text-center'>Handle Event</span>
-                        </div> */}
-
-
                         <div className="flex flex-col font-jukarta mt-5 hidden">
-                            <span className='text-2xl'>What you can do with <span className='text-indigo-500 font-bold'>TrackLio</span>,</span>
+                            <span className='text-2xl'>What you can do with <span className='text-indigo-500 font-bold'>ProjectNext</span>,</span>
                             <span class="text-rotate text-2xl  text-left">
                                 <span class="justify-items-start *:hover:text-indigo-500 *:font-semibold">
                                     <span>#1 Handle Project</span>

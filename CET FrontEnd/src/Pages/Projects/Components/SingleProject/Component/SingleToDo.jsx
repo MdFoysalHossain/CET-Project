@@ -2,12 +2,8 @@ import { Ellipsis, MessagesSquare, Paperclip } from 'lucide-react';
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router';
 
-// import { SettingsContext } from '../../../../Context/SettingsProvidor';
-// import { AuthContext } from '../../../../Context/AccountProvidor';
-
 const SingleToDo = ({ todo, setShowDetails, selectedTask, setSelectedTask }) => {
 
-    // console.log("Task:", todo)
     return (
         <div className="cursor-pointer " onClick={() => {
             setSelectedTask(todo)

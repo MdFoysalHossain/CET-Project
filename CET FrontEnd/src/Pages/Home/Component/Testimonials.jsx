@@ -6,7 +6,7 @@ const Testimonials = () => {
         {
             name: "Sarah Jenkins",
             role: "Product Manager at TechFlow",
-            quote: "TrackLio made our workflow significantly more organized and transparent. It's the first tool the whole team actually enjoys using.",
+            quote: "ProjectNext made our workflow significantly more organized and transparent. It's the first tool the whole team actually enjoys using.",
             avatar: "https://i.pravatar.cc/150?u=sarah"
         },
         {

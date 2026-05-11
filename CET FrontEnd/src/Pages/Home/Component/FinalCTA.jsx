@@ -21,7 +21,7 @@ const FinalCTA = () => {
                         </h2>
                         
                         <p className="text-xl leading-relaxed text-indigo-100 mt-6 max-w-2xl font-medium">
-                            Join teams using TrackLio to simplify collaboration and deliver faster. Hit your deadlines, remove friction, and build momentum.
+                            Join teams using ProjectNext to simplify collaboration and deliver faster. Hit your deadlines, remove friction, and build momentum.
                         </p>
                     </div>
 
