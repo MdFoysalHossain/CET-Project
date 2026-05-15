@@ -102,7 +102,7 @@ A modern full-stack Project Management SaaS application built to help teams mana
 
 ```bash
 # Clone the repository
-git clone <your-repository-link>
+git clone "https://github.com/MdFoysalHossain/CET-Project"
 
 # Install dependencies
 npm install
